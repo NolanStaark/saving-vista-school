@@ -1,0 +1,3 @@
+# Raw/unreviewed submissions - never publish these
+assets/letters/*
+!assets/letters/.gitkeep

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saving Vista School — Coming Soon</title>
+<meta name="description" content="Saving Vista School — site launching soon.">
+<link rel="stylesheet" href="style.css">
+<style>
+  .under-construction {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .under-construction .box {
+    max-width: 560px;
+  }
+  .under-construction h1 {
+    color: var(--navy);
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
+  .under-construction p {
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+  .under-construction .badge {
+    display: inline-block;
+    background: #eef2f6;
+    color: var(--navy);
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html">Saving Vista School</a>
+  </div>
+</header>
+
+<div class="disclaimer-bar">
+  <div class="container">
+    Saving Vista School is an independent nonprofit run by concerned parents. We are not affiliated with, endorsed by, or operated by Vista School, its administration, or the Utah State Charter School Board.
+  </div>
+</div>
+
+<div class="under-construction">
+  <div class="box">
+    <span class="badge">Coming Soon</span>
+    <h1>We're building something here.</h1>
+    <p>
+      Saving Vista School is putting together a home for parent letters, school media,
+      and live meeting streams. The site isn't ready yet &mdash; check back soon.
+    </p>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    &copy; <span id="year"></span> Saving Vista School. All rights reserved.
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About &amp; Contact — Saving Vista School</title>
+<meta name="description" content="About Saving Vista School and how to get in touch.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html">Saving Vista School</a>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="parent-letters.html">Parent Letters</a></li>
+        <li><a href="media.html">Media</a></li>
+        <li><a href="live-meetings.html">Live Meetings</a></li>
+        <li><a href="about.html" class="active">About &amp; Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="disclaimer-bar">
+  <div class="container">
+    Saving Vista School is an independent nonprofit run by concerned parents. We are not affiliated with, endorsed by, or operated by Vista School, its administration, or the Utah State Charter School Board.
+  </div>
+</div>
+
+<div class="page-header">
+  <div class="container">
+    <h1>About &amp; Contact</h1>
+    <p>Have a question, or need to reach the school office? Get in touch below.</p>
+  </div>
+</div>
+
+<section>
+  <div class="container contact-grid">
+
+    <div class="contact-info">
+      <h2>About Vista School</h2>
+      <p style="color:var(--muted);">
+        Vista School is a free, public charter school in Ivins, Utah, serving students in
+        grades K&ndash;9 with an emphasis on Arts, Technology, and STEM academics
+        (source: <a href="https://www.vistautah.com/" target="_blank" rel="noopener">vistautah.com</a>).
+        This background is provided for context only &mdash; Saving Vista School is not
+        affiliated with or speaking on behalf of Vista School.
+      </p>
+
+      <h2>Our Mission</h2>
+      <p style="color:var(--muted);">
+        <!-- Replace/refine with your own exact wording -->
+        Saving Vista School is a nonprofit organized by a group of concerned parents.
+        We believe a number of recent decisions by the school's administration deserve
+        closer scrutiny, and we are engaging directly with Vista's Charter Board and the
+        Utah State Charter School Board to push for transparency and accountability.
+      </p>
+
+      <dl>
+        <dt>Phone</dt>
+        <dd>[nonprofit contact phone — not the school's]</dd>
+        <dt>Email</dt>
+        <dd>[nonprofit contact email — not the school's]</dd>
+        <dt>Mailing Address</dt>
+        <dd>[nonprofit address, if applicable]</dd>
+      </dl>
+    </div>
+
+    <form class="simple-form" action="#" method="POST">
+      <h2 style="margin:0;">Send a Message</h2>
+      <div>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div>
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+      </div>
+      <button type="submit">Send</button>
+      <p class="form-note">
+        Note: this form doesn't send messages on its own yet — it needs a form backend
+        (e.g. Formspree or Getform, both have free tiers) to actually deliver submissions
+        to an inbox. Ask if you'd like this wired up.
+      </p>
+    </form>
+
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    &copy; <span id="year"></span> Saving Vista School. All rights reserved.
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
