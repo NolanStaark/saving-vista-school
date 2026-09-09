@@ -1,16 +1,26 @@
-/* Saving Vista School — shared stylesheet */
+/* Saving Vista School — shared stylesheet
+   Palette echoes Vista School's own colors (deep teal-navy, maroon, gold)
+   -- this site is an independent parent effort and is not run by or
+   affiliated with Vista School; see the disclaimer bar on every page. */
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap');
 
 :root {
-  --navy: #1f3a5f;
-  --navy-dark: #16283f;
-  --gold: #c99a3b;
-  --cream: #faf7f0;
-  --text: #26313f;
+  --navy: #003e56;
+  --navy-dark: #00212e;
+  --maroon: #9e1b21;
+  --maroon-dark: #7a1519;
+  --gold: #eca73a;
+  --sage: #77a685;
+  --cream: #f5f7f8;
+  --text: #212121;
   --muted: #5c6b7a;
-  --border: #e3ddd0;
+  --border: #dde3e7;
   --card-bg: #ffffff;
-  --radius: 10px;
+  --radius: 12px;
   --max-width: 1080px;
+  --font-body: 'Manrope', "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: 'Sora', "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -20,15 +30,27 @@ html, body {
   padding: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-body);
   color: var(--text);
   background: var(--cream);
   line-height: 1.6;
 }
 
+h1, h2, h3,
+.brand,
+.count-banner-number,
+.count-banner-label {
+  font-family: var(--font-heading);
+  letter-spacing: -0.01em;
+}
+
 a { color: var(--navy); }
-a:hover { color: var(--gold); }
+a:hover { color: var(--maroon); }
 
 .container {
   max-width: var(--max-width);
@@ -80,7 +102,7 @@ nav.main-nav a {
 nav.main-nav a:hover,
 nav.main-nav a.active {
   color: #fff;
-  border-bottom-color: var(--gold);
+  border-bottom-color: var(--maroon);
 }
 
 /* Hero */
@@ -151,7 +173,7 @@ h2 {
 }
 
 .feature-card:hover {
-  box-shadow: 0 6px 18px rgba(31, 58, 95, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 62, 86, 0.14);
   transform: translateY(-2px);
 }
 
@@ -204,13 +226,13 @@ h2 {
 }
 
 .filter-bar .tag:hover {
-  border-color: var(--navy);
-  color: var(--navy);
+  border-color: var(--maroon);
+  color: var(--maroon);
 }
 
 .filter-bar .tag.active {
-  background: var(--navy);
-  border-color: var(--navy);
+  background: var(--maroon);
+  border-color: var(--maroon);
   color: #fff;
 }
 
@@ -227,7 +249,91 @@ h2 {
 .letter-count {
   font-size: 0.85rem;
   color: var(--muted);
-  margin: 14px 0 0;
+  margin: 10px 0 0;
+}
+
+.count-banner {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 20px 26px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.count-banner-stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.count-banner-number {
+  font-size: 3.2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+
+.count-banner-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.count-banner-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 22px;
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+  flex: 1;
+  min-width: 200px;
+}
+
+.count-banner-cta span {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #eef2f6;
+}
+
+.count-banner-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--maroon);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  align-self: flex-start;
+  transition: background 0.15s ease;
+}
+
+.count-banner-link:hover {
+  background: var(--maroon-dark);
+  text-decoration: none;
+}
+
+.submit-box h3 {
+  color: var(--maroon);
+}
+
+@media (max-width: 480px) {
+  .count-banner-number { font-size: 2.4rem; }
+  .count-banner-label { font-size: 0.85rem; }
+  .count-banner-cta {
+    padding-left: 0;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    padding-top: 14px;
+  }
 }
 
 .letter-list {
@@ -240,7 +346,7 @@ h2 {
 .letter-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-left: 4px solid var(--gold);
+  border-left: 4px solid var(--maroon);
   border-radius: var(--radius);
   padding: 16px 20px;
   display: flex;
@@ -248,6 +354,10 @@ h2 {
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
+}
+
+.letter-card[hidden] {
+  display: none;
 }
 
 .letter-card .meta {
@@ -444,9 +554,9 @@ footer.site-footer a {
 
 /* Independence disclaimer */
 .disclaimer-bar {
-  background: #fff4e0;
-  border-bottom: 1px solid #f0d9a8;
-  color: #6b4a12;
+  background: #fdf1de;
+  border-bottom: 1px solid #f2d9ad;
+  color: #7a4d12;
   font-size: 0.8rem;
   text-align: center;
   padding: 8px 0;

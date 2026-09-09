@@ -52,6 +52,17 @@
               3. Add newest letters at the TOP of the list so they show first.
             -->
 
+            <div class="count-banner">
+              <div class="count-banner-stat">
+                <span class="count-banner-number" id="total-count-banner">18</span>
+                <span class="count-banner-label">Letters<br>Published</span>
+              </div>
+              <div class="count-banner-cta">
+                <span id="count-banner-cta-text"><span id="total-count-banner-2">18</span> concerned parents and staff have spoken up.</span>
+                <a href="#submit-a-letter" class="count-banner-link">Add your voice to support Vista &rarr;</a>
+              </div>
+            </div>
+
             <div class="filter-bar" role="group" aria-label="Filter letters by recipient">
               <button type="button" class="tag active" data-category="all">All</button>
               <button type="button" class="tag" data-category="To Vista Administration">To Vista Administration</button>
@@ -79,7 +90,7 @@
                   <span class="category-badge">To the School Board</span>
                   <div class="meta">Sent August 11, 2026 &middot; Submitted anonymously</div>
                 </div>
-                <a class="download" href="assets/letters-archive/grievance-letter-2026-08-11.docx" target="_blank" rel="noopener">Read Letter &rarr;</a>
+                <a class="download" href="assets/letters-archive/grievance-letter-2026-08-11.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
               <div class="letter-card" data-category="To the State Charter School Board">
@@ -88,7 +99,7 @@
                   <span class="category-badge">To the State Charter School Board</span>
                   <div class="meta">Sent August 2026 &middot; Dr. Megan Milne</div>
                 </div>
-                <a class="download" href="assets/letters-archive/megan-milne-letter-to-state-charter-board.docx" target="_blank" rel="noopener">Read Letter &rarr;</a>
+                <a class="download" href="assets/letters-archive/megan-milne-letter-to-state-charter-board.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
               <div class="letter-card" data-category="To the State Charter School Board">
@@ -106,7 +117,7 @@
                   <span class="category-badge">General Concern</span>
                   <div class="meta">Sent July 31, 2026 &middot; Shyrel Wood</div>
                 </div>
-                <a class="download" href="assets/letters-archive/wood-grievance-letter.docx" target="_blank" rel="noopener">Read Letter &rarr;</a>
+                <a class="download" href="assets/letters-archive/wood-grievance-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
               <div class="letter-card" data-category="To the School Board">
@@ -124,7 +135,7 @@
                   <span class="category-badge">To the State Charter School Board</span>
                   <div class="meta">Sent July 27, 2026 &middot; Submitted anonymously</div>
                 </div>
-                <a class="download" href="assets/letters-archive/vista-parent-letter.docx" target="_blank" rel="noopener">Read Letter &rarr;</a>
+                <a class="download" href="assets/letters-archive/vista-parent-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
               <div class="letter-card" data-category="General Concern">
@@ -133,7 +144,7 @@
                   <span class="category-badge">General Concern</span>
                   <div class="meta">Sent July 2026 &middot; Dr. Megan Milne</div>
                 </div>
-                <a class="download" href="assets/letters-archive/megan-milne-grievance-letter.docx" target="_blank" rel="noopener">Read Letter &rarr;</a>
+                <a class="download" href="assets/letters-archive/megan-milne-grievance-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
               <div class="letter-card" data-category="To the School Board">
@@ -196,7 +207,7 @@
                   <span class="category-badge">General Concern</span>
                   <div class="meta">Ezra and Elise Hurst</div>
                 </div>
-                <a class="download" href="assets/letters-archive/hurst-letter.docx" target="_blank" rel="noopener">Read Letter &rarr;</a>
+                <a class="download" href="assets/letters-archive/hurst-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
               <div class="letter-card" data-category="General Concern">
@@ -243,7 +254,7 @@
               automatically, and you choose whether your name is shown if it's published.
             </p>
 
-            <div class="submit-box">
+            <div class="submit-box" id="submit-a-letter">
               <h3>Submit a Letter</h3>
 
               <!-- Tally.so form "Submit a Letter of Concern" (lbGY16). Collects name + email for
@@ -254,7 +265,7 @@
                 <iframe
                   src="https://tally.so/embed/lbGY16?alignLeft=1&hideTitle=1&transparentBackground=1"
                   width="100%"
-                  height="500"
+                  height="950"
                   frameborder="0"
                   title="Submit a Letter">
                 </iframe>
@@ -306,6 +317,10 @@
   var totalCountEl = document.getElementById('total-count');
 
   if (totalCountEl) totalCountEl.textContent = cards.length;
+  var totalCountBannerEl = document.getElementById('total-count-banner');
+  if (totalCountBannerEl) totalCountBannerEl.textContent = cards.length;
+  var totalCountBanner2El = document.getElementById('total-count-banner-2');
+  if (totalCountBanner2El) totalCountBanner2El.textContent = cards.length;
 
   function applyFilter(category) {
     var visibleCount = 0;
@@ -325,6 +340,7 @@
       applyFilter(btn.getAttribute('data-category'));
     });
   });
+
 })();
 </script>
 </body>
