@@ -168,6 +168,28 @@ h2 {
 }
 
 /* Letters archive */
+.letters-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 32px;
+  align-items: start;
+  margin-top: 8px;
+}
+
+.submit-column {
+  position: sticky;
+  top: 20px;
+}
+
+.submit-column h2 {
+  font-size: 1.3rem;
+}
+
+@media (max-width: 860px) {
+  .letters-layout { grid-template-columns: 1fr; }
+  .submit-column { position: static; }
+}
+
 .filter-bar {
   display: flex;
   flex-wrap: wrap;
