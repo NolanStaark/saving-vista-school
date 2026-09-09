@@ -204,6 +204,7 @@ h2 {
 
 @media (max-width: 860px) {
   .letters-layout { grid-template-columns: 1fr; }
+  .submit-column { order: -1; }
 }
 
 .filter-bar {
