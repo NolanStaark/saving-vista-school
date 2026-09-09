@@ -204,6 +204,36 @@ h2 {
   padding: 6px 14px;
   font-size: 0.85rem;
   color: var(--muted);
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.filter-bar .tag:hover {
+  border-color: var(--navy);
+  color: var(--navy);
+}
+
+.filter-bar .tag.active {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+}
+
+.no-results {
+  background: #fff;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+  margin-top: 14px;
+}
+
+.letter-count {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 14px 0 0;
 }
 
 .letter-list {

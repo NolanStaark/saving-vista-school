@@ -47,21 +47,24 @@
               1. Save the reviewed letter (PDF or DOCX) into the assets/letters-archive/ folder.
                  Raw/unreviewed submissions from the form live in assets/letters/, which is
                  never published -- only move a file here after it's been reviewed.
-              2. Copy one of the <div class="letter-card"> blocks below and edit:
+              2. Copy one of the <div class="letter-card" data-category="..."> blocks below and edit:
                  - the title, category badge text, the meta line, and the href to your filename.
               3. Add newest letters at the TOP of the list so they show first.
             -->
 
-            <div class="filter-bar">
-              <span class="tag">To Vista Administration</span>
-              <span class="tag">To the School Board</span>
-              <span class="tag">To the State Charter School Board</span>
-              <span class="tag">General Concern</span>
+            <div class="filter-bar" role="group" aria-label="Filter letters by recipient">
+              <button type="button" class="tag active" data-category="all">All</button>
+              <button type="button" class="tag" data-category="To Vista Administration">To Vista Administration</button>
+              <button type="button" class="tag" data-category="To the School Board">To the School Board</button>
+              <button type="button" class="tag" data-category="To the State Charter School Board">To the State Charter School Board</button>
+              <button type="button" class="tag" data-category="General Concern">General Concern</button>
             </div>
+
+            <p class="letter-count">Showing <span id="visible-count">18</span> of <span id="total-count">18</span> letters</p>
 
             <div class="letter-list">
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="To the State Charter School Board">
                 <div>
                   <strong>Concerns About Student Safety, Bullying, and Supervision Practices</strong>
                   <span class="category-badge">To the State Charter School Board</span>
@@ -70,7 +73,7 @@
                 <a class="download" href="assets/letters-archive/anonymous-letter-state-charter-board-2026-08-20.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="To the School Board">
                 <div>
                   <strong>Grievance on Repeated Bullying Incidents and Communication Failures</strong>
                   <span class="category-badge">To the School Board</span>
@@ -79,7 +82,7 @@
                 <a class="download" href="assets/letters-archive/grievance-letter-2026-08-11.docx" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="To the State Charter School Board">
                 <div>
                   <strong>Formal Parent Grievance on Retaliation and Charter Compliance</strong>
                   <span class="category-badge">To the State Charter School Board</span>
@@ -88,7 +91,7 @@
                 <a class="download" href="assets/letters-archive/megan-milne-letter-to-state-charter-board.docx" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="To the State Charter School Board">
                 <div>
                   <strong>Concerns Regarding Leadership, Governance, and Executive Compensation</strong>
                   <span class="category-badge">To the State Charter School Board</span>
@@ -97,7 +100,7 @@
                 <a class="download" href="assets/letters-archive/pearce-letter-to-state-charter-board.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="General Concern">
                 <div>
                   <strong>Grievance on Lack of Transparent Communication With Families</strong>
                   <span class="category-badge">General Concern</span>
@@ -106,7 +109,7 @@
                 <a class="download" href="assets/letters-archive/wood-grievance-letter.docx" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="To the School Board">
                 <div>
                   <strong>Request for Investigation Into Bullying Response and Special Education Concerns</strong>
                   <span class="category-badge">To the School Board</span>
@@ -115,7 +118,7 @@
                 <a class="download" href="assets/letters-archive/clegg-grievance-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="To the State Charter School Board">
                 <div>
                   <strong>Concerns About Teacher Retention and Request for Charter Review</strong>
                   <span class="category-badge">To the State Charter School Board</span>
@@ -124,7 +127,7 @@
                 <a class="download" href="assets/letters-archive/vista-parent-letter.docx" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="General Concern">
                 <div>
                   <strong>Concerns About Arts Program Losses and Administration Leadership</strong>
                   <span class="category-badge">General Concern</span>
@@ -133,7 +136,7 @@
                 <a class="download" href="assets/letters-archive/megan-milne-grievance-letter.docx" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="To the School Board">
                 <div>
                   <strong>Request to Reinstate a Parent Arts Advisory Committee</strong>
                   <span class="category-badge">To the School Board</span>
@@ -142,7 +145,7 @@
                 <a class="download" href="assets/letters-archive/save-vista-arts-program.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="General Concern">
                 <div>
                   <strong>Grievance on Administration Communication and Conduct</strong>
                   <span class="category-badge">General Concern</span>
@@ -151,7 +154,7 @@
                 <a class="download" href="assets/letters-archive/vista-grievance-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="To the State Charter School Board">
                 <div>
                   <strong>Addendum: Ongoing Concerns About Student Safety and Curriculum</strong>
                   <span class="category-badge">To the State Charter School Board</span>
@@ -160,7 +163,7 @@
                 <a class="download" href="assets/letters-archive/kalynn-snow-letter-to-state-board-2024.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="To the State Charter School Board">
                 <div>
                   <strong>Departure From Charter Regarding Curriculum Autonomy</strong>
                   <span class="category-badge">To the State Charter School Board</span>
@@ -169,7 +172,7 @@
                 <a class="download" href="assets/letters-archive/kalynn-snow-letter-to-state-board-2023.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="To the School Board">
                 <div>
                   <strong>Anonymous Staff Letter on Workplace Culture and Retaliation Concerns</strong>
                   <span class="category-badge">To the School Board</span>
@@ -178,7 +181,7 @@
                 <a class="download" href="assets/letters-archive/anonymous-letter-vista-staff.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="General Concern">
                 <div>
                   <strong>Grievance on Lack of Transparency in Arts Program Audition Scoring</strong>
                   <span class="category-badge">General Concern</span>
@@ -187,7 +190,7 @@
                 <a class="download" href="assets/letters-archive/braden-grievance-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="General Concern">
                 <div>
                   <strong>Grievance on Staff Turnover, Communication, and School Culture</strong>
                   <span class="category-badge">General Concern</span>
@@ -196,7 +199,7 @@
                 <a class="download" href="assets/letters-archive/hurst-letter.docx" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="General Concern">
                 <div>
                   <strong>A Former Teacher's Perspective on Vista's Culture and Instruction</strong>
                   <span class="category-badge">General Concern</span>
@@ -205,7 +208,7 @@
                 <a class="download" href="assets/letters-archive/jazmine-gee-bullock-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="To the State Charter School Board">
                 <div>
                   <strong>Concerns About Academic Support and Classroom Disruptions</strong>
                   <span class="category-badge">To the State Charter School Board</span>
@@ -214,7 +217,7 @@
                 <a class="download" href="assets/letters-archive/leisha-ouimet-letter-to-state-charter-board.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
               </div>
 
-              <div class="letter-card">
+              <div class="letter-card" data-category="General Concern">
                 <div>
                   <strong>A Teacher's Account of Culture in the Math Department</strong>
                   <span class="category-badge">General Concern</span>
@@ -224,6 +227,8 @@
               </div>
 
             </div>
+
+            <div class="no-results" hidden>No letters in this category yet.</div>
 
       </div>
 
@@ -291,5 +296,36 @@
 </footer>
 
 <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+
+<script>
+(function () {
+  var buttons = document.querySelectorAll('.filter-bar .tag');
+  var cards = document.querySelectorAll('.letter-card');
+  var noResults = document.querySelector('.no-results');
+  var visibleCountEl = document.getElementById('visible-count');
+  var totalCountEl = document.getElementById('total-count');
+
+  if (totalCountEl) totalCountEl.textContent = cards.length;
+
+  function applyFilter(category) {
+    var visibleCount = 0;
+    cards.forEach(function (card) {
+      var show = category === 'all' || card.getAttribute('data-category') === category;
+      card.hidden = !show;
+      if (show) visibleCount++;
+    });
+    if (noResults) noResults.hidden = visibleCount !== 0;
+    if (visibleCountEl) visibleCountEl.textContent = visibleCount;
+  }
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      buttons.forEach(function (b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      applyFilter(btn.getAttribute('data-category'));
+    });
+  });
+})();
+</script>
 </body>
 </html>
