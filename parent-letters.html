@@ -310,37 +310,88 @@
 
 <script>
 (function () {
-  var buttons = document.querySelectorAll('.filter-bar .tag');
-  var cards = document.querySelectorAll('.letter-card');
-  var noResults = document.querySelector('.no-results');
-  var visibleCountEl = document.getElementById('visible-count');
-  var totalCountEl = document.getElementById('total-count');
+  // Public feed of team-approved letters, served by a Google Apps Script
+  // bound to the "Submit a Letter of Concern" response sheet. It only ever
+  // returns rows marked Status = Published, and only the fields safe to
+  // show publicly (title, category, date, author name-or-anonymous, file
+  // link) -- never name/email of unpublished or anonymous-by-default rows.
+  var LETTERS_FEED_URL = 'https://script.google.com/macros/s/AKfycbxtRxNc8xkxQj9QfGi7u2wVZFdV7PXk26GCM_dFUjHOUeiWzer_L-v_0KLUjuIfzl61/exec';
 
-  if (totalCountEl) totalCountEl.textContent = cards.length;
-  var totalCountBannerEl = document.getElementById('total-count-banner');
-  if (totalCountBannerEl) totalCountBannerEl.textContent = cards.length;
-  var totalCountBanner2El = document.getElementById('total-count-banner-2');
-  if (totalCountBanner2El) totalCountBanner2El.textContent = cards.length;
-
-  function applyFilter(category) {
-    var visibleCount = 0;
-    cards.forEach(function (card) {
-      var show = category === 'all' || card.getAttribute('data-category') === category;
-      card.hidden = !show;
-      if (show) visibleCount++;
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
-    if (noResults) noResults.hidden = visibleCount !== 0;
-    if (visibleCountEl) visibleCountEl.textContent = visibleCount;
   }
 
-  buttons.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      buttons.forEach(function (b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      applyFilter(btn.getAttribute('data-category'));
-    });
-  });
+  function buildCard(item) {
+    var card = document.createElement('div');
+    card.className = 'letter-card';
+    card.setAttribute('data-category', item.category || '');
 
+    var metaParts = [];
+    if (item.date) metaParts.push('Sent ' + escapeHtml(item.date));
+    metaParts.push(escapeHtml(item.author || 'Submitted anonymously'));
+
+    card.innerHTML =
+      '<div>' +
+        '<strong>' + escapeHtml(item.title) + '</strong>' +
+        (item.category ? '<span class="category-badge">' + escapeHtml(item.category) + '</span>' : '') +
+        '<div class="meta">' + metaParts.join(' &middot; ') + '</div>' +
+      '</div>' +
+      (item.fileUrl ? '<a class="download" href="' + escapeHtml(item.fileUrl) + '" target="_blank" rel="noopener">Read Letter &rarr;</a>' : '');
+
+    return card;
+  }
+
+  function initFilters() {
+    var buttons = document.querySelectorAll('.filter-bar .tag');
+    var cards = document.querySelectorAll('.letter-card');
+    var noResults = document.querySelector('.no-results');
+    var visibleCountEl = document.getElementById('visible-count');
+    var totalCountEl = document.getElementById('total-count');
+
+    if (totalCountEl) totalCountEl.textContent = cards.length;
+    var totalCountBannerEl = document.getElementById('total-count-banner');
+    if (totalCountBannerEl) totalCountBannerEl.textContent = cards.length;
+    var totalCountBanner2El = document.getElementById('total-count-banner-2');
+    if (totalCountBanner2El) totalCountBanner2El.textContent = cards.length;
+
+    function applyFilter(category) {
+      var visibleCount = 0;
+      cards.forEach(function (card) {
+        var show = category === 'all' || card.getAttribute('data-category') === category;
+        card.hidden = !show;
+        if (show) visibleCount++;
+      });
+      if (noResults) noResults.hidden = visibleCount !== 0;
+      if (visibleCountEl) visibleCountEl.textContent = visibleCount;
+    }
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        buttons.forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        applyFilter(btn.getAttribute('data-category'));
+      });
+    });
+  }
+
+  var list = document.querySelector('.letter-list');
+
+  fetch(LETTERS_FEED_URL)
+    .then(function (res) { return res.json(); })
+    .then(function (items) {
+      if (!list || !Array.isArray(items) || !items.length) return;
+      var fragment = document.createDocumentFragment();
+      items.forEach(function (item) {
+        fragment.appendChild(buildCard(item));
+      });
+      list.insertBefore(fragment, list.firstChild);
+    })
+    .catch(function (err) {
+      console.warn('Could not load additional published letters:', err);
+    })
+    .then(initFilters);
 })();
 </script>
 </body>
