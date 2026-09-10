@@ -13,7 +13,7 @@ Go to github.com and sign up (skip if you already have one).
 
 ## 3. Upload the site files
 - On the repo page, click **Add file → Upload files**.
-- Drag in every file/folder from this package (`index.html`, `parent-letters.html`, `media.html`, `live-meetings.html`, `about.html`, `style.css`, and the `assets` folder).
+- Drag in every file/folder from this package (`index.html`, `letters.html`, `media.html`, `live-meetings.html`, `about.html`, `style.css`, and the `assets` folder).
 - Scroll down, click **Commit changes**.
 
 ## 4. Turn on GitHub Pages
@@ -64,7 +64,7 @@ When there's a new letter, photo, video, or a change to the schedule/embed codes
    - **Do not add Name or Email fields** if you want submissions to default to anonymous.
 3. Publish the form. Click **Share** and copy the form ID from the link
    (it's the part after `tally.so/r/`).
-4. Open `parent-letters.html`, find the `<iframe src="https://tally.so/embed/FORM_ID...`
+4. Open `letters.html`, find the `<iframe src="https://tally.so/embed/FORM_ID...`
    line, and replace `FORM_ID` with your real form ID.
 5. Submissions land in your private Tally dashboard (tally.so/forms) — nothing is public
    until your team reviews it and manually adds it to this page.
