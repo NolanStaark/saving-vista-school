@@ -13,7 +13,7 @@ Go to github.com and sign up (skip if you already have one).
 
 ## 3. Upload the site files
 - On the repo page, click **Add file → Upload files**.
-- Drag in every file/folder from this package (`index.html`, `letters.html`, `media.html`, `live-meetings.html`, `about.html`, `style.css`, and the `assets` folder).
+- Drag in every file/folder from this package (`index.html`, `letters.html`, `media.html`, `meetings.html`, `about.html`, `style.css`, and the `assets` folder).
 - Scroll down, click **Commit changes**.
 
 ## 4. Turn on GitHub Pages
@@ -75,5 +75,5 @@ When there's a new letter, photo, video, or a change to the schedule/embed codes
 
 ## Notes
 - The Parent Letters and Media pages currently show an empty-state placeholder — they're ready to fill in as soon as real letters/photos are sent over.
-- The Live Meetings page needs your YouTube **Channel ID** (and a playlist ID for past meetings) dropped into `live-meetings.html` — see the comments in that file.
+- The Live Meetings page needs your YouTube **Channel ID** (and a playlist ID for past meetings) dropped into `meetings.html` — see the comments in that file.
 - The Contact form on the About page is currently visual-only (it doesn't send email yet) — say the word if you want it wired up to actually deliver messages (Formspree/Getform have free tiers for this).
