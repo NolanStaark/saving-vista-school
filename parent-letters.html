@@ -374,6 +374,11 @@
         applyFilter(btn.getAttribute('data-category'));
       });
     });
+
+    // Sync "Showing X of Y" against whichever filter is active on load
+    // (matters once dynamically-fetched letters change the total).
+    var activeButton = document.querySelector('.filter-bar .tag.active');
+    applyFilter(activeButton ? activeButton.getAttribute('data-category') : 'all');
   }
 
   var list = document.querySelector('.letter-list');
