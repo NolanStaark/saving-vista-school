@@ -109,6 +109,44 @@ even though it can't be locally tested from either of Claude's shells.
   `letters.html`). This requires Russ to sign into the new account himself;
   Claude cannot do the sign-in/authorization steps. Not started.
 
+## Defamation-risk screening for letters (do this before publishing any new letter)
+
+As of Sept 2026, a full read-through of the 18 letters then-published on
+`letters.html` found most are fine (framed as the author's own opinion or
+first-hand experience, or aimed at "the administration"/"the board"
+collectively). A few named specific individuals (not the school, not the
+author) and asserted damaging claims -- dishonesty, cover-ups, bias,
+unethical conduct -- as flat fact rather than opinion, mostly resting on
+secondhand/hearsay sourcing. Those were left published as-is (Russ's call),
+but a disclaimer was added to `letters.html` (linking to `about.html#contact`
+for correction requests) and this checklist exists so *new* submissions get
+screened before they're moved from `assets/letters/` into
+`assets/letters-archive/`:
+
+- Does it name a specific person other than the author (a teacher, a
+  specific staff/board member -- not "the administration" collectively)?
+- If so, does it assert something damaging about that person as a stated
+  fact ("he covered it up") rather than clearly-framed opinion/experience
+  ("it felt to me like...", "I was told...", "in my view...")?
+- Is the claim about that person's official actions/votes (lower risk --
+  school officials are limited-purpose public figures for their official
+  conduct) or about their private character/conduct (higher risk)?
+- Is the claim sourced to the author's own direct experience, or to
+  secondhand/hearsay reports ("colleagues told me...")? Hearsay stated as
+  fact is the highest-risk pattern seen so far.
+- Accusations of illegal conduct, financial impropriety, dishonesty, or
+  abuse deserve the closest look regardless of source.
+
+None of this is legal advice -- Russ has been told to get an actual Utah
+attorney to review the site's publishing practices as it grows, especially
+given growing traffic. This checklist is a non-lawyer screening aid, not a
+substitute for that review.
+
+Note: `about.html`'s contact form has no backend wired up yet (no
+Formspree/Getform etc.) -- the "contact us" link in the letters disclaimer
+currently dead-ends at a form that doesn't actually send anything. Wire
+that up before relying on it as a real correction-request channel.
+
 ## Open / unconfirmed items
 
 - Whether updating Brave's Shields content-filter lists actually fixed the
