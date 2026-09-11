@@ -1,5 +1,7 @@
 # Saving Vista School — project notes for Claude
 
+**This file lives in `.notes/` on purpose, not the repo root.** GitHub Pages for this site is set to "Deploy from a branch" (main, root) with no `.nojekyll` file, so Jekyll runs its default build, which excludes anything starting with `.` or `_` but NOT plain root files. A file like this sitting at the repo root -- especially one naming people whose content we're specifically trying to keep unpublished -- would be publicly fetchable at savingvistaschool.org/PROJECT_NOTES.md. Keep this (and DEPLOY.md) inside a dot-prefixed folder; never move either back to the root.
+
 Read this first in any new chat scoped to one page of this site. It's the
 cross-cutting context every page-specific conversation should share, so we
 don't have to re-explain it each time.
@@ -56,7 +58,7 @@ still stands even if not repeated in a given chat.
   box + the same filter-chip pattern.
 - `media.html`, `about.html`, `404.html`, `home-full.html` — mostly static;
   keep their nav in sync when pages are added/renamed.
-- `DEPLOY.md` — deployment notes.
+- `.notes/DEPLOY.md` — deployment notes (moved here for the same publishing-exposure reason as this file).
 
 ## Meetings automation (as of this writing)
 
