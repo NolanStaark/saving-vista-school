@@ -1,23 +1,17 @@
 #!/usr/bin/env python3
 """
-Pulls Vista School's next upcoming Board Meeting(s) and Townhall Meeting(s)
-directly from Vista's own public Google Calendar -- the source Vista itself
-keeps current, including one-off reschedules -- and merges in
-Agenda/Minutes/Recording links from Vista's board-meetings page where
-available, into assets/data/meetings.json so meetings.html can render an
-always-current "what's next" list without anyone here updating it by hand.
+Pulls Vista School's next upcoming Board Meeting AND next upcoming Townhall
+Meeting -- one of each, separately -- directly from Vista's own public
+Google Calendar, and merges in Agenda/Minutes/Recording links from Vista's
+board-meetings page where available, into assets/data/meetings.json so
+meetings.html can show "what's next" for each meeting type at the top of
+the page without anyone here updating it by hand.
 
 Vista's calendar has real Google Calendar recurrence rules with per-meeting
 overrides (a single occurrence can be moved without changing the recurring
-series), so we resolve those with `recurring_ical_events` rather than
-assuming a fixed weekday/time pattern -- Vista's own stated "4th Tuesday"
-description has not held in practice (e.g. meetings moved to Mondays for a
-stretch in 2026).
-
-Only the next NEXT_N upcoming meetings (across both types, combined) are
-kept -- this is meant to answer "when's the next meeting," not to be a full
-schedule archive (Vista's own board-meetings page + our archive-year links
-already cover that).
+series -- Vista's board meetings run monthly on a nominal "4th Tuesday" but
+are frequently moved), so we resolve those with `recurring_ical_events`
+rather than assuming a fixed weekday/time pattern.
 
 Run on a schedule via .github/workflows/update-meetings.yml.
 """
@@ -42,12 +36,9 @@ OUTPUT_PATH = Path(__file__).resolve().parent.parent / "assets" / "data" / "meet
 USER_AGENT = "Mozilla/5.0 (compatible; SavingVistaSchoolBot/1.0; +https://savingvistaschool.org)"
 DENVER = ZoneInfo("America/Denver")
 
-# How many upcoming meetings (combined, both types) to keep.
-NEXT_N = 2
-
-# How far ahead to look for those NEXT_N meetings. Board meetings run
-# roughly monthly, so this comfortably covers finding two of them even
-# around breaks/holidays.
+# How far ahead to look for the next occurrence of each meeting type. Board
+# meetings run roughly monthly and Townhalls less often, so this comfortably
+# covers finding one of each even around breaks/holidays.
 FUTURE_WINDOW_DAYS = 270
 
 TOWNHALL_RE = re.compile(r"town\s*hall", re.IGNORECASE)
@@ -71,10 +62,9 @@ def classify(summary):
 
 
 def fetch_upcoming_meetings():
-    """Returns the next NEXT_N Board/Townhall meetings, chronologically,
-    resolved directly from Vista's calendar (recurrence + overrides
-    included, since Google Calendar API-style expansion is what
-    recurring_ical_events gives us over the raw ICS feed)."""
+    """Returns all upcoming Board/Townhall occurrences within the window,
+    chronologically, resolved directly from Vista's calendar (recurrence +
+    per-occurrence overrides included)."""
     ics_text = fetch_text(CALENDAR_ICS_URL)
     calendar = icalendar.Calendar.from_ical(ics_text)
 
@@ -122,7 +112,14 @@ def fetch_upcoming_meetings():
     for m in deduped:
         del m["_sort_key"]
 
-    return deduped[:NEXT_N]
+    return deduped
+
+
+def next_of_type(meetings, kind):
+    for m in meetings:
+        if m["type"] == kind:
+            return m
+    return None
 
 
 def parse_board_page(html):
@@ -179,7 +176,10 @@ def parse_board_page(html):
 
 def main():
     meetings = fetch_upcoming_meetings()
-    if not meetings:
+    next_board = next_of_type(meetings, "board")
+    next_townhall = next_of_type(meetings, "townhall")
+
+    if not next_board and not next_townhall:
         # Don't overwrite a good file with an empty result if the calendar
         # is briefly unreachable or its structure changed -- fail loudly so
         # the workflow surfaces it instead of silently going stale.
@@ -197,15 +197,15 @@ def main():
         print(f"Warning: couldn't fetch/parse Vista's board-meetings page ({exc}); "
               f"continuing with calendar dates only.", file=sys.stderr)
 
-    for m in meetings:
-        if m["type"] == "board" and m["date"] in docs_by_date:
-            m.update(docs_by_date[m["date"]])
+    if next_board and next_board["date"] in docs_by_date:
+        next_board.update(docs_by_date[next_board["date"]])
 
     data = {
         "source": CALENDAR_ICS_URL,
         "board_page_source": BOARD_PAGE_URL,
         "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "meetings": meetings,
+        "next_board": next_board,
+        "next_townhall": next_townhall,
         "archive_years": archive_years,
     }
 
@@ -214,7 +214,9 @@ def main():
         json.dump(data, f, indent=2)
         f.write("\n")
 
-    print(f"Wrote {len(meetings)} upcoming meetings and {len(archive_years)} archive years to {OUTPUT_PATH}")
+    print(f"Wrote next_board={next_board and next_board['date']} "
+          f"next_townhall={next_townhall and next_townhall['date']} "
+          f"and {len(archive_years)} archive years to {OUTPUT_PATH}")
 
 
 if __name__ == "__main__":

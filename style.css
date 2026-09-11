@@ -676,48 +676,36 @@ footer.site-footer a {
   text-decoration: none;
 }
 
-/* Meetings page: auto-pulled Board/Townhall schedule */
-.meetings-list {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+/* Meetings page: auto-pulled "next meeting" cards, one per type */
+.next-meetings-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
   margin-top: 8px;
 }
 
-.meeting-row {
+.next-meeting-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-left: 4px solid var(--border);
+  border-top: 4px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px 20px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  padding: 20px 22px;
 }
 
-.meeting-row.next {
-  border-left-color: var(--navy);
-  background: #f4f8fa;
-}
+.next-meeting-card.board { border-top-color: var(--navy); }
+.next-meeting-card.townhall { border-top-color: #c98a1c; }
 
-.meeting-date {
-  font-weight: 600;
-  color: var(--navy);
-}
-
-.next-badge {
-  display: inline-block;
-  background: var(--navy);
-  color: #fff;
-  font-size: 0.7rem;
+.next-meeting-date {
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 2px 8px;
-  border-radius: 999px;
-  margin-right: 4px;
+  font-size: 1.15rem;
+  color: var(--navy);
+  margin-top: 10px;
+}
+
+.next-meeting-location {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 2px;
 }
 
 .meeting-type-badge {
@@ -728,7 +716,6 @@ footer.site-footer a {
   letter-spacing: 0.03em;
   padding: 2px 8px;
   border-radius: 999px;
-  margin-right: 4px;
 }
 
 .meeting-type-badge.board {
@@ -745,6 +732,7 @@ footer.site-footer a {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-top: 14px;
 }
 
 .doc-link {

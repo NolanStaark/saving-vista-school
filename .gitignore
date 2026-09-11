@@ -1,3 +1,7 @@
 # Raw/unreviewed submissions - never publish these
 assets/letters/*
 !assets/letters/.gitkeep
+
+# Python bytecode cache from local script testing
+__pycache__/
+*.pyc

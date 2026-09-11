@@ -38,6 +38,25 @@
   </div>
 </div>
 
+<section class="alt">
+  <div class="container">
+    <h2>Next Meetings</h2>
+    <p style="color:var(--muted);font-size:0.9rem;margin:0 0 16px;">
+      Pulled automatically from Vista's own public calendar, since their posted schedule can move around
+      in practice (meetings aren't always the same weekday). Both Board and Townhall meetings are held
+      in the Vista School Gym. <a href="https://calendar.google.com/calendar/embed?src=vistautah.com_848rd4r1ssm1rkme3mnr3ke9h4%40group.calendar.google.com&ctz=America/Denver" target="_blank" rel="noopener">View Vista's calendar directly &rarr;</a>
+    </p>
+
+    <div id="next-meetings-cards" class="next-meetings-cards"></div>
+    <p id="next-meetings-empty" class="empty-state" hidden>
+      Couldn't load the current schedule right now &mdash;
+      <a href="https://www.vistautah.com/board-meetings" target="_blank" rel="noopener">check Vista's Board Meetings page</a>
+      or <a href="https://calendar.google.com/calendar/embed?src=vistautah.com_848rd4r1ssm1rkme3mnr3ke9h4%40group.calendar.google.com&ctz=America/Denver" target="_blank" rel="noopener">their calendar directly</a>.
+    </p>
+    <p id="meetings-updated" style="color:var(--muted);font-size:0.8rem;margin-top:10px;"></p>
+  </div>
+</section>
+
 <section>
   <div class="container">
     <h2>Live Stream</h2>
@@ -57,25 +76,6 @@
         allowfullscreen>
       </iframe>
     </div>
-  </div>
-</section>
-
-<section class="alt">
-  <div class="container">
-    <h2>Upcoming Meetings</h2>
-    <p style="color:var(--muted);font-size:0.9rem;margin:0 0 16px;">
-      Pulled automatically from Vista's own public calendar, since their posted schedule can move around
-      in practice (meetings aren't always the same weekday). Both Board and Townhall meetings are held
-      in the Vista School Gym. <a href="https://calendar.google.com/calendar/embed?src=vistautah.com_848rd4r1ssm1rkme3mnr3ke9h4%40group.calendar.google.com&ctz=America/Denver" target="_blank" rel="noopener">View Vista's calendar directly &rarr;</a>
-    </p>
-
-    <div id="meetings-list" class="meetings-list"></div>
-    <p id="meetings-empty" class="empty-state" hidden>
-      Couldn't load the current schedule right now &mdash;
-      <a href="https://www.vistautah.com/board-meetings" target="_blank" rel="noopener">check Vista's Board Meetings page</a>
-      or <a href="https://calendar.google.com/calendar/embed?src=vistautah.com_848rd4r1ssm1rkme3mnr3ke9h4%40group.calendar.google.com&ctz=America/Denver" target="_blank" rel="noopener">their calendar directly</a>.
-    </p>
-    <p id="meetings-updated" style="color:var(--muted);font-size:0.8rem;margin-top:10px;"></p>
   </div>
 </section>
 
@@ -105,53 +105,45 @@
 
 <script>
 (function () {
-  function fmtDate(iso) {
-    if (!iso) return '';
-    var parts = iso.split('-');
-    var d = new Date(Date.UTC(+parts[0], +parts[1] - 1, +parts[2]));
-    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
-  }
-
   function docLink(url, label) {
     if (!url) return '<span class="doc-link disabled">' + label + ' not posted yet</span>';
     return '<a class="doc-link" href="' + url + '" target="_blank" rel="noopener">' + label + '</a>';
   }
 
-  function typeLabel(type) {
-    return type === 'townhall' ? 'Townhall' : 'Board';
-  }
-
-  function renderMeetings(data) {
-    var list = document.getElementById('meetings-list');
-    var updatedEl = document.getElementById('meetings-updated');
-    if (!list || !data || !Array.isArray(data.meetings)) throw new Error('bad data');
-
-    var todayIso = new Date().toISOString().slice(0, 10);
-    var nextFound = false;
-
-    var html = data.meetings.map(function (m) {
-      var isNext = !nextFound && m.date && m.date >= todayIso;
-      if (isNext) nextFound = true;
-      var docsHtml = m.type === 'board'
-        ? ('<div class="meeting-docs">' +
-            docLink(m.agenda_url, 'Agenda') +
-            docLink(m.minutes_url, 'Minutes') +
-            docLink(m.recording_url, 'Recording') +
-          '</div>')
-        : '';
+  function renderCard(meeting, typeLabel, typeClass) {
+    if (!meeting) {
       return (
-        '<div class="meeting-row' + (isNext ? ' next' : '') + '">' +
-          '<div class="meeting-date">' +
-            (isNext ? '<span class="next-badge">Next</span> ' : '') +
-            '<span class="meeting-type-badge ' + m.type + '">' + typeLabel(m.type) + '</span> ' +
-            (m.display_date || fmtDate(m.date)) + (m.time ? ' at ' + m.time : '') + ' &mdash; Vista School Gym' +
-          '</div>' +
-          docsHtml +
+        '<div class="next-meeting-card ' + typeClass + ' empty">' +
+          '<span class="meeting-type-badge ' + typeClass + '">' + typeLabel + '</span>' +
+          '<p class="empty-state" style="margin-top:10px;">No upcoming ' + typeLabel.toLowerCase() + ' currently posted.</p>' +
         '</div>'
       );
-    }).join('');
+    }
+    var docsHtml = meeting.type === 'board'
+      ? ('<div class="meeting-docs">' +
+          docLink(meeting.agenda_url, 'Agenda') +
+          docLink(meeting.minutes_url, 'Minutes') +
+          docLink(meeting.recording_url, 'Recording') +
+        '</div>')
+      : '';
+    return (
+      '<div class="next-meeting-card ' + typeClass + '">' +
+        '<span class="meeting-type-badge ' + typeClass + '">' + typeLabel + '</span>' +
+        '<div class="next-meeting-date">' + (meeting.display_date || meeting.date) + (meeting.time ? ' at ' + meeting.time : '') + '</div>' +
+        '<div class="next-meeting-location">Vista School Gym</div>' +
+        docsHtml +
+      '</div>'
+    );
+  }
 
-    list.innerHTML = html || '<p class="empty-state">No meetings currently posted.</p>';
+  function renderNextMeetings(data) {
+    var container = document.getElementById('next-meetings-cards');
+    var updatedEl = document.getElementById('meetings-updated');
+    if (!container || !data) throw new Error('bad data');
+
+    container.innerHTML =
+      renderCard(data.next_board, 'Board Meeting', 'board') +
+      renderCard(data.next_townhall, 'Townhall Meeting', 'townhall');
 
     if (updatedEl && data.updated_at) {
       var d = new Date(data.updated_at);
@@ -168,10 +160,10 @@
 
   fetch('assets/data/meetings.json')
     .then(function (res) { return res.json(); })
-    .then(renderMeetings)
+    .then(renderNextMeetings)
     .catch(function (err) {
       console.warn('Could not load meeting schedule:', err);
-      var empty = document.getElementById('meetings-empty');
+      var empty = document.getElementById('next-meetings-empty');
       if (empty) empty.hidden = false;
     });
 })();
