@@ -75,6 +75,19 @@
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen>
       </iframe>
+      <!--
+        YouTube's own "This video is unavailable" message shows inside their iframe
+        whenever nothing is streaming -- we can't edit that (it's cross-origin), so
+        this overlay covers it with our own "Not currently live" message instead.
+        JS below hides this automatically during/near a scheduled meeting time, based
+        on the same Next Meetings data used above.
+      -->
+      <div id="live-placeholder" class="live-placeholder">
+        <div>
+          <strong>Not currently live</strong>
+          <span id="live-placeholder-next">Check back during a scheduled Board or Townhall meeting.</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -158,13 +171,74 @@
     }
   }
 
+  function parseMeetingDateTime(m) {
+    if (!m || !m.date) return null;
+    var timeMatch = /(\d+):(\d+)\s*(AM|PM)/i.exec(m.time || '');
+    var hours = 18, minutes = 0; // assume 6pm if a time is ever missing
+    if (timeMatch) {
+      hours = parseInt(timeMatch[1], 10) % 12;
+      minutes = parseInt(timeMatch[2], 10);
+      if (/pm/i.test(timeMatch[3])) hours += 12;
+    }
+    var d = new Date(m.date + 'T00:00:00');
+    d.setHours(hours, minutes, 0, 0);
+    return d;
+  }
+
+  // Assumes viewers are in Mountain time (the community this site is for) --
+  // good enough for a "is a meeting probably happening right now" check,
+  // not meant to be precise for out-of-area visitors.
+  function updateLiveStreamPlaceholder(data) {
+    var placeholder = document.getElementById('live-placeholder');
+    var nextEl = document.getElementById('live-placeholder-next');
+    if (!placeholder) return;
+
+    var candidates = [
+      data && data.next_board,
+      data && data.next_townhall
+    ].map(function (m) {
+      return { meeting: m, start: parseMeetingDateTime(m) };
+    }).filter(function (c) { return c.start; });
+
+    var now = new Date();
+    var BEFORE_MS = 15 * 60 * 1000;      // show the real embed starting 15 min early
+    var AFTER_MS = 3 * 60 * 60 * 1000;   // ...through 3 hours after the scheduled start
+
+    var isLikelyLive = candidates.some(function (c) {
+      var diff = now - c.start;
+      return diff >= -BEFORE_MS && diff <= AFTER_MS;
+    });
+
+    placeholder.hidden = isLikelyLive;
+
+    if (!isLikelyLive && nextEl) {
+      var upcoming = candidates
+        .filter(function (c) { return c.start > now; })
+        .sort(function (a, b) { return a.start - b.start; })[0];
+
+      if (upcoming) {
+        var typeLabel = upcoming.meeting.type === 'townhall' ? 'Townhall Meeting' : 'Board Meeting';
+        nextEl.textContent = 'Next: ' + typeLabel + ' \u2014 ' +
+          (upcoming.meeting.display_date || upcoming.meeting.date) +
+          (upcoming.meeting.time ? ' at ' + upcoming.meeting.time : '');
+      } else {
+        nextEl.textContent = 'Check back during a scheduled Board or Townhall meeting.';
+      }
+    }
+  }
+
   fetch('assets/data/meetings.json')
     .then(function (res) { return res.json(); })
-    .then(renderNextMeetings)
+    .then(function (data) {
+      renderNextMeetings(data);
+      updateLiveStreamPlaceholder(data);
+    })
     .catch(function (err) {
       console.warn('Could not load meeting schedule:', err);
       var empty = document.getElementById('next-meetings-empty');
       if (empty) empty.hidden = false;
+      // Leave the live-placeholder visible (its default state) rather than
+      // risk showing YouTube's raw "unavailable" error underneath it.
     });
 })();
 </script>

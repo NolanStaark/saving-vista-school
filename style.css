@@ -772,3 +772,32 @@ footer.site-footer a {
 .archive-list li {
   margin-bottom: 6px;
 }
+
+/* Live Stream: our own "not currently live" overlay, replacing YouTube's
+   own (unstyled, cross-origin) "This video is unavailable" message */
+.live-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+  color: #fff;
+  z-index: 2;
+}
+
+.live-placeholder[hidden] { display: none; }
+
+.live-placeholder strong {
+  display: block;
+  font-size: 1.15rem;
+  margin-bottom: 6px;
+}
+
+.live-placeholder span {
+  display: block;
+  color: #cfe0e8;
+  font-size: 0.9rem;
+}
