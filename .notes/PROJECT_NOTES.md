@@ -147,6 +147,34 @@ Formspree/Getform etc.) -- the "contact us" link in the letters disclaimer
 currently dead-ends at a form that doesn't actually send anything. Wire
 that up before relying on it as a real correction-request channel.
 
+## Letters page: filters removed (Sept 2026 decision)
+
+The recipient filter bar ("To Vista Administration" / "To the School Board" /
+"To the State Charter School Board" / "General Concern") was REMOVED from
+letters.html on purpose -- do not add it back without talking to Russ.
+
+Why: of the 18 published letters, 7 were tagged State Charter Board, 7
+"General Concern" (a catch-all, not a recipient), 4 School Board, and 0 "To
+Vista Administration" -- so that button returned an empty list to anyone who
+clicked it. Most of these letters went to more than one recipient anyway, so
+filtering on a single recipient narrowed almost nothing and misrepresented
+the letters. The page is now a straight reverse-chronological archive; each
+card still shows its recipient as a badge.
+
+Notes for whoever touches this next:
+- `.filter-bar` and `.tag` CSS in style.css is STILL USED by policies.html.
+  Do not delete those rules. `.letter-count` and `.no-results` are now unused
+  but were left in place rather than risk a shared-stylesheet edit.
+- The JS `initFilters()` function was replaced by `updateCounts()`, which only
+  keeps the "18 Letters Published" banner numbers in sync once feed-loaded
+  letters are prepended to the static ones.
+- 7 letters still carry a "General Concern" badge, which reads oddly now that
+  it stands alone as a label rather than a filter. Open question for Russ.
+- If filtering ever comes back, the useful axis is subject matter (bullying &
+  student safety, leadership & governance, transparency & communication, staff
+  & culture, arts & curriculum, special ed & academic support) with letters
+  allowed to carry MULTIPLE tags -- not a single recipient.
+
 ## Open / unconfirmed items
 
 - Whether updating Brave's Shields content-filter lists actually fixed the

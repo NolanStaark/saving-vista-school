@@ -33,6 +33,12 @@
 
 <div class="page-header">
   <div class="container">
+    <svg class="page-header-graphic" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+      <rect x="20" y="55" width="160" height="110" rx="10" stroke="#fff" stroke-width="4"/>
+      <path d="M24 60 100 122 176 60" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="172" cy="34" r="9" fill="var(--gold)"/>
+      <circle cx="30" cy="178" r="6" fill="var(--gold)"/>
+    </svg>
     <h1>Letters of Concern</h1>
     <p>Letters written by Vista parents to the school's administration, the School Board, and the Utah State Charter School Board &mdash; archived here for transparency.</p>
   </div>
@@ -54,7 +60,7 @@
             -->
 
             <p class="policy-note" style="margin-bottom:24px;">
-              <strong>A note on these letters:</strong> each one was written and submitted
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--gold);flex-shrink:0;vertical-align:-3px;margin-right:6px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><strong>A note on these letters:</strong> each one was written and submitted
               by the parent, staff member, or community member named below it (or kept
               anonymous at their request). They are personal accounts and opinions &mdash;
               Saving Vista School does not independently investigate or verify every
@@ -66,8 +72,9 @@
 
             <div class="count-banner">
               <div class="count-banner-stat">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--gold);flex-shrink:0;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
                 <span class="count-banner-number" id="total-count-banner">18</span>
-                <span class="count-banner-label">Letters<br>Published</span>
+                <span class="count-banner-label">Letters<br>Submitted</span>
               </div>
               <div class="count-banner-cta">
                 <span id="count-banner-cta-text"><span id="total-count-banner-2">18</span> concerned parents and staff have spoken up.</span>
@@ -75,183 +82,18 @@
               </div>
             </div>
 
-            <div class="filter-bar" role="group" aria-label="Filter letters by recipient">
-              <button type="button" class="tag active" data-category="all">All</button>
-              <button type="button" class="tag" data-category="To Vista Administration">To Vista Administration</button>
-              <button type="button" class="tag" data-category="To the School Board">To the School Board</button>
-              <button type="button" class="tag" data-category="To the State Charter School Board">To the State Charter School Board</button>
-              <button type="button" class="tag" data-category="General Concern">General Concern</button>
-            </div>
-
-            <p class="letter-count">Showing <span id="visible-count">18</span> of <span id="total-count">18</span> letters</p>
+            <h2 class="letters-heading">Published With Permission</h2>
+            <p class="letters-heading-note">
+              Every letter below is shared here with the express permission of the
+              person who wrote it.
+            </p>
 
             <div class="letter-list">
 
-              <div class="letter-card" data-category="To the State Charter School Board">
-                <div>
-                  <strong>Concerns About Student Safety, Bullying, and Supervision Practices</strong>
-                  <span class="category-badge">To the State Charter School Board</span>
-                  <div class="meta">Sent August 20, 2026 &middot; Submitted anonymously</div>
-                </div>
-                <a class="download" href="assets/letters-archive/anonymous-letter-state-charter-board-2026-08-20.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="To the School Board">
-                <div>
-                  <strong>Grievance on Repeated Bullying Incidents and Communication Failures</strong>
-                  <span class="category-badge">To the School Board</span>
-                  <div class="meta">Sent August 11, 2026 &middot; Submitted anonymously</div>
-                </div>
-                <a class="download" href="assets/letters-archive/grievance-letter-2026-08-11.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="To the State Charter School Board">
-                <div>
-                  <strong>Formal Parent Grievance on Retaliation and Charter Compliance</strong>
-                  <span class="category-badge">To the State Charter School Board</span>
-                  <div class="meta">Sent August 2026 &middot; Dr. Megan Milne</div>
-                </div>
-                <a class="download" href="assets/letters-archive/megan-milne-letter-to-state-charter-board.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="To the State Charter School Board">
-                <div>
-                  <strong>Concerns Regarding Leadership, Governance, and Executive Compensation</strong>
-                  <span class="category-badge">To the State Charter School Board</span>
-                  <div class="meta">Sent August 3, 2026 &middot; Katie Pearce</div>
-                </div>
-                <a class="download" href="assets/letters-archive/pearce-letter-to-state-charter-board.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="General Concern">
-                <div>
-                  <strong>Grievance on Lack of Transparent Communication With Families</strong>
-                  <span class="category-badge">General Concern</span>
-                  <div class="meta">Sent July 31, 2026 &middot; Shyrel Wood</div>
-                </div>
-                <a class="download" href="assets/letters-archive/wood-grievance-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="To the School Board">
-                <div>
-                  <strong>Request for Investigation Into Bullying Response and Special Education Concerns</strong>
-                  <span class="category-badge">To the School Board</span>
-                  <div class="meta">Sent July 28, 2026 &middot; Kim Clegg</div>
-                </div>
-                <a class="download" href="assets/letters-archive/clegg-grievance-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="To the State Charter School Board">
-                <div>
-                  <strong>Concerns About Teacher Retention and Request for Charter Review</strong>
-                  <span class="category-badge">To the State Charter School Board</span>
-                  <div class="meta">Sent July 27, 2026 &middot; Submitted anonymously</div>
-                </div>
-                <a class="download" href="assets/letters-archive/vista-parent-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="General Concern">
-                <div>
-                  <strong>Concerns About Arts Program Losses and Administration Leadership</strong>
-                  <span class="category-badge">General Concern</span>
-                  <div class="meta">Sent July 2026 &middot; Dr. Megan Milne</div>
-                </div>
-                <a class="download" href="assets/letters-archive/megan-milne-grievance-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="To the School Board">
-                <div>
-                  <strong>Request to Reinstate a Parent Arts Advisory Committee</strong>
-                  <span class="category-badge">To the School Board</span>
-                  <div class="meta">Sent June 7, 2026 &middot; Submitted by a group of concerned Vista parents</div>
-                </div>
-                <a class="download" href="assets/letters-archive/save-vista-arts-program.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="General Concern">
-                <div>
-                  <strong>Grievance on Administration Communication and Conduct</strong>
-                  <span class="category-badge">General Concern</span>
-                  <div class="meta">Sent May 28, 2024 &middot; Submitted anonymously</div>
-                </div>
-                <a class="download" href="assets/letters-archive/vista-grievance-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="To the State Charter School Board">
-                <div>
-                  <strong>Addendum: Ongoing Concerns About Student Safety and Curriculum</strong>
-                  <span class="category-badge">To the State Charter School Board</span>
-                  <div class="meta">Sent 2024 &middot; Kalynn Snow</div>
-                </div>
-                <a class="download" href="assets/letters-archive/kalynn-snow-letter-to-state-board-2024.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="To the State Charter School Board">
-                <div>
-                  <strong>Departure From Charter Regarding Curriculum Autonomy</strong>
-                  <span class="category-badge">To the State Charter School Board</span>
-                  <div class="meta">Sent December 15, 2023 &middot; Kalynn Snow</div>
-                </div>
-                <a class="download" href="assets/letters-archive/kalynn-snow-letter-to-state-board-2023.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="To the School Board">
-                <div>
-                  <strong>Anonymous Staff Letter on Workplace Culture and Retaliation Concerns</strong>
-                  <span class="category-badge">To the School Board</span>
-                  <div class="meta">Submitted anonymously by a Vista staff member</div>
-                </div>
-                <a class="download" href="assets/letters-archive/anonymous-letter-vista-staff.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="General Concern">
-                <div>
-                  <strong>Grievance on Lack of Transparency in Arts Program Audition Scoring</strong>
-                  <span class="category-badge">General Concern</span>
-                  <div class="meta">Heather Braden</div>
-                </div>
-                <a class="download" href="assets/letters-archive/braden-grievance-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="General Concern">
-                <div>
-                  <strong>Grievance on Staff Turnover, Communication, and School Culture</strong>
-                  <span class="category-badge">General Concern</span>
-                  <div class="meta">Ezra and Elise Hurst</div>
-                </div>
-                <a class="download" href="assets/letters-archive/hurst-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="General Concern">
-                <div>
-                  <strong>A Former Teacher's Perspective on Vista's Culture and Instruction</strong>
-                  <span class="category-badge">General Concern</span>
-                  <div class="meta">Jazzmine Bullock (Gee), former teacher</div>
-                </div>
-                <a class="download" href="assets/letters-archive/jazmine-gee-bullock-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="To the State Charter School Board">
-                <div>
-                  <strong>Concerns About Academic Support and Classroom Disruptions</strong>
-                  <span class="category-badge">To the State Charter School Board</span>
-                  <div class="meta">Leisha Ouimet</div>
-                </div>
-                <a class="download" href="assets/letters-archive/leisha-ouimet-letter-to-state-charter-board.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
-
-              <div class="letter-card" data-category="General Concern">
-                <div>
-                  <strong>A Teacher's Account of Culture in the Math Department</strong>
-                  <span class="category-badge">General Concern</span>
-                  <div class="meta">Shala Hunsaker, former teacher</div>
-                </div>
-                <a class="download" href="assets/letters-archive/shala-hunsaker-letter.pdf" target="_blank" rel="noopener">Read Letter &rarr;</a>
-              </div>
+              
 
             </div>
 
-            <div class="no-results" hidden>No letters in this category yet.</div>
 
       </div>
 
@@ -267,7 +109,7 @@
             </p>
 
             <div class="submit-box" id="submit-a-letter">
-              <h3>Submit a Letter</h3>
+              <h3><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:6px;"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Submit a Letter</h3>
 
               <!-- Tally.so form "Submit a Letter of Concern" (lbGY16). Collects name + email for
                    internal follow-up only (never published), plus a "Publishing preference"
@@ -335,6 +177,15 @@
     });
   }
 
+  // Mirrors the icons hand-placed on the static category-badge spans above,
+  // so letters fetched from the feed get the same treatment.
+  var CATEGORY_ICONS = {
+    'To Vista Administration': '<svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V9l8-5 8 5v12"/><path d="M4 21h16"/><path d="M9 21v-6h6v6"/><path d="M9 12h.01M15 12h.01M9 16h.01M15 16h.01"/></svg>',
+    'To the School Board': '<svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="7" r="3"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/><circle cx="17" cy="8" r="2.5"/><path d="M15.5 14.4c.3-.1.6-.15 1-.15h1a3 3 0 0 1 3 3V21"/></svg>',
+    'To the State Charter School Board': '<svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10 12 4l9 6"/><path d="M5 10v10M9 10v10M15 10v10M19 10v10"/><path d="M3 20h18"/></svg>',
+    'General Concern': '<svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>'
+  };
+
   function buildCard(item) {
     var card = document.createElement('div');
     card.className = 'letter-card';
@@ -344,10 +195,12 @@
     if (item.date) metaParts.push('Sent ' + escapeHtml(item.date));
     metaParts.push(escapeHtml(item.author || 'Submitted anonymously'));
 
+    var icon = CATEGORY_ICONS[item.category] || '';
+
     card.innerHTML =
       '<div>' +
         '<strong>' + escapeHtml(item.title) + '</strong>' +
-        (item.category ? '<span class="category-badge">' + escapeHtml(item.category) + '</span>' : '') +
+        (item.category ? '<span class="category-badge">' + icon + escapeHtml(item.category) + '</span>' : '') +
         '<div class="meta">' + metaParts.join(' &middot; ') + '</div>' +
       '</div>' +
       (item.fileUrl ? '<a class="download" href="' + escapeHtml(item.fileUrl) + '" target="_blank" rel="noopener">Read Letter &rarr;</a>' : '');
@@ -355,42 +208,17 @@
     return card;
   }
 
-  function initFilters() {
-    var buttons = document.querySelectorAll('.filter-bar .tag');
-    var cards = document.querySelectorAll('.letter-card');
-    var noResults = document.querySelector('.no-results');
-    var visibleCountEl = document.getElementById('visible-count');
-    var totalCountEl = document.getElementById('total-count');
-
-    if (totalCountEl) totalCountEl.textContent = cards.length;
-    var totalCountBannerEl = document.getElementById('total-count-banner');
-    if (totalCountBannerEl) totalCountBannerEl.textContent = cards.length;
-    var totalCountBanner2El = document.getElementById('total-count-banner-2');
-    if (totalCountBanner2El) totalCountBanner2El.textContent = cards.length;
-
-    function applyFilter(category) {
-      var visibleCount = 0;
-      cards.forEach(function (card) {
-        var show = category === 'all' || card.getAttribute('data-category') === category;
-        card.hidden = !show;
-        if (show) visibleCount++;
-      });
-      if (noResults) noResults.hidden = visibleCount !== 0;
-      if (visibleCountEl) visibleCountEl.textContent = visibleCount;
-    }
-
-    buttons.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        buttons.forEach(function (b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        applyFilter(btn.getAttribute('data-category'));
-      });
+  // No filtering on this page -- the letters overwhelmingly went to more
+  // than one recipient, so a single-recipient filter narrowed nothing and
+  // one of its buttons matched no letters at all. The recipient is still
+  // shown on each card; this just keeps the published count honest once
+  // feed-loaded letters are added to the static ones.
+  function updateCounts() {
+    var total = document.querySelectorAll('.letter-card').length;
+    ['total-count-banner', 'total-count-banner-2'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.textContent = total;
     });
-
-    // Sync "Showing X of Y" against whichever filter is active on load
-    // (matters once dynamically-fetched letters change the total).
-    var activeButton = document.querySelector('.filter-bar .tag.active');
-    applyFilter(activeButton ? activeButton.getAttribute('data-category') : 'all');
   }
 
   var list = document.querySelector('.letter-list');
@@ -407,8 +235,8 @@
     })
     .catch(function (err) {
       console.warn('Could not load additional published letters:', err);
-    })
-    .then(initFilters);
+    });
+    //.then(updateCounts);
 })();
 </script>
 </body>
