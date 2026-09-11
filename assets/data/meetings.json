@@ -1,0 +1,37 @@
+{
+  "source": "https://calendar.google.com/calendar/ical/vistautah.com_848rd4r1ssm1rkme3mnr3ke9h4%40group.calendar.google.com/public/basic.ics",
+  "board_page_source": "https://www.vistautah.com/board-meetings",
+  "updated_at": "2026-09-11T00:00:00Z",
+  "meetings": [
+    {
+      "type": "board",
+      "summary": "Vista Board Meeting",
+      "date": "2026-09-29",
+      "display_date": "September 29, 2026",
+      "time": "6:00 PM",
+      "agenda_url": null,
+      "minutes_url": null,
+      "recording_url": null
+    },
+    {
+      "type": "townhall",
+      "summary": "Town Hall Meeting",
+      "date": "2026-10-20",
+      "display_date": "October 20, 2026",
+      "time": "6:00 PM"
+    }
+  ],
+  "archive_years": [
+    { "label": "2025-2026", "url": "https://www.vistautah.com/2025-2026-board-meetings" },
+    { "label": "2023-2025", "url": "https://www.vistautah.com/2023-2025-board-meetings" },
+    { "label": "2022-2023", "url": "https://www.vistautah.com/2022-2023-board-meetings" },
+    { "label": "2021-2022", "url": "https://www.vistautah.com/2021-2022-board-meetings" },
+    { "label": "2020-2021", "url": "https://www.vistautah.com/2020-2021-board-meetings" },
+    { "label": "2019-2020", "url": "https://www.vistautah.com/2019-2020-board-meetings" },
+    { "label": "2018-2019", "url": "https://www.vistautah.com/2018-2019-board-meetings" },
+    { "label": "2017-2018", "url": "https://www.vistautah.com/2017-2018-board-meetings" },
+    { "label": "2016-2017", "url": "https://www.vistautah.com/2016-2017-board-meetings" },
+    { "label": "2015-2016", "url": "https://www.vistautah.com/2015-2016-board-meetings" },
+    { "label": "2014-2015", "url": "https://www.vistautah.com/2014-2015-board-meetings" }
+  ]
+}
