@@ -88,10 +88,35 @@
               person who wrote it.
             </p>
 
-            <div class="letter-list">
-
-              
-
+            <div class="letter-list" aria-live="polite" aria-busy="true">
+              <div class="letter-card is-skeleton" aria-hidden="true">
+                <div class="skeleton-content">
+                  <div class="skeleton-line skeleton-title"></div>
+                  <div class="skeleton-line skeleton-meta"></div>
+                </div>
+                <div class="skeleton-line skeleton-button"></div>
+              </div>
+              <div class="letter-card is-skeleton" aria-hidden="true">
+                <div class="skeleton-content">
+                  <div class="skeleton-line skeleton-title"></div>
+                  <div class="skeleton-line skeleton-meta"></div>
+                </div>
+                <div class="skeleton-line skeleton-button"></div>
+              </div>
+              <div class="letter-card is-skeleton" aria-hidden="true">
+                <div class="skeleton-content">
+                  <div class="skeleton-line skeleton-title"></div>
+                  <div class="skeleton-line skeleton-meta"></div>
+                </div>
+                <div class="skeleton-line skeleton-button"></div>
+              </div>
+              <div class="letter-card is-skeleton" aria-hidden="true">
+                <div class="skeleton-content">
+                  <div class="skeleton-line skeleton-title"></div>
+                  <div class="skeleton-line skeleton-meta"></div>
+                </div>
+                <div class="skeleton-line skeleton-button"></div>
+              </div>
             </div>
 
 
@@ -223,10 +248,28 @@
 
   var list = document.querySelector('.letter-list');
 
+  function removeSkeletons() {
+    if (!list) return;
+    list.querySelectorAll('.is-skeleton').forEach(function (el) { el.remove(); });
+    list.setAttribute('aria-busy', 'false');
+  }
+
+  function showEmptyState(message) {
+    if (!list) return;
+    var p = document.createElement('p');
+    p.className = 'empty-state';
+    p.textContent = message;
+    list.appendChild(p);
+  }
+
   fetch(LETTERS_FEED_URL)
     .then(function (res) { return res.json(); })
     .then(function (items) {
-      if (!list || !Array.isArray(items) || !items.length) return;
+      if (!list) return;
+      if (!Array.isArray(items) || !items.length) {
+        showEmptyState('No letters have been published yet. Check back soon.');
+        return;
+      }
       var fragment = document.createDocumentFragment();
       items.forEach(function (item) {
         fragment.appendChild(buildCard(item));
@@ -234,8 +277,10 @@
       list.insertBefore(fragment, list.firstChild);
     })
     .catch(function (err) {
-      console.warn('Could not load additional published letters:', err);
-    });
+      console.warn('Could not load published letters:', err);
+      showEmptyState("Letters couldn't be loaded right now. Please refresh the page or check back soon.");
+    })
+    .finally(removeSkeletons);
     //.then(updateCounts);
 })();
 </script>
