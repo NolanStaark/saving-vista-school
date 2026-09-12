@@ -214,10 +214,16 @@ attorney to review the site's publishing practices as it grows, especially
 given growing traffic. This checklist is a non-lawyer screening aid, not a
 substitute for that review.
 
-Note: `about.html`'s contact form has no backend wired up yet (no
-Formspree/Getform etc.) -- the "contact us" link in the letters disclaimer
-currently dead-ends at a form that doesn't actually send anything. Wire
-that up before relying on it as a real correction-request channel.
+Note: `about.html`'s contact section was updated (Sept 2026) -- the
+placeholder phone/email/address were replaced with the nonprofit's real
+contact info (email only: `savingvistaschool@gmail.com`; Russ confirmed
+there's no phone or mailing address). The "Send a Message" form now posts
+to FormSubmit.co (`action="https://formsubmit.co/savingvistaschool@gmail.com"`,
+no account signup needed -- just an email confirmation on first real
+submission) with a `_subject`, `_next` redirect back to
+`about.html?sent=1#contact`, and a `_honey` spam honeypot field. The
+"contact us" link in the letters disclaimer now dead-ends at a working
+channel.
 
 ## Letters page: filters removed (Sept 2026 decision)
 
