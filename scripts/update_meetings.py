@@ -20,6 +20,7 @@ import re
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import urljoin
 from zoneinfo import ZoneInfo
 
 import icalendar
@@ -154,7 +155,9 @@ def parse_board_page(html):
 
             def link_or_none(cell):
                 a = cell.find("a")
-                return a.get("href") if a and a.get("href") else None
+                if not a or not a.get("href"):
+                    return None
+                return urljoin(BOARD_PAGE_URL, a["href"])
 
             docs_by_date[iso_date] = {
                 "agenda_url": link_or_none(cells[1]),
@@ -169,7 +172,7 @@ def parse_board_page(html):
         text = a.get_text(strip=True)
         if re.search(r"/\d{4}-\d{4}-board-meetings", href) and text and href not in seen:
             seen.add(href)
-            archive_years.append({"label": text, "url": href})
+            archive_years.append({"label": text, "url": urljoin(BOARD_PAGE_URL, href)})
 
     return docs_by_date, archive_years
 
