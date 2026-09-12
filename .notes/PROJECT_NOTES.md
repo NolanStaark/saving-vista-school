@@ -831,3 +831,27 @@ were editing `style.css` at the same moment, and its uncommitted tail
 swept in when they staged and committed the whole file. Content is
 correct in HEAD either way; noting it so the commit history isn't
 confusing later.
+
+## Social posts section rebuilt as a real sidebar + renamed (Sept 2026, supersedes note above)
+
+Russ corrected the previous note: the social-posts feature was built as its
+own full-width section, but he wanted an actual sidebar running alongside
+the page's main content, and wanted it called the **"Vista Social Media
+Tracker"** (not "What Parents Are Saying").
+
+Restructured home-full.html: the "Why This Site Exists" section and the
+Leadership ("Hindsight Is 20/20") section are now merged into one
+`<section>` containing a two-column `.home-main-layout` grid (`2fr 1fr`) --
+left column (`.home-main-column`) is that same main content unchanged
+(including the Blasko "Hindsight Is 20/20" quote header, which stays put),
+right column is a boxed, sticky `<aside class="home-sidebar">` holding the
+renamed "Vista Social Media Tracker" heading, the verification-note
+paragraph, and the `.social-post-list` feed. Collapses to a single stacked
+column (sidebar below main content) under 900px. "Get Involved" stays its
+own full-width section below, unchanged.
+
+No change to the underlying data model/feed architecture from the note
+above -- same Sheet, same columns, same pending Apps Script deployment
+step, same `SOCIAL_POSTS_FEED_URL` placeholder in the JS. Only the HTML
+placement/layout and the on-page heading text changed. New CSS:
+`.home-main-layout`, `.home-sidebar` (appended to the end of style.css).

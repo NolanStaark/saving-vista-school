@@ -1327,3 +1327,44 @@ footer.site-footer a {
 .brand-icon {
   flex-shrink: 0;
 }
+
+/* Home page: two-column layout for the main content region (between the
+   hero and "Get Involved") so the Vista Social Media Tracker can run as a
+   real sidebar alongside "Why This Site Exists" and the Leadership
+   section, instead of sitting in its own full-width section. Sticks in
+   view while its sibling column scrolls; collapses to a single stacked
+   column (sidebar below main content, since it comes second in the
+   markup) on narrower screens. */
+.home-main-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.home-sidebar {
+  position: sticky;
+  top: 24px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px 22px 26px;
+}
+
+.home-sidebar h2 {
+  margin-top: 0;
+  font-size: 1.3rem;
+}
+
+.home-sidebar .social-post-list {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 900px) {
+  .home-main-layout {
+    grid-template-columns: 1fr;
+  }
+  .home-sidebar {
+    position: static;
+  }
+}
