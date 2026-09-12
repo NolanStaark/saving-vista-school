@@ -564,3 +564,47 @@ Given how much git-collision risk showed up in a single session, worth
 raising with Russ: consider not running multiple chats that commit to
 this repo at the same moment, or having each push to origin promptly so
 a lost/orphaned local commit is recoverable from the remote.
+
+## Favicon redesigned again: reaching-figure-and-star icon (Sept 2026, supersedes both notes above)
+
+Russ shared Vista School's actual "Rising Stars" mascot logo (a maroon
+reaching figure + red star, official school branding) and asked us to
+echo that motif -- but confirmed (via a direct question, given the
+affiliation/trademark sensitivity) that he wanted **original art
+inspired by the motif**, not a close copy of the school's actual mascot.
+Replaced the parent-and-child favicon with: a single figure reaching up
+toward a star, drawn in the site's own stroke-icon style (white outline
+on navy `#003e56`, gold `#eca73a` star) -- deliberately different pose/
+proportions/technique from Vista's filled maroon silhouette, so it reads
+as our own mark, not theirs. Same three files as before, same filenames
+(`assets/favicon.svg`/`.ico`, `assets/apple-touch-icon.png`,
+`favicon.ico` at repo root), `assets/social-preview.png` rebuilt to
+match.
+
+Also, since the site's mascot theme is "Rising Stars," swapped the small
+gold accent-dot circles for 5-point star polygons everywhere they
+appeared: the two in the new favicon, plus the two each on letters.html's
+and policies.html's `.page-header-graphic` SVGs (same position/size,
+still `var(--gold)`).
+
+**Git note for whoever's next:** while committing this, ran into real
+lock contention with another concurrent chat editing style.css/nav.js/
+meetings.html at the same moment (both chats hitting `.git/index.lock`
+and `.git/refs/heads/main.lock` back to back). One of my own commits
+briefly became a "dangling" commit (object created, but the ref update
+lost the race) -- recovered by finding it via `git fsck` and pointing
+`refs/heads/main` at it with `git update-ref` (confirmed via
+`git merge-base --is-ancestor` that it was a clean fast-forward first).
+Also found the shared index had picked up stale/reverted entries for a
+few of my files mid-race (worktree and HEAD were both correct throughout
+-- only the index briefly disagreed) -- fixed by re-`git add`-ing just
+those paths. No content was lost on either side; the other chat's mobile-
+nav commit (`574f65b`) landed cleanly on top right after. `git fsck` also
+turned up an unrelated dangling `WIP on main` stash-commit (harmless,
+auto-created by a `git stash`) and one dangling commit from Sept 11
+(`38b5d9e`, "Link the Board Meeting schedule...") that predates this
+session and was never investigated -- flagging in case that one's actual
+lost work someone still wants; not touched here since it's outside this
+task's scope.
+
+Commits: `63b0d4e` (reaching-figure-and-star redesign + star accents).
