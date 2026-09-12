@@ -103,21 +103,21 @@
       <input type="search" id="policy-search" placeholder="Search (try &quot;charter agreement,&quot; &quot;records,&quot; &quot;IEP,&quot; &quot;complaint&quot;)&hellip;" aria-label="Search policies and parental rights">
     </div>
 
-    <div class="filter-bar" role="group" aria-label="Filter by topic">
-      <button type="button" class="tag" data-category="all"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>All Topics</span> <span class="tag-count"></span></button>
-      <button type="button" class="tag active" data-category="charter"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V10M9 21V10M15 21V10M19 21V10"/><path d="M3 10l9-6 9 6"/></svg><span>Vista's Charter &amp; Oversight</span> <span class="tag-count"></span></button>
-      <button type="button" class="tag" data-category="curriculum"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>Curriculum &amp; Materials</span> <span class="tag-count"></span></button>
-      <button type="button" class="tag" data-category="records"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Records &amp; Privacy</span> <span class="tag-count"></span></button>
-      <button type="button" class="tag" data-category="specialed"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.6Z"/></svg><span>Special Education &amp; 504</span> <span class="tag-count"></span></button>
-      <button type="button" class="tag" data-category="discrimination"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18"/><path d="M9 21h6"/><path d="M5 7h14"/><path d="M5 7l-3 7a3 3 0 0 0 6 0z"/><path d="M19 7l-3 7a3 3 0 0 0 6 0z"/></svg><span>Discrimination &amp; Title IX</span> <span class="tag-count"></span></button>
-      <button type="button" class="tag" data-category="complaints"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Filing a Complaint</span> <span class="tag-count"></span></button>
-      <button type="button" class="tag" data-category="engagement"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Family Engagement</span> <span class="tag-count"></span></button>
-      <button type="button" class="tag" data-category="vista"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg><span>Vista's Own Documents</span> <span class="tag-count"></span></button>
+    <div class="policy-tabs" role="tablist" aria-label="Policy categories">
+      <button type="button" class="tab-btn" data-category="all" role="tab" aria-selected="false" id="tab-all"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>All Topics</span> <span class="tag-count"></span></button>
+      <button type="button" class="tab-btn active" data-category="charter" role="tab" aria-selected="true" id="tab-charter"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V10M9 21V10M15 21V10M19 21V10"/><path d="M3 10l9-6 9 6"/></svg><span>Vista's Charter &amp; Oversight</span> <span class="tag-count"></span></button>
+      <button type="button" class="tab-btn" data-category="curriculum" role="tab" aria-selected="false" id="tab-curriculum"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>Curriculum &amp; Materials</span> <span class="tag-count"></span></button>
+      <button type="button" class="tab-btn" data-category="records" role="tab" aria-selected="false" id="tab-records"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Records &amp; Privacy</span> <span class="tag-count"></span></button>
+      <button type="button" class="tab-btn" data-category="specialed" role="tab" aria-selected="false" id="tab-specialed"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.6Z"/></svg><span>Special Education &amp; 504</span> <span class="tag-count"></span></button>
+      <button type="button" class="tab-btn" data-category="discrimination" role="tab" aria-selected="false" id="tab-discrimination"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18"/><path d="M9 21h6"/><path d="M5 7h14"/><path d="M5 7l-3 7a3 3 0 0 0 6 0z"/><path d="M19 7l-3 7a3 3 0 0 0 6 0z"/></svg><span>Discrimination &amp; Title IX</span> <span class="tag-count"></span></button>
+      <button type="button" class="tab-btn" data-category="complaints" role="tab" aria-selected="false" id="tab-complaints"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Filing a Complaint</span> <span class="tag-count"></span></button>
+      <button type="button" class="tab-btn" data-category="engagement" role="tab" aria-selected="false" id="tab-engagement"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Family Engagement</span> <span class="tag-count"></span></button>
+      <button type="button" class="tab-btn" data-category="vista" role="tab" aria-selected="false" id="tab-vista"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg><span>Vista's Own Documents</span> <span class="tag-count"></span></button>
     </div>
 
     <p class="letter-count">Showing <span id="visible-count">17</span> of <span id="total-count">17</span> topics</p>
 
-    <div class="policy-list">
+    <div class="policy-list" role="tabpanel" id="policy-panel" aria-labelledby="tab-charter">
 
       <div class="policy-card" data-category="charter">
         <span class="category-badge"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18"/><path d="M5 21V10M9 21V10M15 21V10M19 21V10"/><path d="M3 10l9-6 9 6"/></svg>Vista's Charter &amp; Oversight</span>
@@ -320,11 +320,12 @@
 (function () {
   function init() {
     var searchInput = document.getElementById('policy-search');
-    var buttons = document.querySelectorAll('.filter-bar .tag');
+    var buttons = document.querySelectorAll('.policy-tabs .tab-btn');
     var cards = document.querySelectorAll('.policy-card');
     var noResults = document.querySelector('.no-results');
     var visibleCountEl = document.getElementById('visible-count');
     var totalCountEl = document.getElementById('total-count');
+    var panel = document.getElementById('policy-panel');
     var activeCategory = 'charter';
 
     if (totalCountEl) totalCountEl.textContent = cards.length;
@@ -352,8 +353,11 @@
       // While searching, no single tab is "the" view -- clear the active
       // highlight so it doesn't imply results are scoped to that tab.
       buttons.forEach(function (b) {
-        b.classList.toggle('active', !searching && b.getAttribute('data-category') === activeCategory);
+        var isActive = !searching && b.getAttribute('data-category') === activeCategory;
+        b.classList.toggle('active', isActive);
+        b.setAttribute('aria-selected', isActive ? 'true' : 'false');
       });
+      if (panel) panel.setAttribute('aria-labelledby', searching ? '' : 'tab-' + activeCategory);
       if (noResults) noResults.hidden = visible !== 0;
       if (visibleCountEl) visibleCountEl.textContent = visible;
     }

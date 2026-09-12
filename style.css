@@ -355,6 +355,61 @@ h2 {
   color: #fff;
 }
 
+/* Policies page: a real tab strip, not filter chips -- deliberately distinct
+   from .filter-bar/.tag (used elsewhere for filtering, e.g. letters.html). */
+.policy-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  border-bottom: 2px solid var(--border);
+  margin: 24px 0 0;
+}
+
+.policy-tabs .tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: var(--muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.policy-tabs .tab-btn:hover {
+  color: var(--navy);
+}
+
+.policy-tabs .tab-btn.active {
+  color: var(--navy);
+  border-bottom-color: var(--gold);
+}
+
+.policy-tabs .tab-btn .tag-count {
+  opacity: 0.65;
+  font-size: 0.85em;
+}
+
+.policy-tabs .tab-btn.active .tag-count {
+  opacity: 0.85;
+}
+
+@media (max-width: 700px) {
+  .policy-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+
 .no-results {
   background: #fff;
   border: 1px dashed var(--border);
