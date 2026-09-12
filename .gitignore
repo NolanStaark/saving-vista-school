@@ -5,3 +5,8 @@ assets/letters/*
 # Python bytecode cache from local script testing
 __pycache__/
 *.pyc
+
+# Raw meeting audio recordings - large local-only source files for the
+# YouTube meeting-video pipeline (see .notes/PROJECT_NOTES.md), never
+# committed
+assets/media/meeting audio recordings/

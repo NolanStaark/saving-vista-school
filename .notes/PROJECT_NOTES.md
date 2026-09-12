@@ -933,3 +933,67 @@ This is "for now," not a permanent decision — if a media/gallery feature
 comes back later, `media.html`'s original gallery markup is still in git
 history (the commit before this one) rather than lost.
 
+## Meeting audio -> YouTube video pipeline (Sept 2026)
+
+Russ had 16 raw Otter.ai .mp3 recordings in
+`site/assets/media/meeting audio recordings/` (not in git -- gitignored/
+untracked, stays local) covering 5 meetings across summer 2026. Task: turn
+each into a video (YouTube needs a video track) for the @SavingVistaSchool
+channel's Board Meetings (PLcz4BuaUMKq4) and Town Hall Meetings
+(PLGbOtQelu0FA) playlists.
+
+**Playlists already existed and were already correctly wired into
+meetings.html** -- the IDs there are real, not placeholders, confirmed by
+checking the channel directly. Board Meetings had 0 videos; Town Hall
+Meetings had one "Test" video (Russ says he'll remove it himself before
+new uploads go in).
+
+**Meeting-to-file mapping** (inferred from filename timestamps + chunking
+gaps, cross-checked against Vista's own published board-meeting dates in
+`assets/data/meetings.json` where possible -- only Board dates have an
+official record to confirm against):
+- Jun 15, 2026 -> Townhall (3 files) -- NOT officially confirmed
+- Jul 29, 2026 -> Board (4 files) -- confirmed vs. official record
+- Jul 30, 2026 -> Townhall (4 files) -- NOT officially confirmed
+- Aug 24, 2026 -> Board (2 files) -- confirmed vs. official record
+- Aug 31, 2026 -> Townhall (1 file) -- NOT officially confirmed
+
+Two files didn't fit any meeting's pattern and were flagged to Russ rather
+than assumed: `Note__20260729_2132_otter.ai.mp3` (9:32pm, ~2.5 min, >2hrs
+after the July 29 chunks end) and `Note__20260824_1008_otter.ai.mp3`
+(10:08am, ~48 min, doesn't match the evening board-meeting time). Both
+were still rendered to video (suffixed `-UNCONFIRMED-extra`) so nothing
+was silently dropped, but Russ needs to confirm what they actually are
+before uploading them.
+
+Per Russ's preference, chunked recordings were kept as separate numbered
+parts (pt1, pt2, ...) rather than concatenated into one file per meeting.
+
+**Video generation**: static title-card image (dark blue `#003e56` bg,
+site's existing favicon icon, meeting type/date/part text) + the original
+audio, built entirely via `device_bash` on Russ's machine (ffmpeg +
+Python/Pillow already available there -- no cloud container involved).
+Naive `-loop 1 -i image` re-encoding at even 1fps was too slow for
+long meetings (some are 90+ min) to fit device_bash's ~3min call limit.
+Fix: encode one ~60s master clip per video (`-preset veryslow -crf 28`,
+still cheap since <=16 files), then `-stream_loop -1` + `-c:v copy` that
+master against the real audio with an explicit `-t <audio_duration>` (NOT
+`-shortest` -- that left the container duration badly overstated, e.g.
+~11s over on a 30min file, vs. ~2-3s with an explicit `-t`). This dropped
+total processing for all 16 files to ~2.5 minutes combined. Every output
+has a few seconds of frozen silent tail past the end of the audio --
+expected artifact of 1fps frame quantization, not a bug, mentioned in the
+checklist so Russ isn't surprised.
+
+Output: 16 .mp4s (~259MB total) plus `UPLOAD_CHECKLIST.md` (suggested
+per-video YouTube title + a standard description template + playlist
+target + the two unconfirmed-file flags), all in
+`Claude outputs/meeting videos/` (outside the site git repo -- never
+committed).
+
+Russ said he'll validate the videos and handle the actual YouTube upload
+himself (not Claude, via browser automation) -- so no upload/publish
+action was taken this session. Once videos are live, still need to come
+back and confirm the playlist IDs already in meetings.html are correct
+(they should be, per the above) or update them if Russ used different
+playlists.
