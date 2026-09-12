@@ -1022,3 +1022,39 @@ in for future rows makes for a more informative card, but isn't required.
 
 The Vista Social Media Tracker sidebar on home-full.html is now fully
 live end-to-end (staged, not yet pushed/deployed to the actual site).
+
+## Social tracker rebuilt as a one-post-at-a-time carousel with real embeds (Sept 2026)
+
+Two more corrections from Russ on the Vista Social Media Tracker sidebar:
+
+1. **Carousel, not a stacked list.** Only one post shows at a time now,
+   with prev/next buttons and dot indicators so a visitor can browse
+   manually, plus auto-advance every 45 seconds (`AUTOPLAY_MS` in the
+   inline script) that pauses while the sidebar is hovered or focused.
+   Skeleton loading state trimmed to a single placeholder card to match
+   (was 3 stacked skeletons for the old list layout).
+2. **Shows the actual post, not just a link.** Each card embeds the real
+   post inline via that platform's own embed widget for the platforms we
+   can: Facebook (`fb-post` + the Facebook JS SDK), X/Twitter
+   (`twitter-tweet` blockquote + platform.twitter.com/widgets.js), and
+   Instagram (`instagram-media` blockquote + instagram.com/embed.js).
+   Anything else (Nextdoor, TikTok, an unrecognized Platform value) falls
+   back to the excerpt text + a "View Post" link, since there's no
+   reliable public embed API for those. Embeds are **lazy**: a platform's
+   SDK script only loads, and a given post's embed only actually renders,
+   the first time that post's slide becomes active -- so posts a visitor
+   never scrolls to never load that platform's iframe/tracking script.
+   This does mean the sidebar now pulls in third-party scripts
+   (connect.facebook.net / platform.twitter.com / instagram.com) once a
+   visitor views a post from that platform -- normal for embedding posts
+   on any site, just flagging it since nothing on this site previously
+   loaded third-party JS.
+
+Also corrected: the sidebar copy said "Vista at Entrada" twice -- Russ
+says the school now goes by just **"Vista School"**, so both mentions
+were updated. Repo-wide grep found no other .html file using "Vista at
+Entrada" at the time of this note, so no other page needed the same fix
+-- but flagging for other chats in case that changes, and note that this
+project's own Claude-project description (in claude.ai project settings,
+not a repo file) still says "Vista at Entrada School of Performing Arts
+and Technology," which Russ may want to update separately.

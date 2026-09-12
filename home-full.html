@@ -8,6 +8,9 @@
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="alternate" hreflang="en" href="https://savingvistaschool.org/home-full.html">
+<link rel="alternate" hreflang="es" href="https://savingvistaschool.org/es/home-full.html">
+<link rel="alternate" hreflang="x-default" href="https://savingvistaschool.org/home-full.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Saving Vista School">
 <meta property="og:url" content="https://savingvistaschool.org/home-full.html">
@@ -96,6 +99,7 @@
         <li><a href="policies.html">Policies &amp; Rights</a></li>
         <li><a href="meetings.html">Meetings</a></li>
         <li><a href="about.html">About &amp; Contact</a></li>
+        <li class="lang-toggle-item"><a href="es/home-full.html" hreflang="es" lang="es">Español</a></li>
       </ul>
     </nav>
   </div>
@@ -257,34 +261,23 @@
       <aside class="home-sidebar">
     <h2>Vista Social Media Tracker</h2>
     <p style="color:var(--muted);font-size:0.95rem;">
-      Posts from parents and community members talking about Vista at Entrada online.
+      Posts from parents and community members talking about Vista School online.
       Have one to add? <a href="about.html#contact">Send us the link</a>.
     </p>
 
     <p class="policy-note" style="font-size:0.85rem;padding:14px 16px;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--gold);flex-shrink:0;vertical-align:-3px;margin-right:6px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><strong>A note on these posts:</strong> each is a link to a real, public post by its
-      original author. Before listing one here, our team manually confirms it's genuinely
-      about Vista at Entrada &mdash; the K-9 charter school in Ivins, Utah &mdash; and not a
-      different school with a similar name. We don't otherwise verify what a post says; the
-      views in it belong to the original poster, not Saving Vista School.
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--gold);flex-shrink:0;vertical-align:-3px;margin-right:6px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><strong>A note on these posts:</strong> each is a real, public post by its
+      original author, shown here as posted. Before listing one here, our team manually
+      confirms it's genuinely about Vista School &mdash; the K-9 charter school in Ivins,
+      Utah &mdash; and not a different school with a similar name. We don't otherwise verify
+      what a post says; the views in it belong to the original poster, not Saving Vista
+      School.
     </p>
 
-    <div class="social-post-list" aria-live="polite" aria-busy="true">
+    <div class="social-post-list" aria-live="off" aria-busy="true">
       <div class="social-post-card is-skeleton" aria-hidden="true">
         <div class="skeleton-line skeleton-meta" style="width:90px"></div>
-        <div class="skeleton-line skeleton-title" style="width:100%"></div>
-        <div class="skeleton-line skeleton-title" style="width:70%"></div>
-        <div class="skeleton-line skeleton-button"></div>
-      </div>
-      <div class="social-post-card is-skeleton" aria-hidden="true">
-        <div class="skeleton-line skeleton-meta" style="width:70px"></div>
-        <div class="skeleton-line skeleton-title" style="width:95%"></div>
-        <div class="skeleton-line skeleton-title" style="width:55%"></div>
-        <div class="skeleton-line skeleton-button"></div>
-      </div>
-      <div class="social-post-card is-skeleton" aria-hidden="true">
-        <div class="skeleton-line skeleton-meta" style="width:110px"></div>
-        <div class="skeleton-line skeleton-title" style="width:88%"></div>
+        <div class="skeleton-line" style="width:100%;height:180px;margin-bottom:8px;"></div>
         <div class="skeleton-line skeleton-button"></div>
       </div>
     </div>
@@ -401,7 +394,20 @@ fetch('assets/data/meetings.json')
   // Published, and only the fields safe to show publicly (platform, post
   // URL, excerpt, date) -- never the "Who told us about it" or "Reviewer
   // notes" columns from the sheet.
+  //
+  // Renders as a one-post-at-a-time carousel, not a stacked list: prev/
+  // next buttons + dots let a visitor browse manually, and it auto-
+  // advances every AUTOPLAY_MS (paused while hovered/focused). Each post
+  // is shown as the actual embedded post (via that platform's own embed
+  // widget), not just a link out, for the platforms we know how to embed
+  // -- Facebook, X/Twitter, Instagram. Anything else (Nextdoor, TikTok,
+  // an unrecognized platform) falls back to the excerpt + a "View Post"
+  // link, since there's no reliable public embed for it. Embeds are lazy
+  // -- a platform's embed script only loads, and a given post's embed
+  // only renders, the first time its slide becomes active, so posts a
+  // visitor never scrolls to never load that platform's tracking iframe.
   var SOCIAL_POSTS_FEED_URL = 'https://script.google.com/macros/s/AKfycbwRIwwfL2o6VKP4Ce8vwNuQ3BhZyECR9u3u8Lid64HaW4VHsziWtzQJ4N9GP87ztvnfLQ/exec';
+  var AUTOPLAY_MS = 45000;
 
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, function (c) {
@@ -409,22 +415,94 @@ fetch('assets/data/meetings.json')
     });
   }
 
-  function buildPostCard(item) {
+  // ---- lazy embed-SDK loading -------------------------------------------
+  // sdkState[id]: undefined (never requested) | 'loading' | 'ready'.
+  // sdkQueue[id]: callbacks waiting for that SDK to finish loading.
+  var sdkState = {};
+  var sdkQueue = {};
+
+  // Ensures the SDK script with this id is loading/loaded exactly once.
+  // Returns true if it's already ready (caller can act immediately);
+  // otherwise queues `whenReady` (if given) and returns false.
+  function ensureSdk(id, src, onFirstLoad, whenReady) {
+    if (sdkState[id] === 'ready') return true;
+    if (whenReady) {
+      sdkQueue[id] = sdkQueue[id] || [];
+      sdkQueue[id].push(whenReady);
+    }
+    if (sdkState[id] === 'loading') return false;
+    sdkState[id] = 'loading';
+    var s = document.createElement('script');
+    s.src = src;
+    s.async = true;
+    s.onload = function () {
+      sdkState[id] = 'ready';
+      if (onFirstLoad) onFirstLoad();
+      (sdkQueue[id] || []).forEach(function (cb) { cb(); });
+      sdkQueue[id] = [];
+    };
+    document.body.appendChild(s);
+    return false;
+  }
+
+  function embedKindFor(item) {
+    var platform = (item.platform || '').toLowerCase();
+    if (!item.url) return null;
+    if (platform.indexOf('facebook') !== -1) return 'facebook';
+    if (platform.indexOf('twitter') !== -1 || platform === 'x' || platform.indexOf('x.com') !== -1) return 'twitter';
+    if (platform.indexOf('instagram') !== -1) return 'instagram';
+    return null;
+  }
+
+  function renderEmbed(container, item) {
+    var kind = embedKindFor(item);
+    var url = escapeHtml(item.url);
+
+    if (kind === 'facebook') {
+      if (!document.getElementById('fb-root')) {
+        var root = document.createElement('div');
+        root.id = 'fb-root';
+        document.body.insertBefore(root, document.body.firstChild);
+      }
+      container.innerHTML = '<div class="fb-post" data-href="' + url + '" data-width="auto"></div>';
+      var fbReady = ensureSdk('fb-sdk', 'https://connect.facebook.net/en_US/sdk.js#xfbml=0&version=v19.0',
+        function () { window.FB && FB.init({ xfbml: false, version: 'v19.0' }); });
+      if (fbReady) { FB.XFBML.parse(container); }
+      else { sdkQueue['fb-sdk'].push(function () { FB.XFBML.parse(container); }); }
+    } else if (kind === 'twitter') {
+      container.innerHTML = '<blockquote class="twitter-tweet" data-dnt="true"><a href="' + url + '"></a></blockquote>';
+      var twReady = ensureSdk('twitter-widgets', 'https://platform.twitter.com/widgets.js');
+      if (twReady) { twttr.widgets.load(container); }
+      else { sdkQueue['twitter-widgets'].push(function () { twttr.widgets.load(container); }); }
+    } else if (kind === 'instagram') {
+      container.innerHTML = '<blockquote class="instagram-media" data-instgrm-permalink="' + url + '" data-instgrm-version="14"></blockquote>';
+      var igReady = ensureSdk('instagram-embed', 'https://www.instagram.com/embed.js');
+      if (igReady) { instgrm.Embeds.process(); }
+      else { sdkQueue['instagram-embed'].push(function () { instgrm.Embeds.process(); }); }
+    }
+  }
+
+  function buildPostCard(item, index) {
     var card = document.createElement('div');
     card.className = 'social-post-card';
+    if (index !== 0) card.hidden = true;
 
     var top = (item.platform ? '<span class="category-badge">' + escapeHtml(item.platform) + '</span>' : '<span></span>') +
       (item.date ? '<span class="meta">' + escapeHtml(item.date) + '</span>' : '');
 
+    var canEmbed = !!embedKindFor(item);
+
     card.innerHTML =
       '<div class="social-post-top">' + top + '</div>' +
-      (item.excerpt ? '<p class="social-post-excerpt">&ldquo;' + escapeHtml(item.excerpt) + '&rdquo;</p>' : '') +
+      (canEmbed ? '<div class="social-post-embed"></div>' :
+        (item.excerpt ? '<p class="social-post-excerpt">&ldquo;' + escapeHtml(item.excerpt) + '&rdquo;</p>' : '')) +
       (item.url ? '<a class="download" href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">View Post &rarr;</a>' : '');
 
     return card;
   }
 
   var list = document.querySelector('.social-post-list');
+  var sidebar = document.querySelector('.home-sidebar');
 
   function removeSkeletons() {
     if (!list) return;
@@ -440,18 +518,116 @@ fetch('assets/data/meetings.json')
     list.appendChild(p);
   }
 
+  // ---- carousel state -----------------------------------------------
+  var items = [];
+  var cards = [];
+  var embedded = [];
+  var current = 0;
+  var timer = null;
+  var dotsEl = null;
+
+  function renderCurrentEmbed() {
+    if (embedded[current]) return;
+    var embedEl = cards[current].querySelector('.social-post-embed');
+    if (embedEl) renderEmbed(embedEl, items[current]);
+    embedded[current] = true;
+  }
+
+  function updateDots() {
+    if (!dotsEl) return;
+    Array.prototype.forEach.call(dotsEl.children, function (dot, i) {
+      dot.classList.toggle('is-active', i === current);
+      dot.setAttribute('aria-current', i === current ? 'true' : 'false');
+    });
+  }
+
+  function goTo(index) {
+    if (!cards.length) return;
+    cards[current].hidden = true;
+    current = (index + cards.length) % cards.length;
+    cards[current].hidden = false;
+    renderCurrentEmbed();
+    updateDots();
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  function startAutoplay() {
+    stopAutoplay();
+    if (cards.length > 1) timer = setInterval(next, AUTOPLAY_MS);
+  }
+  function stopAutoplay() {
+    if (timer) { clearInterval(timer); timer = null; }
+  }
+
+  function buildNav() {
+    var nav = document.createElement('div');
+    nav.className = 'social-post-nav';
+
+    var prevBtn = document.createElement('button');
+    prevBtn.type = 'button';
+    prevBtn.className = 'social-post-nav-btn';
+    prevBtn.setAttribute('aria-label', 'Previous post');
+    prevBtn.innerHTML = '&larr;';
+    prevBtn.addEventListener('click', function () { prev(); startAutoplay(); });
+
+    var dots = document.createElement('div');
+    dots.className = 'social-post-dots';
+    items.forEach(function (_, i) {
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'social-post-dot';
+      dot.setAttribute('aria-label', 'Go to post ' + (i + 1) + ' of ' + items.length);
+      dot.addEventListener('click', function () { goTo(i); startAutoplay(); });
+      dots.appendChild(dot);
+    });
+    dotsEl = dots;
+
+    var nextBtn = document.createElement('button');
+    nextBtn.type = 'button';
+    nextBtn.className = 'social-post-nav-btn';
+    nextBtn.setAttribute('aria-label', 'Next post');
+    nextBtn.innerHTML = '&rarr;';
+    nextBtn.addEventListener('click', function () { next(); startAutoplay(); });
+
+    nav.appendChild(prevBtn);
+    nav.appendChild(dots);
+    nav.appendChild(nextBtn);
+    list.insertAdjacentElement('afterend', nav);
+    updateDots();
+  }
+
   fetch(SOCIAL_POSTS_FEED_URL)
     .then(function (res) { return res.json(); })
     .then(function (data) {
       if (!list) return;
-      var items = Array.isArray(data) ? data : (data && Array.isArray(data.items) ? data.items : []);
+      items = Array.isArray(data) ? data : (data && Array.isArray(data.items) ? data.items : []);
       if (!items.length) {
         showEmptyState('No posts have been added yet. Check back soon.');
         return;
       }
+
       var fragment = document.createDocumentFragment();
-      items.forEach(function (item) { fragment.appendChild(buildPostCard(item)); });
+      items.forEach(function (item, i) {
+        var card = buildPostCard(item, i);
+        cards.push(card);
+        fragment.appendChild(card);
+      });
       list.insertBefore(fragment, list.firstChild);
+
+      renderCurrentEmbed();
+
+      if (items.length > 1) {
+        buildNav();
+        startAutoplay();
+        if (sidebar) {
+          sidebar.addEventListener('mouseenter', stopAutoplay);
+          sidebar.addEventListener('mouseleave', startAutoplay);
+          sidebar.addEventListener('focusin', stopAutoplay);
+          sidebar.addEventListener('focusout', startAutoplay);
+        }
+      }
     })
     .catch(function (err) {
       console.warn('Could not load social media posts:', err);

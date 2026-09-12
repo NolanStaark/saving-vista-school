@@ -1261,9 +1261,7 @@ footer.site-footer a {
    set to Status = Published -- mirrors the Letters-of-Concern pattern.
    Skeleton lines reuse the .skeleton-line family defined above. */
 .social-post-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 16px;
+  position: relative;
   margin-top: 20px;
 }
 
@@ -1302,10 +1300,68 @@ footer.site-footer a {
   line-height: 1.5;
 }
 
+/* Reserves space for the platform embed (Facebook/Twitter/Instagram
+   iframe) while it loads, so the carousel card doesn't collapse then
+   jump once the embed script finishes rendering. */
+.social-post-embed {
+  min-height: 220px;
+}
+
 .social-post-card a.download {
   font-weight: 600;
   text-decoration: none;
   align-self: flex-start;
+}
+
+/* Carousel controls: prev/next + dots, centered under the active card. */
+.social-post-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.social-post-nav-btn {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--navy);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.social-post-nav-btn:hover {
+  background: #eef2f6;
+}
+
+.social-post-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.social-post-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+}
+
+.social-post-dot.is-active {
+  background: var(--navy);
+  width: 18px;
+  border-radius: 4px;
 }
 
 /* Home page(s): the reaching-figure-and-star watermark reads better
@@ -1354,10 +1410,6 @@ footer.site-footer a {
 .home-sidebar h2 {
   margin-top: 0;
   font-size: 1.3rem;
-}
-
-.home-sidebar .social-post-list {
-  grid-template-columns: 1fr;
 }
 
 @media (max-width: 900px) {
@@ -1426,3 +1478,22 @@ footer.site-footer a {
 }
 
 .filter-bar .tag.active .tag-count { opacity: 0.85; }
+
+/* Language switcher: an extra nav item on pages that have an /es/
+   translation, and the reciprocal link back on those /es/ pages
+   themselves. Reuses the existing nav link look; on desktop it gets a
+   thin divider so it doesn't read as just another site section. */
+.lang-toggle-item {
+  margin-left: 4px;
+}
+
+.lang-toggle-item a {
+  opacity: 0.85;
+}
+
+@media (min-width: 769px) {
+  .lang-toggle-item {
+    padding-left: 18px;
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
+  }
+}
