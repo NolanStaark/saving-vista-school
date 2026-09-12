@@ -66,14 +66,17 @@ still stands even if not repeated in a given chat.
 
 ## Site pages (current)
 
-- `index.html` — still the placeholder "Coming Soon" page, no nav, don't
-  touch nav logic here. A full replacement home page has been built and is
-  staged in `home-full.html` (see below), ready to swap in — Russ asked to
-  hold off on making it live for now. To swap it in later: replace
-  `index.html`'s content with `home-full.html`'s (or `git mv` it over,
-  updating the self-referencing nav links/`href="index.html"` as needed),
-  then update this note and (optionally) remove the now-redundant
-  `home-full.html`.
+- `index.html` — **NOW THE LIVE HOME PAGE** (Sept 2026 -- Russ said "let's
+  make the site live" once the Spanish translation below was done).
+  Formerly `home-full.html`; swapped in via `git mv home-full.html
+  index.html` (the old "Coming Soon" placeholder is gone from the working
+  tree, but fully recoverable from git history/previous commits if ever
+  needed). Self-referencing links didn't need changes -- every page's nav
+  already pointed `Home` at `index.html`, by design, specifically so this
+  swap would be clean. Only the page's own `og:url`/hreflang meta and its
+  `es/` language-toggle link needed updating (from `.../home-full.html` to
+  `.../` and `es/index.html`). See "Home page" content bullet below for
+  what's actually on it -- that content itself didn't change in this swap.
 - `letters.html` (renamed from `parent-letters.html`) — parent letters of
   concern, fed by a Google Apps Script Web App JSON API in front of a
   private Google Sheet (Tally.so submissions land in the Sheet; some
@@ -111,15 +114,14 @@ still stands even if not repeated in a given chat.
   pages are added/renamed.
 - `media.html` — REMOVED (Sept 2026, see note below); now a redirect stub
   to `index.html`, same pattern as `live-meetings.html`/`parent-letters.html`.
-- `home-full.html` — the finished replacement home page (hero + "Why This
-  Site Exists" mission blurb + feature cards for Letters/Meetings/
-  Policies/Media + a "Next Meeting" teaser pill fed by
+- **Home page** (now `index.html`, formerly the staged `home-full.html` --
+  see the `index.html` bullet above for the go-live swap itself) — hero +
+  "Why This Site Exists" mission blurb + feature cards for Letters/
+  Meetings/Policies + a "Next Meeting" teaser pill fed by
   `assets/data/meetings.json`, same file `meetings.html` uses + a "Get
   Involved" CTA linking to `letters.html#submit-a-letter` and
-  `about.html#contact`). NOT live yet — Russ wants to hold off swapping it
-  in for `index.html`. Its shared CSS (`.hero-actions`, `.btn-primary`,
-  `.btn-secondary`, `.btn-outline`, `.home-next-meeting`) is already in
-  style.css (harmless/unused until swapped in).
+  `about.html#contact`. Its shared CSS (`.hero-actions`, `.btn-primary`,
+  `.btn-secondary`, `.btn-outline`, `.home-next-meeting`) is in style.css.
 
   Also has an "A Closer Look at Vista's Leadership" section (Sept 2026,
   per Russ: "the home page is the crux of presenting the information
@@ -1142,3 +1144,35 @@ while this work was done. Used the established blob-surgery technique
 `git show HEAD:<file>` copy) to stage only this chat's own diff on each
 shared file, leaving their in-progress uncommitted work untouched in the
 working tree for them to commit separately.
+
+## Home page went live: home-full.html -> index.html (Sept 2026) -- FLAG FOR OTHER CHATS
+
+**If your chat has uncommitted work on `home-full.html`, it no longer
+exists as a filename** -- it was `git mv`'d to `index.html` (replacing the
+old "Coming Soon" placeholder) once Russ said to make the site live,
+right after the Spanish translation pass (see the note above) landed.
+Any pending edits aimed at `home-full.html` need to target `index.html`
+instead; the old placeholder `index.html` content is gone from the
+working tree (recoverable from git history if ever needed, but not
+expected to be).
+
+What changed mechanically:
+- `home-full.html` -> `index.html` (content unchanged by this swap itself
+  -- same hero, mission section, leadership/Blasko background, social
+  media tracker sidebar, Get Involved section as before).
+- `es/home-full.html` -> `es/index.html` (the Spanish counterpart, same
+  rename).
+- Both files' `og:url` meta and `hreflang` `<link>` tags updated from
+  `.../home-full.html` / `.../es/home-full.html` to the root-style
+  `https://savingvistaschool.org/` / `https://savingvistaschool.org/es/`.
+- Each file's language-toggle nav link updated to point at the other's
+  new filename (`es/index.html` / `../index.html`).
+- No other page needed a nav change -- every page's `Home` link already
+  pointed at `index.html` (by design, specifically so this swap would be
+  a clean rename with zero other edits needed).
+- `sitemap.xml`: no change needed for the English homepage entry (it was
+  already `https://savingvistaschool.org/`, not a filename); added a new
+  entry for `https://savingvistaschool.org/es/`.
+
+This was a git-only change in this session -- **nothing is actually live
+on the public internet until Russ runs `git push`**. Remind him.

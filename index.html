@@ -3,60 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saving Vista School — Coming Soon</title>
-<meta name="description" content="Saving Vista School — site launching soon.">
+<title>Saving Vista School</title>
+<meta name="description" content="Saving Vista School is an independent, parent-led nonprofit pushing for transparency and accountability at Vista School in Ivins, Utah — letters of concern, meeting access, and family resources, all in one place.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="assets/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="alternate" hreflang="en" href="https://savingvistaschool.org/">
+<link rel="alternate" hreflang="es" href="https://savingvistaschool.org/es/">
+<link rel="alternate" hreflang="x-default" href="https://savingvistaschool.org/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Saving Vista School">
 <meta property="og:url" content="https://savingvistaschool.org/">
-<meta property="og:title" content="Saving Vista School — Coming Soon">
-<meta property="og:description" content="Saving Vista School — site launching soon.">
+<meta property="og:title" content="Saving Vista School">
+<meta property="og:description" content="Saving Vista School is an independent, parent-led nonprofit pushing for transparency and accountability at Vista School in Ivins, Utah — letters of concern, meeting access, and family resources, all in one place.">
 <meta property="og:image" content="https://savingvistaschool.org/assets/social-preview.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Saving Vista School — Coming Soon">
-<meta name="twitter:description" content="Saving Vista School — site launching soon.">
+<meta name="twitter:title" content="Saving Vista School">
+<meta name="twitter:description" content="Saving Vista School is an independent, parent-led nonprofit pushing for transparency and accountability at Vista School in Ivins, Utah — letters of concern, meeting access, and family resources, all in one place.">
 <meta name="twitter:image" content="https://savingvistaschool.org/assets/social-preview.png">
 <link rel="stylesheet" href="style.css">
 <style>
-  .under-construction {
-    min-height: 38vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 20px;
-  }
-  .under-construction .container {
+  /* Inline glossary tooltips: wraps the first mention of a defined term
+     (see GLOSSARY in the script near the end of this page) in a dotted
+     underline with a definition on hover/focus. Self-contained to this
+     page on purpose -- copy this block + the matching script if another
+     page wants the same treatment. */
+  .glossary-term {
+    border-bottom: 1px dotted var(--muted);
+    cursor: help;
     position: relative;
-    z-index: 1;
-    width: 100%;
   }
-  .under-construction .box {
-    max-width: 560px;
-    margin: 0 auto;
+  .glossary-term .glossary-tip {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .15s ease;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 130%;
+    background: var(--navy-dark);
+    color: #fff;
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 1.45;
+    width: 260px;
+    max-width: 70vw;
+    z-index: 20;
+    box-shadow: 0 4px 14px rgba(0,0,0,.18);
   }
-  .under-construction h1 {
-    color: var(--navy);
-    font-size: 2rem;
-    margin-bottom: 12px;
+  .glossary-term .glossary-tip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--navy-dark) transparent transparent transparent;
   }
-  .under-construction p {
-    color: var(--muted);
-    font-size: 1.05rem;
-  }
-  .under-construction .badge {
-    display: inline-block;
-    background: #eef2f6;
-    color: var(--navy);
-    font-weight: 600;
-    font-size: 0.85rem;
-    padding: 6px 14px;
-    border-radius: 999px;
-    margin-bottom: 18px;
+  .glossary-term:hover .glossary-tip,
+  .glossary-term:focus .glossary-tip {
+    visibility: visible;
+    opacity: 1;
   }
 </style>
 </head>
@@ -74,6 +87,21 @@
       </svg>
       Saving Vista School
     </a>
+    <button type="button" class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primary-nav">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+    <nav class="main-nav" id="primary-nav">
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="letters.html">Letters of Concern</a></li>
+        <li><a href="policies.html">Policies &amp; Rights</a></li>
+        <li><a href="meetings.html">Meetings</a></li>
+        <li><a href="about.html">About &amp; Contact</a></li>
+        <li class="lang-toggle-item"><a href="es/index.html" hreflang="es" lang="es">Español</a></li>
+      </ul>
+    </nav>
   </div>
 </header>
 
@@ -83,25 +111,194 @@
   </div>
 </div>
 
-<div class="under-construction">
+<section class="hero">
   <div class="container">
     <svg class="page-header-graphic" width="104" height="104" viewBox="0 0 200 200" fill="none" aria-hidden="true">
-      <circle cx="90" cy="68" r="20" stroke="var(--navy)" stroke-width="9"/>
-      <path d="M55 166 Q55 108 90 108 Q118 108 122 140" stroke="var(--navy)" stroke-width="9" stroke-linecap="round"/>
-      <path d="M113 118 Q136 104 149 82" stroke="var(--navy)" stroke-width="9" stroke-linecap="round"/>
+      <circle cx="90" cy="68" r="20" stroke="#fff" stroke-width="9"/>
+      <path d="M55 166 Q55 108 90 108 Q118 108 122 140" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+      <path d="M113 118 Q136 104 149 82" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
       <polygon points="152.3,28.7 161.2,41.6 176.5,38.0 167.0,50.5 175.1,63.8 160.3,58.7 150.1,70.5 150.5,54.9 136.0,48.8 151.0,44.3" fill="var(--gold)"/>
       <polygon points="34.0,161.0 36.5,168.5 44.5,168.6 38.1,173.3 40.5,180.9 34.0,176.3 27.5,180.9 29.9,173.3 23.5,168.6 31.5,168.5" fill="var(--gold)"/>
     </svg>
-  <div class="box">
-    <span class="badge">Coming Soon</span>
-    <h1>We're building something here.</h1>
+    <h1>Standing Up for Vista School Families</h1>
     <p>
-      Saving Vista School is putting together a home for letters of concern, school media,
-      and live meeting streams. The site isn't ready yet &mdash; check back soon.
+      Saving Vista School is an independent, parent-led effort to bring transparency and
+      accountability to the Vista School Board and Vista's current administration &mdash; through
+      documented letters of concern, open access to meetings, and shared resources for families.
     </p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="letters.html">Read the Letters</a>
+      <a class="btn-secondary" href="meetings.html">See the Meeting Schedule</a>
+    </div>
+    <div class="home-next-meeting" id="home-next-meeting" hidden></div>
   </div>
+</section>
+
+<section>
+  <div class="container container--wide">
+    <div class="home-main-layout">
+      <div class="home-main-column">
+    <h2 style="text-align:center;">Why This Site Exists</h2>
+    <p style="max-width:700px;margin:0 auto;text-align:center;color:var(--muted);">
+      This site was organized by a group of concerned parents who believe a number of recent
+      decisions by the Vista School Board and Vista's current administration deserve closer
+      scrutiny. We're engaging directly with the Vista School Board and the Utah State Charter
+      School Board to push for transparency and accountability &mdash; and this is where we're
+      keeping that effort public: letters sent, meetings held, and the policies that are supposed
+      to protect families.
+    </p>
+
+    <div style="max-width:600px;margin:28px auto 32px;text-align:center;">
+      <p style="font-size:1.2rem;font-style:italic;color:var(--navy-dark);font-family:var(--font-heading);margin:0;">
+        &ldquo;Trust requires transparency; transparency builds trust.&rdquo;
+      </p>
+      <p style="font-size:0.85rem;color:var(--muted);margin-top:8px;">
+        &mdash; Utah Office of the State Auditor's <a href="https://transparent.utah.gov/" target="_blank" rel="noopener">Transparent Utah</a>
+      </p>
+    </div>
+
+    <div class="feature-grid">
+      <a class="feature-card" href="letters.html">
+        <h3>Letters of Concern</h3>
+        <p>Read letters written by parents, staff, and community members to Vista's administration, School Board, and the state charter board &mdash; and add your own.</p>
+      </a>
+      <a class="feature-card" href="meetings.html">
+        <h3>Meetings</h3>
+        <p>Watch Board and Town Hall meetings live, browse the auto-updated schedule, or catch a past recording.</p>
+      </a>
+      <a class="feature-card" href="policies.html">
+        <h3>Policies &amp; Rights</h3>
+        <p>A searchable library of Utah and USBE charter-school policies and parental-rights resources.</p>
+      </a>
+    </div>
+    <h2 style="text-align:center;">&ldquo;Hindsight Is 20/20&rdquo;</h2>
+    <p style="text-align:center;font-size:0.95rem;color:var(--muted);margin-top:-8px;margin-bottom:22px;">
+      &mdash; Dr. Justin Blasko, describing a lesson from a former boss in the Monroe School
+      District, quoted by St.&nbsp;George News when Vista hired him (2023)
+    </p>
+    <p class="exhibit-intro" style="text-align:center;">
+      Vista's current Executive Director, <strong>Dr. Justin Blasko</strong>, was appointed in
+      August 2023. Before coming to Vista, Blasko was Superintendent of the Monroe School
+      District in Washington State, where he was placed on administrative leave in December 2021
+      after an independent investigation substantiated complaints of bullying, intimidation, and
+      unprofessional conduct toward staff. He resigned in July 2022 with a severance package of
+      roughly $396,000. St.&nbsp;George News reported at the time Vista hired him that parents
+      raised concerns both about this background and about the Board's lack of communication
+      around the decision.
+    </p>
+
+    <div class="exhibit-grid" style="grid-template-columns:1fr;">
+      <div class="exhibit-card">
+        <img src="assets/leadership/vista-org-chart.png" alt="Vista School organizational chart: Vista School Board at top, then Dr. Justin Blasko as Executive Director. Reporting to him: Christine Giles (Deputy Director), Skyler Perkes (Human Resources), and Troy Bradshaw (Chief Operating Officer). Under Giles: Jocelyn Larkin (K-5 Principal) with K-5 Teachers, Chad Allman (6-9 Principal) with 6-9 Teachers, Alicia Hutchinson (SPED Coordinator), Katelynn George (Title 1 Coordinator), Jenna Ayers (Behavior Coach), LaNessa Stevens (Learning Coach), and Marilyn Russell (ESL Coordinator). Under Perkes: Bruce Hatch (Assessment Director / IT Specialist) and Marie Ehlers (Head School Counselor, 7-9), who oversees Danielle Robb (School Social Worker), Shelli Jones (K-6 Counselor), and Nicole Richins (College and Career Readiness / Student Council Adviser). Under Bradshaw: Food Service, Business Office, Transportation, IT Office, and Facilities. Titles current per vistautah.com; the SPED Coordinator and a few coaching titles differ from the original board-meeting chart, which listed older names/titles for those roles.">
+        <p class="exhibit-caption">Vista's organizational chart, as presented at a public Board meeting, redrawn here for readability. Source: vistautah.com.</p>
+      </div>
+    </div>
+
+    <h3 class="exhibit-subhead">Administrative &amp; Teacher Turnover</h3>
+    <p class="exhibit-subhead-note">
+      Compiled by Vista parents using Utah's public compensation database,
+      <a href="https://transparent.utah.gov/" target="_blank" rel="noopener">Transparent Utah</a>,
+      and redrawn here for readability. The dashed vertical lines mark years in which Vista
+      changed directors. These charts were put together by parents, not produced or independently
+      verified by Saving Vista School &mdash; the underlying data is public and can be checked
+      directly at transparent.utah.gov.
+    </p>
+    <div class="exhibit-grid" style="grid-template-columns:1fr;max-width:900px;margin-left:auto;margin-right:auto;">
+      <div class="exhibit-card">
+        <img src="assets/leadership/teacher-experience-exiting-chart.png" alt="Chart titled 'Years of Teacher Experience at Vista, Exiting Each Year,' sourced to Transparent Utah, showing a rise in combined years of experience among exiting teachers in recent years, with director-change years marked: 2015, 2021, and 2023.">
+        <p class="exhibit-caption">Combined years of experience held by teachers who left Vista, by year.</p>
+      </div>
+      <div class="exhibit-card">
+        <img src="assets/leadership/teacher-exits-chart.png" alt="Chart titled 'Teacher Exits, Exiting Each Year,' sourced to Transparent Utah, showing the number of teachers leaving Vista rising to 17 and 13 in the most recent two years shown, with director-change years marked.">
+        <p class="exhibit-caption">Number of teachers exiting Vista, by year.</p>
+      </div>
+    </div>
+
+    <h3 class="exhibit-subhead">Enrollment</h3>
+    <p class="exhibit-subhead-note">Presented at Vista's July 29, 2026 Board meeting, redrawn here for readability.</p>
+    <div class="exhibit-grid" style="grid-template-columns:1fr;max-width:900px;margin-left:auto;margin-right:auto;">
+      <div class="exhibit-card">
+        <img src="assets/leadership/enrollment-by-grade-chart.png" alt="Bar chart of Vista School enrollment by grade for August 2026 compared to the school's own stated per-grade targets, showing enrollment above target in every grade. Totals: 1,149 enrolled versus a target of 1,083.">
+        <p class="exhibit-caption">Enrollment by grade, August 2026, compared to the school's own stated targets.</p>
+      </div>
+    </div>
+
+    <p class="exhibit-subhead-note" style="margin-top:20px;">
+      For independent confirmation, the Utah State Charter School Board publishes its own
+      official enrollment count for every charter school each year.
+    </p>
+    <div class="exhibit-grid" style="grid-template-columns:1fr;max-width:900px;margin-left:auto;margin-right:auto;">
+      <div class="exhibit-card">
+        <img src="assets/leadership/enrollment-trend-chart.png" alt="Line chart of Vista School's official total enrollment on October 1 of each year from 2022 to 2026, per the Utah State Charter School Board: 1099, 1113, 1117, 1115, and 1088 students.">
+        <p class="exhibit-caption">Vista's official October 1 headcount, 2022&ndash;2026, per the Utah State Charter School Board's <a href="https://ucap.schools.utah.gov/SCSB/SchoolDashboard/186115" target="_blank" rel="noopener">Utah Charter Access Point dashboard</a>.</p>
+      </div>
+    </div>
+
+    <h3 class="exhibit-subhead">Administrator Salaries</h3>
+    <p class="exhibit-subhead-note">
+      Vista's administrator salaries compared to George Washington Academy, a similarly
+      sized nearby charter school, per Utah's public employee compensation database,
+      <a href="https://transparent.utah.gov/" target="_blank" rel="noopener">Transparent Utah</a>.
+    </p>
+    <div class="exhibit-grid" style="grid-template-columns:1fr;max-width:900px;margin-left:auto;margin-right:auto;">
+      <div class="exhibit-card">
+        <img src="assets/leadership/salary-comparison-chart.png" alt="Bar chart comparing administrator salaries at Vista School and George Washington Academy, full-year 2025 figures: Director $180,746 vs $137,919; Chief Operating Officer $141,924 vs no equivalent role; Assistant Principal/comparable role $93,938 vs $103,810.">
+        <p class="exhibit-caption">Administrator salaries at Vista compared to George Washington Academy, per Utah's public compensation data.</p>
+      </div>
+    </div>
+
+    <div class="exhibit-sources">
+      <h4>Sources</h4>
+      <ul>
+        <li><a href="https://www.stgeorgeutah.com/news/education/hindsight-is-20-20-vista-school-in-ivins-welcomes-new-director-amid-concerns-from-parents/article_d95c9be0-bdf1-593a-82ac-5e36476e5ff6.html" target="_blank" rel="noopener">St. George News: "Hindsight is 20/20": Vista School in Ivins welcomes new director amid concerns from parents</a> (Aug. 11, 2023)</li>
+        <li><a href="https://www.heraldnet.com/2022/05/27/expletive-idiot-scathing-report-paints-monroe-schools-supe-as-bully/" target="_blank" rel="noopener">HeraldNet: "'Expletive,' 'idiot': Scathing report paints Monroe schools' supe as bully"</a> (May 27, 2022)</li>
+        <li><a href="https://www.seattletimes.com/seattle-news/monroe-superintendent-to-resign-receive-nearly-400k-despite-complaints-about-toxic-behavior/" target="_blank" rel="noopener">Seattle Times: Monroe superintendent to resign, receive nearly $400K despite complaints about toxic behavior</a></li>
+        <li><a href="https://s3.documentcloud.org/documents/22041136/1-alleged-misconduct-investigation.pdf" target="_blank" rel="noopener">DocumentCloud: Independent investigation report into complaints against then-Superintendent Justin Blasko, Monroe School District</a></li>
+      </ul>
+    </div>
+      </div>
+
+      <aside class="home-sidebar">
+    <h2>Vista Social Media Tracker</h2>
+    <p style="color:var(--muted);font-size:0.95rem;">
+      Posts from parents and community members talking about Vista School online.
+      Have one to add? <a href="about.html#contact">Send us the link</a>.
+    </p>
+
+    <p class="policy-note" style="font-size:0.85rem;padding:14px 16px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--gold);flex-shrink:0;vertical-align:-3px;margin-right:6px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><strong>A note on these posts:</strong> each is a real, public post by its
+      original author, shown here as posted. Before listing one here, our team manually
+      confirms it's genuinely about Vista School &mdash; the K-9 charter school in Ivins,
+      Utah &mdash; and not a different school with a similar name. We don't otherwise verify
+      what a post says; the views in it belong to the original poster, not Saving Vista
+      School.
+    </p>
+
+    <div class="social-post-list" aria-live="off" aria-busy="true">
+      <div class="social-post-card is-skeleton" aria-hidden="true">
+        <div class="skeleton-line skeleton-meta" style="width:90px"></div>
+        <div class="skeleton-line" style="width:100%;height:180px;margin-bottom:8px;"></div>
+        <div class="skeleton-line skeleton-button"></div>
+      </div>
+    </div>
+      </aside>
+    </div>
   </div>
-</div>
+</section>
+
+<section class="alt">
+  <div class="container" style="text-align:center;">
+    <h2>Get Involved</h2>
+    <p style="color:var(--muted);max-width:600px;margin:0 auto 22px;">
+      However you found your way here, there's a way to help &mdash; share what you know, or just
+      reach out with a question.
+    </p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="letters.html#submit-a-letter">Submit a Letter of Concern</a>
+      <a class="btn-outline" href="about.html#contact">Contact Us</a>
+    </div>
+  </div>
+</section>
 
 <footer class="site-footer">
   <div class="container">
@@ -109,6 +306,336 @@
   </div>
 </footer>
 
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Small "next meeting" teaser in the hero, fed by the same auto-generated
+// assets/data/meetings.json that meetings.html uses. Fails silently (strip
+// just stays hidden) if the file is missing or unreadable.
+fetch('assets/data/meetings.json')
+  .then(function (r) { return r.json(); })
+  .then(function (data) {
+    var candidates = [data.next_board, data.next_townhall].filter(Boolean);
+    candidates.sort(function (a, b) { return new Date(a.date) - new Date(b.date); });
+    var next = candidates[0];
+    if (!next) return;
+    var label = next.type === 'board' ? 'Board Meeting' : 'Town Hall Meeting';
+    var el = document.getElementById('home-next-meeting');
+    el.innerHTML = 'Next ' + label + ': ' + next.display_date + ' at ' + next.time +
+      ' &mdash; <a href="meetings.html">details&nbsp;&rarr;</a>';
+    el.hidden = false;
+  })
+  .catch(function () { /* leave the teaser hidden */ });
+</script>
+<script>
+// Inline glossary: define terms here; each one gets a dotted-underline
+// tooltip the first time it appears (as its own word) in the page's
+// visible text. Add more entries as new jargon shows up in the copy.
+(function () {
+  var GLOSSARY = {
+    "Title IX": "Title IX — a 1972 federal civil rights law that prohibits sex-based discrimination in any school program or activity that receives federal funding.",
+    "LEA": "LEA — Local Education Agency, the entity legally authorized to operate a school. Vista is its own LEA (the school and the LEA are the same organization), which is how state and charter-board reports refer to it."
+  };
+  var terms = Object.keys(GLOSSARY).sort(function (a, b) { return b.length - a.length; });
+  var already = {};
+
+  function wrapIfWholeWord(textNode, term) {
+    var value = textNode.nodeValue;
+    var idx = value.indexOf(term);
+    if (idx === -1) return false;
+    var before = value.charAt(idx - 1);
+    var after = value.charAt(idx + term.length);
+    if ((before && /[\w]/.test(before)) || (after && /[\w]/.test(after))) return false;
+
+    var span = document.createElement('span');
+    span.className = 'glossary-term';
+    span.tabIndex = 0;
+    span.textContent = term;
+    var tip = document.createElement('span');
+    tip.className = 'glossary-tip';
+    tip.textContent = GLOSSARY[term];
+    span.appendChild(tip);
+
+    var afterNode = textNode.splitText(idx);
+    afterNode.nodeValue = afterNode.nodeValue.slice(term.length);
+    textNode.parentNode.insertBefore(span, afterNode);
+    return true;
+  }
+
+  function walk(el) {
+    var child = el.firstChild;
+    while (child) {
+      var next = child.nextSibling;
+      if (child.nodeType === 3) {
+        for (var i = 0; i < terms.length; i++) {
+          var term = terms[i];
+          if (already[term]) continue;
+          if (child.nodeValue.indexOf(term) !== -1 && wrapIfWholeWord(child, term)) {
+            already[term] = true;
+            break;
+          }
+        }
+      } else if (child.nodeType === 1 && child.tagName !== 'SCRIPT' && child.tagName !== 'STYLE') {
+        walk(child);
+      }
+      child = next;
+    }
+  }
+
+  document.querySelectorAll('section').forEach(walk);
+})();
+</script>
+<script>
+(function () {
+  // Public feed of team-verified social media posts, served by a Google
+  // Apps Script Web App bound to the private "Vista Social Media Posts"
+  // Google Sheet. Mirrors the Letters-of-Concern feed on letters.html: it
+  // only ever returns rows a human has manually set to Status =
+  // Published, and only the fields safe to show publicly (platform, post
+  // URL, excerpt, date) -- never the "Who told us about it" or "Reviewer
+  // notes" columns from the sheet.
+  //
+  // Renders as a one-post-at-a-time carousel, not a stacked list: prev/
+  // next buttons + dots let a visitor browse manually, and it auto-
+  // advances every AUTOPLAY_MS (paused while hovered/focused). Each post
+  // is shown as the actual embedded post (via that platform's own embed
+  // widget), not just a link out, for the platforms we know how to embed
+  // -- Facebook, X/Twitter, Instagram. Anything else (Nextdoor, TikTok,
+  // an unrecognized platform) falls back to the excerpt + a "View Post"
+  // link, since there's no reliable public embed for it. Embeds are lazy
+  // -- a platform's embed script only loads, and a given post's embed
+  // only renders, the first time its slide becomes active, so posts a
+  // visitor never scrolls to never load that platform's tracking iframe.
+  var SOCIAL_POSTS_FEED_URL = 'https://script.google.com/macros/s/AKfycbwRIwwfL2o6VKP4Ce8vwNuQ3BhZyECR9u3u8Lid64HaW4VHsziWtzQJ4N9GP87ztvnfLQ/exec';
+  var AUTOPLAY_MS = 45000;
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // ---- lazy embed-SDK loading -------------------------------------------
+  // sdkState[id]: undefined (never requested) | 'loading' | 'ready'.
+  // sdkQueue[id]: callbacks waiting for that SDK to finish loading.
+  var sdkState = {};
+  var sdkQueue = {};
+
+  // Ensures the SDK script with this id is loading/loaded exactly once.
+  // Returns true if it's already ready (caller can act immediately);
+  // otherwise queues `whenReady` (if given) and returns false.
+  function ensureSdk(id, src, onFirstLoad, whenReady) {
+    if (sdkState[id] === 'ready') return true;
+    if (whenReady) {
+      sdkQueue[id] = sdkQueue[id] || [];
+      sdkQueue[id].push(whenReady);
+    }
+    if (sdkState[id] === 'loading') return false;
+    sdkState[id] = 'loading';
+    var s = document.createElement('script');
+    s.src = src;
+    s.async = true;
+    s.onload = function () {
+      sdkState[id] = 'ready';
+      if (onFirstLoad) onFirstLoad();
+      (sdkQueue[id] || []).forEach(function (cb) { cb(); });
+      sdkQueue[id] = [];
+    };
+    document.body.appendChild(s);
+    return false;
+  }
+
+  function embedKindFor(item) {
+    var platform = (item.platform || '').toLowerCase();
+    if (!item.url) return null;
+    if (platform.indexOf('facebook') !== -1) return 'facebook';
+    if (platform.indexOf('twitter') !== -1 || platform === 'x' || platform.indexOf('x.com') !== -1) return 'twitter';
+    if (platform.indexOf('instagram') !== -1) return 'instagram';
+    return null;
+  }
+
+  function renderEmbed(container, item) {
+    var kind = embedKindFor(item);
+    var url = escapeHtml(item.url);
+
+    if (kind === 'facebook') {
+      if (!document.getElementById('fb-root')) {
+        var root = document.createElement('div');
+        root.id = 'fb-root';
+        document.body.insertBefore(root, document.body.firstChild);
+      }
+      container.innerHTML = '<div class="fb-post" data-href="' + url + '" data-width="auto"></div>';
+      var fbReady = ensureSdk('fb-sdk', 'https://connect.facebook.net/en_US/sdk.js#xfbml=0&version=v19.0',
+        function () { window.FB && FB.init({ xfbml: false, version: 'v19.0' }); });
+      if (fbReady) { FB.XFBML.parse(container); }
+      else { sdkQueue['fb-sdk'].push(function () { FB.XFBML.parse(container); }); }
+    } else if (kind === 'twitter') {
+      container.innerHTML = '<blockquote class="twitter-tweet" data-dnt="true"><a href="' + url + '"></a></blockquote>';
+      var twReady = ensureSdk('twitter-widgets', 'https://platform.twitter.com/widgets.js');
+      if (twReady) { twttr.widgets.load(container); }
+      else { sdkQueue['twitter-widgets'].push(function () { twttr.widgets.load(container); }); }
+    } else if (kind === 'instagram') {
+      container.innerHTML = '<blockquote class="instagram-media" data-instgrm-permalink="' + url + '" data-instgrm-version="14"></blockquote>';
+      var igReady = ensureSdk('instagram-embed', 'https://www.instagram.com/embed.js');
+      if (igReady) { instgrm.Embeds.process(); }
+      else { sdkQueue['instagram-embed'].push(function () { instgrm.Embeds.process(); }); }
+    }
+  }
+
+  function buildPostCard(item, index) {
+    var card = document.createElement('div');
+    card.className = 'social-post-card';
+    if (index !== 0) card.hidden = true;
+
+    var top = (item.platform ? '<span class="category-badge">' + escapeHtml(item.platform) + '</span>' : '<span></span>') +
+      (item.date ? '<span class="meta">' + escapeHtml(item.date) + '</span>' : '');
+
+    var canEmbed = !!embedKindFor(item);
+
+    card.innerHTML =
+      '<div class="social-post-top">' + top + '</div>' +
+      (canEmbed ? '<div class="social-post-embed"></div>' :
+        (item.excerpt ? '<p class="social-post-excerpt">&ldquo;' + escapeHtml(item.excerpt) + '&rdquo;</p>' : '')) +
+      (item.url ? '<a class="download" href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">View Post &rarr;</a>' : '');
+
+    return card;
+  }
+
+  var list = document.querySelector('.social-post-list');
+  var sidebar = document.querySelector('.home-sidebar');
+
+  function removeSkeletons() {
+    if (!list) return;
+    list.querySelectorAll('.is-skeleton').forEach(function (el) { el.remove(); });
+    list.setAttribute('aria-busy', 'false');
+  }
+
+  function showEmptyState(message) {
+    if (!list) return;
+    var p = document.createElement('p');
+    p.className = 'empty-state';
+    p.textContent = message;
+    list.appendChild(p);
+  }
+
+  // ---- carousel state -----------------------------------------------
+  var items = [];
+  var cards = [];
+  var embedded = [];
+  var current = 0;
+  var timer = null;
+  var dotsEl = null;
+
+  function renderCurrentEmbed() {
+    if (embedded[current]) return;
+    var embedEl = cards[current].querySelector('.social-post-embed');
+    if (embedEl) renderEmbed(embedEl, items[current]);
+    embedded[current] = true;
+  }
+
+  function updateDots() {
+    if (!dotsEl) return;
+    Array.prototype.forEach.call(dotsEl.children, function (dot, i) {
+      dot.classList.toggle('is-active', i === current);
+      dot.setAttribute('aria-current', i === current ? 'true' : 'false');
+    });
+  }
+
+  function goTo(index) {
+    if (!cards.length) return;
+    cards[current].hidden = true;
+    current = (index + cards.length) % cards.length;
+    cards[current].hidden = false;
+    renderCurrentEmbed();
+    updateDots();
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  function startAutoplay() {
+    stopAutoplay();
+    if (cards.length > 1) timer = setInterval(next, AUTOPLAY_MS);
+  }
+  function stopAutoplay() {
+    if (timer) { clearInterval(timer); timer = null; }
+  }
+
+  function buildNav() {
+    var nav = document.createElement('div');
+    nav.className = 'social-post-nav';
+
+    var prevBtn = document.createElement('button');
+    prevBtn.type = 'button';
+    prevBtn.className = 'social-post-nav-btn';
+    prevBtn.setAttribute('aria-label', 'Previous post');
+    prevBtn.innerHTML = '&larr;';
+    prevBtn.addEventListener('click', function () { prev(); startAutoplay(); });
+
+    var dots = document.createElement('div');
+    dots.className = 'social-post-dots';
+    items.forEach(function (_, i) {
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'social-post-dot';
+      dot.setAttribute('aria-label', 'Go to post ' + (i + 1) + ' of ' + items.length);
+      dot.addEventListener('click', function () { goTo(i); startAutoplay(); });
+      dots.appendChild(dot);
+    });
+    dotsEl = dots;
+
+    var nextBtn = document.createElement('button');
+    nextBtn.type = 'button';
+    nextBtn.className = 'social-post-nav-btn';
+    nextBtn.setAttribute('aria-label', 'Next post');
+    nextBtn.innerHTML = '&rarr;';
+    nextBtn.addEventListener('click', function () { next(); startAutoplay(); });
+
+    nav.appendChild(prevBtn);
+    nav.appendChild(dots);
+    nav.appendChild(nextBtn);
+    list.insertAdjacentElement('afterend', nav);
+    updateDots();
+  }
+
+  fetch(SOCIAL_POSTS_FEED_URL)
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      if (!list) return;
+      items = Array.isArray(data) ? data : (data && Array.isArray(data.items) ? data.items : []);
+      if (!items.length) {
+        showEmptyState('No posts have been added yet. Check back soon.');
+        return;
+      }
+
+      var fragment = document.createDocumentFragment();
+      items.forEach(function (item, i) {
+        var card = buildPostCard(item, i);
+        cards.push(card);
+        fragment.appendChild(card);
+      });
+      list.insertBefore(fragment, list.firstChild);
+
+      renderCurrentEmbed();
+
+      if (items.length > 1) {
+        buildNav();
+        startAutoplay();
+        if (sidebar) {
+          sidebar.addEventListener('mouseenter', stopAutoplay);
+          sidebar.addEventListener('mouseleave', startAutoplay);
+          sidebar.addEventListener('focusin', stopAutoplay);
+          sidebar.addEventListener('focusout', startAutoplay);
+        }
+      }
+    })
+    .catch(function (err) {
+      console.warn('Could not load social media posts:', err);
+      showEmptyState("Posts couldn't be loaded right now. Please refresh the page or check back soon.");
+    })
+    .finally(removeSkeletons);
+})();
+</script>
+<script src="assets/js/nav.js" defer></script>
 </body>
 </html>
