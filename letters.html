@@ -50,13 +50,35 @@
 
       <div class="letters-column">
             <!--
-              HOW TO ADD A NEW LETTER (for whoever maintains this file):
-              1. Save the reviewed letter (PDF or DOCX) into the assets/letters-archive/ folder.
-                 Raw/unreviewed submissions from the form live in assets/letters/, which is
-                 never published -- only move a file here after it's been reviewed.
-              2. Copy one of the <div class="letter-card" data-category="..."> blocks below and edit:
-                 - the title, category badge text, the meta line, and the href to your filename.
-              3. Add newest letters at the TOP of the list so they show first.
+              HOW A NEW LETTER ACTUALLY GETS PUBLISHED (for whoever maintains this file):
+
+              This page has no hand-maintained letter markup anymore -- everything below
+              is rendered by the inline script at the bottom of this file, which fetches
+              LETTERS_FEED_URL (a Google Apps Script Web App in front of the private
+              "Submit a Letter of Concern" Google Sheet) on every page load and builds a
+              card for each row with Status = Published. There is nothing to edit in this
+              HTML to add, remove, or reorder a letter.
+
+              The actual flow:
+              1. A letter comes in either through the Tally.so form embedded below (which
+                 writes a new row into the Sheet automatically) or by adding a row to the
+                 Sheet directly for letters collected another way (email, in person, etc.).
+              2. Someone on the team reviews the raw letter -- screen it against the
+                 defamation-risk checklist in .notes/PROJECT_NOTES.md -- and makes sure the
+                 letter file itself (PDF/photo/scan) is reachable at a Google Drive link,
+                 pasted into that row's "Letter (PDF, photo, or scan)" column. (Older
+                 letters were saved into assets/letters/ and assets/letters-archive/ in this
+                 repo; that stopped being the active workflow once the Drive+Sheet+Apps
+                 Script system replaced it -- those two folders are legacy and unreferenced
+                 now, don't add new files there.)
+              3. To actually publish it: in that Sheet row, set Status to "Published" and
+                 fill in "Display Title" (rows without a title are skipped by the feed, even
+                 if Published) plus whichever of "Submitted at" / "Who is this letter
+                 addressed to?" / the publishing-preference checkbox apply. It'll show up on
+                 this page, newest-first, the next time anyone loads it -- no deploy needed.
+
+              See the "Google account situation" section of .notes/PROJECT_NOTES.md for
+              which Google account currently owns the Sheet/Apps Script/Tally integration.
             -->
 
             <p class="policy-note" style="margin-bottom:24px;">

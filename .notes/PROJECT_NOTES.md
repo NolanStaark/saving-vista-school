@@ -253,6 +253,23 @@ Notes for whoever touches this next:
   & culture, arts & curriculum, special ed & academic support) with letters
   allowed to carry MULTIPLE tags -- not a single recipient.
 
+## Letters page: assets/letters/ and assets/letters-archive/ are legacy, unused (Sept 2026)
+
+Confirmed while fixing a stale HTML comment in letters.html: these two
+repo folders (leftover from before the Tally+Sheet+Apps-Script feed
+existed) are NOT part of the current publish flow. Nothing in any HTML/JS/
+Python in this repo references them anymore (only the old comment did,
+now rewritten). Every file in assets/letters-archive/ is a pre-migration
+duplicate of a letter that's since been re-uploaded to the "Letters"
+Google Drive folder and linked from the Sheet's "Letter (PDF, photo, or
+scan)" column instead (same filenames, same content, checked directly).
+Don't add new letter files to either folder -- they won't do anything.
+The real flow is: Tally submission or manual Sheet row -> team reviews +
+puts the file on Google Drive -> Sheet row's Status set to "Published"
+with a Display Title -> the Apps Script feed picks it up automatically.
+(Left the old files in place rather than deleting them, same as the old
+.jpg leadership charts -- harmless to keep around for reference.)
+
 ## Open / unconfirmed items
 
 - Whether updating Brave's Shields content-filter lists actually fixed the
