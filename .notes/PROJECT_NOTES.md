@@ -38,6 +38,20 @@ disclaimer bar says so and that must never be softened or removed.
 - Never reintroduce previously-redacted contact info.
 - Never publish: the "Kim Clegg" folder or the duplicate minor's photo in it.
 - Never publish: Barry Burr's letter, or the "Andersen" screenshot.
+- Never publish: from the "Vista Website Media" Google Drive folder
+  (shared with savingvistaschool@gmail.com by kimmeeg@gmail.com, Sept
+  2026) -- `IMG8185657956546708511.jpg`, a screenshot naming a specific
+  minor student and their private attendance/absence record, and
+  `IMG2050795870800228188.jpg`, a near-duplicate from the same
+  absence-confirmation flow. Neither has been used anywhere on the site.
+  That same Drive folder also contained two Google Docs ("Monroe doc",
+  "HaroldNet") that are just links to a 2022 HeraldNet article about the
+  Monroe School District, WA -- NOT unrelated/misplaced as they first
+  appeared: Vista's current Executive Director, Dr. Justin Blasko, is the
+  same person as the Monroe superintendent in that article (confirmed via
+  St. George News' Aug. 2023 coverage of his hiring). See the
+  `home-full.html` note below -- this background is now written up there,
+  sourced, not just linked.
 These were flagged explicitly earlier in the project and the restriction
 still stands even if not repeated in a given chat.
 
@@ -73,6 +87,27 @@ still stands even if not repeated in a given chat.
   in for `index.html`. Its shared CSS (`.hero-actions`, `.btn-primary`,
   `.btn-secondary`, `.btn-outline`, `.home-next-meeting`) is already in
   style.css (harmless/unused until swapped in).
+
+  Also has an "A Closer Look at Vista's Leadership" section (Sept 2026,
+  per Russ: "the home page is the crux of presenting the information
+  we have gathered transparently") -- a sourced writeup of Executive
+  Director Dr. Justin Blasko's background as former Monroe School
+  District (WA) superintendent (placed on leave Dec. 2021 after an
+  investigation substantiated bullying/misconduct complaints, resigned
+  July 2022 with a ~$396k severance; cites St. George News, HeraldNet,
+  Seattle Times -- see the exhibit-sources block in the HTML for exact
+  links), plus supporting images in `assets/leadership/`: Vista's own
+  org chart, two parent-compiled Transparent Utah charts on teacher
+  tenure/exits vs. director-change years (captioned as parent-compiled,
+  not independently produced/verified by this site), two Vista-School
+  Facebook posts announcing administrative hires, a July 2026 Board
+  enrollment slide, and a parent's Board letter requesting a salary
+  audit with the author's name/phone number cropped out of the image
+  (she was fine with her name being used, but Russ asked afterward to
+  redact it anyway -- don't re-add it without checking with him again).
+  New shared CSS for this: `.exhibit-intro`, `.exhibit-subhead`,
+  `.exhibit-subhead-note`, `.exhibit-grid`, `.exhibit-card`,
+  `.exhibit-caption`, `.exhibit-sources` (also unused until swapped in).
 - `.notes/DEPLOY.md` — deployment notes (moved here for the same publishing-exposure reason as this file).
 
 ## Meetings automation (as of this writing)
