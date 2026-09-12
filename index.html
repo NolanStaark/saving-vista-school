@@ -3,25 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saving Vista School</title>
-<meta name="description" content="Saving Vista School is an independent, parent-led nonprofit pushing for transparency and accountability at Vista School in Ivins, Utah — letters of concern, meeting access, and family resources, all in one place.">
+<title>Saving Vista School — Coming Soon</title>
+<meta name="description" content="Saving Vista School — site launching soon.">
 <link rel="stylesheet" href="style.css">
+<style>
+  .under-construction {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .under-construction .box {
+    max-width: 560px;
+  }
+  .under-construction h1 {
+    color: var(--navy);
+    font-size: 2rem;
+    margin-bottom: 12px;
+  }
+  .under-construction p {
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+  .under-construction .badge {
+    display: inline-block;
+    background: #eef2f6;
+    color: var(--navy);
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 18px;
+  }
+</style>
 </head>
 <body>
 
 <header class="site-header">
   <div class="container">
     <a class="brand" href="index.html">Saving Vista School</a>
-    <nav class="main-nav">
-      <ul>
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="letters.html">Letters of Concern</a></li>
-        <li><a href="policies.html">Policies &amp; Rights</a></li>
-        <li><a href="media.html">Media</a></li>
-        <li><a href="meetings.html">Live Meetings</a></li>
-        <li><a href="about.html">About &amp; Contact</a></li>
-      </ul>
-    </nav>
   </div>
 </header>
 
@@ -31,67 +53,16 @@
   </div>
 </div>
 
-<section class="hero">
-  <div class="container">
-    <h1>Standing Up for Vista School Families</h1>
+<div class="under-construction">
+  <div class="box">
+    <span class="badge">Coming Soon</span>
+    <h1>We're building something here.</h1>
     <p>
-      Saving Vista School is an independent, parent-led effort to bring transparency and
-      accountability to Vista School's administration and its Charter Board &mdash; through
-      documented letters of concern, open access to meetings, and shared resources for families.
+      Saving Vista School is putting together a home for letters of concern, school media,
+      and live meeting streams. The site isn't ready yet &mdash; check back soon.
     </p>
-    <div class="hero-actions">
-      <a class="btn-primary" href="letters.html">Read the Letters</a>
-      <a class="btn-secondary" href="meetings.html">See the Meeting Schedule</a>
-    </div>
-    <div class="home-next-meeting" id="home-next-meeting" hidden></div>
   </div>
-</section>
-
-<section>
-  <div class="container">
-    <h2 style="text-align:center;">Why This Site Exists</h2>
-    <p style="max-width:700px;margin:0 auto;text-align:center;color:var(--muted);">
-      This site was organized by a group of concerned parents who believe a number of recent
-      decisions by Vista's administration deserve closer scrutiny. We're engaging directly with
-      Vista's Charter Board and the Utah State Charter School Board to push for transparency and
-      accountability &mdash; and this is where we're keeping that effort public: letters sent,
-      meetings held, and the policies that are supposed to protect families.
-    </p>
-
-    <div class="feature-grid">
-      <a class="feature-card" href="letters.html">
-        <h3>Letters of Concern</h3>
-        <p>Read letters written by parents, staff, and community members to Vista's administration, School Board, and the state charter board &mdash; and add your own.</p>
-      </a>
-      <a class="feature-card" href="meetings.html">
-        <h3>Live Meetings</h3>
-        <p>Watch Board and Town Hall meetings live, browse the auto-updated schedule, or catch a past recording.</p>
-      </a>
-      <a class="feature-card" href="policies.html">
-        <h3>Policies &amp; Rights</h3>
-        <p>A searchable library of Utah and USBE charter-school policies and parental-rights resources.</p>
-      </a>
-      <a class="feature-card" href="media.html">
-        <h3>Photos &amp; Video</h3>
-        <p>Photos and videos from Vista School events, as they're added.</p>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section class="alt">
-  <div class="container" style="text-align:center;">
-    <h2>Get Involved</h2>
-    <p style="color:var(--muted);max-width:600px;margin:0 auto 22px;">
-      However you found your way here, there's a way to help &mdash; share what you know, or just
-      reach out with a question.
-    </p>
-    <div class="hero-actions">
-      <a class="btn-primary" href="letters.html#submit-a-letter">Submit a Letter of Concern</a>
-      <a class="btn-outline" href="about.html#contact">Contact Us</a>
-    </div>
-  </div>
-</section>
+</div>
 
 <footer class="site-footer">
   <div class="container">
@@ -99,26 +70,6 @@
   </div>
 </footer>
 
-<script>
-document.getElementById('year').textContent = new Date().getFullYear();
-
-// Small "next meeting" teaser in the hero, fed by the same auto-generated
-// assets/data/meetings.json that meetings.html uses. Fails silently (strip
-// just stays hidden) if the file is missing or unreadable.
-fetch('assets/data/meetings.json')
-  .then(function (r) { return r.json(); })
-  .then(function (data) {
-    var candidates = [data.next_board, data.next_townhall].filter(Boolean);
-    candidates.sort(function (a, b) { return new Date(a.date) - new Date(b.date); });
-    var next = candidates[0];
-    if (!next) return;
-    var label = next.type === 'board' ? 'Board Meeting' : 'Town Hall Meeting';
-    var el = document.getElementById('home-next-meeting');
-    el.innerHTML = 'Next ' + label + ': ' + next.display_date + ' at ' + next.time +
-      ' &mdash; <a href="meetings.html">details&nbsp;&rarr;</a>';
-    el.hidden = false;
-  })
-  .catch(function () { /* leave the teaser hidden */ });
-</script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>

@@ -43,16 +43,14 @@ still stands even if not repeated in a given chat.
 
 ## Site pages (current)
 
-- `index.html` — real home page (Sept 2026), not the placeholder anymore.
-  Has the full nav. Hero + "Why This Site Exists" mission blurb + feature
-  cards for Letters/Meetings/Policies/Media + a small "Next Meeting" teaser
-  pill in the hero fed by `assets/data/meetings.json` (same file
-  `meetings.html` uses) + a "Get Involved" CTA section linking to
-  `letters.html#submit-a-letter` and `about.html#contact`. New shared CSS
-  for this: `.hero-actions`, `.btn-primary`, `.btn-secondary`,
-  `.btn-outline`, `.home-next-meeting` (appended to the end of style.css).
-  `home-full.html` was an earlier draft of this and is now superseded/
-  redundant — not deleted, but flag to Russ that it can probably go.
+- `index.html` — still the placeholder "Coming Soon" page, no nav, don't
+  touch nav logic here. A full replacement home page has been built and is
+  staged in `home-full.html` (see below), ready to swap in — Russ asked to
+  hold off on making it live for now. To swap it in later: replace
+  `index.html`'s content with `home-full.html`'s (or `git mv` it over,
+  updating the self-referencing nav links/`href="index.html"` as needed),
+  then update this note and (optionally) remove the now-redundant
+  `home-full.html`.
 - `letters.html` (renamed from `parent-letters.html`) — parent letters of
   concern, fed by a Google Apps Script Web App JSON API in front of a
   private Google Sheet (Tally.so submissions land in the Sheet; some
@@ -65,8 +63,16 @@ still stands even if not repeated in a given chat.
   rights & policy resources (17 cards, 8 categories), with a text search
   box + the same filter-chip pattern.
 - `media.html`, `about.html`, `404.html` — mostly static; keep their nav
-  in sync when pages are added/renamed. `home-full.html` — superseded draft
-  of the home page, see the `index.html` note above.
+  in sync when pages are added/renamed.
+- `home-full.html` — the finished replacement home page (hero + "Why This
+  Site Exists" mission blurb + feature cards for Letters/Meetings/
+  Policies/Media + a "Next Meeting" teaser pill fed by
+  `assets/data/meetings.json`, same file `meetings.html` uses + a "Get
+  Involved" CTA linking to `letters.html#submit-a-letter` and
+  `about.html#contact`). NOT live yet — Russ wants to hold off swapping it
+  in for `index.html`. Its shared CSS (`.hero-actions`, `.btn-primary`,
+  `.btn-secondary`, `.btn-outline`, `.home-next-meeting`) is already in
+  style.css (harmless/unused until swapped in).
 - `.notes/DEPLOY.md` — deployment notes (moved here for the same publishing-exposure reason as this file).
 
 ## Meetings automation (as of this writing)
