@@ -1176,3 +1176,104 @@ What changed mechanically:
 
 This was a git-only change in this session -- **nothing is actually live
 on the public internet until Russ runs `git push`**. Remind him.
+
+## Facebook embed was blank: share links aren't permalinks (Sept 2026)
+
+Russ reported the social tracker card wasn't showing the actual post.
+Root cause: the URL in the Sheet was a Facebook "share" link
+(`facebook.com/share/1BtaXXm77Q/`), which redirects to the real post but
+isn't itself embeddable -- Facebook's embed widget (`fb-post`) only
+renders from the post's actual permalink, and fails completely silently
+(no error, just an empty box) when given a share link. Confirmed this by
+resolving the share link in a real browser and reading its `og:url`:
+
+`https://www.facebook.com/justin.griffiths.332/posts/posting-for-my-wife-because-she-doesnt-have-facebook-fellow-vista-parents-we-nee/10236281437000526/`
+
+**Immediate fix for the existing row**: paste that canonical URL into the
+Sheet's Post URL cell in place of the share link, no redeploy needed.
+
+**Two code changes made:**
+1. **Client-side (index.html, committed this chat)**: every embed attempt
+   (Facebook/Twitter/Instagram) is now verified ~6-8s after it starts --
+   if no iframe actually appeared in the card, it falls back to the
+   excerpt + "View Post" link instead of leaving a blank box forever.
+   This covers ANY future embed failure (bad URL, deleted/private post,
+   ad blocker, network hiccup), not just this specific share-link case.
+2. **Server-side (Apps Script, NOT yet redeployed -- Russ needs to do
+   this)**: the feed script now auto-resolves `facebook.com/share/` URLs
+   to their canonical permalink via `UrlFetchApp` reading the redirected
+   page's `og:url` meta tag (the same tag Slack/iMessage/etc. read for
+   link previews), before returning them in the feed -- so parents can
+   keep pasting whatever link Facebook's Share button gives them (which
+   defaults to the share/ format) without needing to know about this
+   permalink requirement. Falls back to the original URL untouched if
+   resolution fails for any reason, so a bad fetch never breaks the feed.
+
+Updated Apps Script code (replaces the version from the "Apps Script
+still needs to be deployed" note above -- same Sheet, same columns):
+
+```javascript
+function doGet(e) {
+  var SHEET_NAME = 'Sheet1'; // change if your tab is named differently
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+
+  function col(name) { return headers.indexOf(name); }
+
+  var idxStatus = col('Status');
+  var idxPlatform = col('Platform');
+  var idxUrl = col('Post URL');
+  var idxExcerpt = col('What it says (brief summary or excerpt)');
+  var idxDate = col('Date added');
+
+  var items = [];
+  for (var i = 1; i < data.length; i++) {
+    var row = data[i];
+    if (String(row[idxStatus]).trim() !== 'Published') continue;
+    if (!row[idxUrl]) continue;
+
+    var dateStr = '';
+    if (row[idxDate]) {
+      var d = new Date(row[idxDate]);
+      if (!isNaN(d.getTime())) {
+        dateStr = Utilities.formatDate(d, Session.getScriptTimeZone(), 'MMM d, yyyy');
+      } else {
+        dateStr = String(row[idxDate]);
+      }
+    }
+
+    items.push({
+      platform: String(row[idxPlatform] || '').trim(),
+      url: resolveCanonicalUrl(String(row[idxUrl] || '').trim()),
+      excerpt: String(row[idxExcerpt] || '').trim(),
+      date: dateStr
+    });
+  }
+
+  items.reverse();
+  var out = { items: items, totalPublished: items.length };
+  return ContentService.createTextOutput(JSON.stringify(out))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function resolveCanonicalUrl(url) {
+  if (!url || url.indexOf('facebook.com/share') === -1) return url;
+  try {
+    var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, followRedirects: true });
+    var html = res.getContentText();
+    var match = html.match(/<meta property="og:url" content="([^"]+)"/);
+    if (match && match[1]) return match[1];
+  } catch (err) {
+    // fall through to the original URL
+  }
+  return url;
+}
+```
+
+**Redeploy steps** (updates the existing deployment in place -- the
+`.../exec` URL already in index.html does NOT change, so no HTML edit
+needed after this): open the Sheet -> Extensions -> Apps Script -> replace
+the code with the above -> Deploy -> Manage deployments -> pencil/edit
+icon on the existing deployment -> Version: "New version" -> Deploy.

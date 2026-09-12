@@ -454,6 +454,26 @@ fetch('assets/data/meetings.json')
     return null;
   }
 
+  // If a platform's widget can't actually embed a given URL (a Facebook
+  // "share/" link instead of the post's real permalink, a deleted or
+  // private post, a network hiccup, an ad blocker) the widget script
+  // typically fails silently -- no error, just an empty box. So every
+  // embed attempt is verified after the fact and swapped for the
+  // excerpt + "View Post" link fallback if nothing actually rendered,
+  // rather than leaving a visitor staring at a blank card.
+  function fallbackToLink(container, item) {
+    container.classList.remove('social-post-embed');
+    container.innerHTML = item.excerpt
+      ? '<p class="social-post-excerpt">&ldquo;' + escapeHtml(item.excerpt) + '&rdquo;</p>'
+      : '<p class="social-post-excerpt" style="color:var(--muted);font-style:italic;">This post couldn&rsquo;t be shown here directly.</p>';
+  }
+
+  function verifyEmbedRendered(container, item, delayMs) {
+    setTimeout(function () {
+      if (!container.querySelector('iframe')) fallbackToLink(container, item);
+    }, delayMs || 6000);
+  }
+
   function renderEmbed(container, item) {
     var kind = embedKindFor(item);
     var url = escapeHtml(item.url);
@@ -469,16 +489,24 @@ fetch('assets/data/meetings.json')
         function () { window.FB && FB.init({ xfbml: false, version: 'v19.0' }); });
       if (fbReady) { FB.XFBML.parse(container); }
       else { sdkQueue['fb-sdk'].push(function () { FB.XFBML.parse(container); }); }
+      verifyEmbedRendered(container, item);
     } else if (kind === 'twitter') {
       container.innerHTML = '<blockquote class="twitter-tweet" data-dnt="true"><a href="' + url + '"></a></blockquote>';
+      function loadTweet() {
+        twttr.widgets.load(container).then(function (els) {
+          if (!els || !els.length) fallbackToLink(container, item);
+        }).catch(function () { fallbackToLink(container, item); });
+      }
       var twReady = ensureSdk('twitter-widgets', 'https://platform.twitter.com/widgets.js');
-      if (twReady) { twttr.widgets.load(container); }
-      else { sdkQueue['twitter-widgets'].push(function () { twttr.widgets.load(container); }); }
+      if (twReady) { loadTweet(); }
+      else { sdkQueue['twitter-widgets'].push(loadTweet); }
+      verifyEmbedRendered(container, item, 8000);
     } else if (kind === 'instagram') {
       container.innerHTML = '<blockquote class="instagram-media" data-instgrm-permalink="' + url + '" data-instgrm-version="14"></blockquote>';
       var igReady = ensureSdk('instagram-embed', 'https://www.instagram.com/embed.js');
       if (igReady) { instgrm.Embeds.process(); }
       else { sdkQueue['instagram-embed'].push(function () { instgrm.Embeds.process(); }); }
+      verifyEmbedRendered(container, item);
     }
   }
 
