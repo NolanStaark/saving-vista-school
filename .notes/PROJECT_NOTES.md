@@ -52,6 +52,15 @@ disclaimer bar says so and that must never be softened or removed.
   St. George News' Aug. 2023 coverage of his hiring). See the
   `home-full.html` note below -- this background is now written up there,
   sourced, not just linked.
+- Never publish: `policies-absence.jpg` from that same "Vista Website
+  Media" Drive folder (added Sept 10, 2026, by kimmeeg@gmail.com) --
+  another screenshot naming a specific minor student ("Iosefa Tanielu")
+  and their private attendance/absence record. Same pattern as the two
+  images already listed above. Found while sourcing images for
+  `policies.html`; excluded, not used anywhere on the site. Worth a
+  heads-up to whoever's adding files to that Drive folder -- this is the
+  third image of this exact type to show up there.
+
 These were flagged explicitly earlier in the project and the restriction
 still stands even if not repeated in a given chat.
 
@@ -75,7 +84,20 @@ still stands even if not repeated in a given chat.
   automation" below.
 - `policies.html` — searchable aggregator of Utah/USBE/charter parental
   rights & policy resources (17 cards, 8 categories), with a text search
-  box + the same filter-chip pattern.
+  box + the same filter-chip pattern. Sept 2026: added visuals -- an inline
+  SVG "scales" graphic in the page-header (matches the letters.html
+  `.page-header-graphic` convention), a per-category inline SVG icon
+  (`.cat-icon`, Feather-style, matches the icon set already used in
+  letters.html's category badges) on every filter-bar button and card
+  badge, and two screened photos from the "Vista Website Media" Drive
+  folder under `assets/policies/`: `dress-code-bottoms.jpg` (Vista's own
+  dress-code policy, "Bottoms" section, with a parent's highlight on the
+  rear-pockets requirement -- embedded in the "Vista's own board-adopted
+  policies" card) and `absence-reason-options.jpg` (the excused-absence
+  reason list from Vista's parent-portal app, cropped to drop the phone
+  chrome -- embedded in "Compulsory education & truancy"). New CSS:
+  `.policy-card-image` in style.css, plus `.filter-bar .tag` gained
+  `display:inline-flex` for the icon+label pairing.
 - `media.html`, `about.html`, `404.html` — mostly static; keep their nav
   in sync when pages are added/renamed.
 - `home-full.html` — the finished replacement home page (hero + "Why This
@@ -249,6 +271,16 @@ Notes for whoever touches this next:
   something isn't known rather than guessing; never restate a claim from
   Vista's own materials as fact without verifying it (see the "4th
   Tuesday" schedule correction above — Russ caught that one).
+- When a concern Russ raises rests on a legal claim, use the most
+  *defensible* framing rather than the first/strongest-sounding one --
+  verify which law/rule actually applies (research it, don't assume) and
+  reframe the concern through that, hedged as a question ("worth asking")
+  rather than asserted as fact. Example: Russ read the absence-reason
+  screenshot on policies.html as a HIPAA issue; HIPAA doesn't reach K-12
+  schools' own attendance records (FERPA does, per HHS/ED joint guidance)
+  -- so the point got reframed as a Utah Student Data Protection Act
+  (§53E-9) data-minimization question instead, added as a `.policy-card-note`
+  under that image. Standing instruction, not a one-off.
 
 
 ## Home page: leadership charts recreated (Sept 2026)
