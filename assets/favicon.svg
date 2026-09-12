@@ -1,7 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
   <rect width="200" height="200" rx="34" fill="#003e56"/>
-  <rect x="20" y="55" width="160" height="110" rx="10" fill="none" stroke="#ffffff" stroke-width="9"/>
-  <path d="M24 60 100 122 176 60" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="172" cy="34" r="15" fill="#eca73a"/>
-  <circle cx="30" cy="178" r="11" fill="#eca73a"/>
+
+  <!-- parent figure -->
+  <circle cx="76" cy="70" r="21" fill="none" stroke="#ffffff" stroke-width="9"/>
+  <path d="M40 162 Q40 106 76 106 Q112 106 112 162" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- child figure, smaller, hand joined to parent -->
+  <circle cx="142" cy="100" r="14" fill="none" stroke="#ffffff" stroke-width="9"/>
+  <path d="M119 162 Q119 130 142 130 Q165 130 165 162" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- joined hands -->
+  <path d="M109 144 L122 144" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- gold accents -->
+  <circle cx="168" cy="36" r="12" fill="#eca73a"/>
+  <circle cx="30" cy="174" r="9" fill="#eca73a"/>
 </svg>
