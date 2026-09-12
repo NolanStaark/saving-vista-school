@@ -5,6 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Saving Vista School</title>
 <meta name="description" content="Saving Vista School is an independent, parent-led nonprofit pushing for transparency and accountability at Vista School in Ivins, Utah — letters of concern, meeting access, and family resources, all in one place.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Saving Vista School">
+<meta property="og:url" content="https://savingvistaschool.org/home-full.html">
+<meta property="og:title" content="Saving Vista School">
+<meta property="og:description" content="Saving Vista School is an independent, parent-led nonprofit pushing for transparency and accountability at Vista School in Ivins, Utah — letters of concern, meeting access, and family resources, all in one place.">
+<meta property="og:image" content="https://savingvistaschool.org/assets/social-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Saving Vista School">
+<meta name="twitter:description" content="Saving Vista School is an independent, parent-led nonprofit pushing for transparency and accountability at Vista School in Ivins, Utah — letters of concern, meeting access, and family resources, all in one place.">
+<meta name="twitter:image" content="https://savingvistaschool.org/assets/social-preview.png">
 <link rel="stylesheet" href="style.css">
 <style>
   /* Inline glossary tooltips: wraps the first mention of a defined term
@@ -60,7 +75,12 @@
 <header class="site-header">
   <div class="container">
     <a class="brand" href="index.html">Saving Vista School</a>
-    <nav class="main-nav">
+    <button type="button" class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="primary-nav">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+    <nav class="main-nav" id="primary-nav">
       <ul>
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="letters.html">Letters of Concern</a></li>
@@ -323,5 +343,6 @@ fetch('assets/data/meetings.json')
   document.querySelectorAll('section').forEach(walk);
 })();
 </script>
+<script src="assets/js/nav.js" defer></script>
 </body>
 </html>
