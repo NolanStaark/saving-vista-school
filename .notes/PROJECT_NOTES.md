@@ -430,3 +430,18 @@ the truncation is flagged, which it now is both visually and in text.
 
 Commits: `617cc19` (line chart + first org chart legibility pass),
 `fe45f68` (title corrections + connector fix + axis zoom).
+
+
+## Home page: leadership source-photo jpgs relocated (Sept 2026)
+
+The four original phone-photo charts that the redrawn .png charts replaced
+(`teacher-exits-chart.jpg`, `teacher-experience-exiting-chart.jpg`,
+`vista-org-chart.jpg`, `enrollment-numbers-2026.jpg`) were unused/unreferenced
+directly in `assets/leadership/` -- confirmed via a repo-wide grep that
+nothing references the `.jpg` paths. Moved (not deleted, per the earlier
+note above about keeping them for diffing) into
+`assets/leadership/source-photos/`. If you're looking for them, that's
+where they are now. `allman-assistant-principal-announcement.jpg`,
+`giles-deputy-director-announcement.jpg`, and `salary-audit-request-letter.jpg`
+were left in place (out of scope for this pass; salary-audit-request-letter.jpg
+is still actively referenced).
