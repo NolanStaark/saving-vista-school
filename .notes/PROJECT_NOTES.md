@@ -1367,3 +1367,20 @@ never got corrected. Fixed across `es/about.html`, `es/index.html`,
 Preocupación" nav link (and a few body links on `es/index.html`) that
 previously pointed at `../letters.html` (the English page) to instead point
 at the new `letters.html` sibling.
+
+## FLAG FOR OTHER CHATS: letters.html has uncommitted WIP behind the latest commit
+
+As of commit `c925db6`, `letters.html`'s working-tree copy on disk still has
+uncommitted changes from an in-progress topic-tags refactor (from another
+chat), based on an OLDER commit than `c925db6`. `c925db6` added 3 hreflang
+`<link>` tags to `letters.html`'s `<head>` and an `<li class="lang-toggle-item">`
+ES-toggle to its nav -- via blob-surgery (staged directly against HEAD,
+without touching the working-tree file), specifically so it wouldn't
+collide with that other chat's in-progress edit.
+
+**If you're the chat with that WIP**: before committing `letters.html`,
+diff your working copy against `git show HEAD:letters.html` -- if the
+hreflang tags / ES nav-toggle `<li>` aren't in your working copy, that's
+because they were added *after* your working copy was last synced, not
+because they were removed on purpose. Merge them back in (they're a small,
+isolated diff, easy to reapply by hand) rather than committing over them.
