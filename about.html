@@ -61,16 +61,15 @@
       </p>
 
       <dl>
-        <dt>Phone</dt>
-        <dd>[nonprofit contact phone — not the school's]</dd>
         <dt>Email</dt>
-        <dd>[nonprofit contact email — not the school's]</dd>
-        <dt>Mailing Address</dt>
-        <dd>[nonprofit address, if applicable]</dd>
+        <dd><a href="mailto:savingvistaschool@gmail.com">savingvistaschool@gmail.com</a></dd>
       </dl>
     </div>
 
-    <form class="simple-form" action="#" method="POST">
+    <form class="simple-form" action="https://formsubmit.co/savingvistaschool@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="New message from savingvistaschool.org">
+      <input type="hidden" name="_next" value="https://savingvistaschool.org/about.html?sent=1#contact">
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
       <h2 style="margin:0;">Send a Message</h2>
       <div>
         <label for="name">Name</label>
@@ -86,9 +85,12 @@
       </div>
       <button type="submit">Send</button>
       <p class="form-note">
-        Note: this form doesn't send messages on its own yet — it needs a form backend
-        (e.g. Formspree or Getform, both have free tiers) to actually deliver submissions
-        to an inbox. Ask if you'd like this wired up.
+        Messages sent through this form go to our nonprofit inbox
+        (<a href="mailto:savingvistaschool@gmail.com">savingvistaschool@gmail.com</a>).
+        We'll do our best to respond promptly.
+      </p>
+      <p class="form-note" id="sent-confirmation" style="display:none;">
+        Thanks — your message was sent.
       </p>
     </form>
 
@@ -101,6 +103,12 @@
   </div>
 </footer>
 
-<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+if (new URLSearchParams(window.location.search).get('sent') === '1') {
+  var el = document.getElementById('sent-confirmation');
+  if (el) { el.style.display = 'block'; }
+}
+</script>
 </body>
 </html>
