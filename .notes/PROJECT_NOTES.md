@@ -671,3 +671,22 @@ content worth decorating (they redirect immediately). Every real page +
 both stubs now have the favicon links; every real page now shows the
 icon. Verified all four newly-touched pages with Playwright screenshots
 at 1600px before committing. Commit `34dc07f`.
+
+## Corrected: page-specific icons, not the mascot everywhere (Sept 2026)
+
+Russ corrected the previous note -- he wanted a distinct, page-specific
+icon per page (like letters.html's mail icon, policies.html's scales),
+not the reaching-figure-and-star mascot copy-pasted onto every header.
+Replaced what was added to meetings/media/about/404 with:
+- meetings.html: screen/play-button icon ("watch live").
+- media.html: camera icon (rounded-square lens, not a circle).
+- about.html: speech-bubble icon ("get in touch").
+- 404.html: a question mark whose dot is a small gold star instead of a
+  circle -- fits both the "?" and the site's Rising Stars motif.
+
+All use stroke-width 4 (matching the original letters/policies icons'
+weight, not the bolder favicon weight) and the same two gold
+corner-accent stars as everywhere else. The mascot icon (reaching figure
++ star) stays only on the favicon/OG image and the home page(s), where
+it functions as the site's actual brand mark rather than a page topic
+icon. Commit `930c043`.
