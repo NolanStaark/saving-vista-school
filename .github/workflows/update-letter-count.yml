@@ -33,10 +33,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- letters.html; then
+          if git diff --quiet -- letters.html es/letters.html; then
             echo "No change to the letter count."
           else
-            git add letters.html
+            git add letters.html es/letters.html
             git commit -m "Update letters-submitted count"
             git push
           fi

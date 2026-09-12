@@ -1327,3 +1327,43 @@ Verified (fallback-font Playwright sweep, 990-1600px): inline nav never
 wraps at any width >=1100px, hamburger cleanly replaces it below that, for
 both `about.html` and `es/about.html`. Not yet confirmed against Russ's
 real browser -- please check and report back if it's still off.
+
+## Spanish letters page added, plus a real "Inicio" nav bug found & fixed (Sept 2026)
+
+Russ flagged that the Letters page had no `/es/` version, following the same
+pattern as the other main pages. Added `es/letters.html`:
+
+- Nav/disclaimer/headings/submit-form copy translated, matching the other
+  `es/` pages' style.
+- **Important limitation, flagged to Russ**: `letters.html` and
+  `es/letters.html` share ONE data source -- the same `LETTERS_FEED_URL`
+  Apps Script feed backed by the "Submit a Letter of Concern" Google Sheet.
+  Individual letters (title, author, date, topic tags, and the linked
+  PDF/photo/scan file itself) come back in whatever language they were
+  originally submitted in -- almost always English -- and are **not**
+  translated by this page. Only the static shell around them (headings,
+  labels, the submit-form copy) is in Spanish. This matches the original
+  "no need for localization of letters or images" scope decision --
+  translating the actual submitted letter files/content would be a much
+  bigger, separate task (each one would need the same care/judgment calls
+  as new submissions do under the defamation-risk checklist above), and
+  wasn't done here.
+- The embedded Tally.so submission form (`lbGY16`) is also shared as-is --
+  there's no separate Spanish Tally form, so it will render in whatever
+  language Tally shows it (English) even on the Spanish page. Would need a
+  second Tally form + embed id to localize; flagged, not built.
+- `scripts/update_letter_count.py` and `.github/workflows/update-letter-count.yml`
+  updated so the "Letters Submitted" seed-count spans in `es/letters.html`
+  get kept in sync alongside `letters.html`'s (same total, both pages).
+- Added `es/letters.html` to `sitemap.xml`.
+
+**Separately discovered while doing this**: every `es/` page's "Inicio" nav
+link was pointing to `../index.html` -- the *English* root homepage, not
+the Spanish one -- including `es/index.html`'s own self-referential "Inicio"
+link. Looks like a leftover from before the home-page go-live rename that
+never got corrected. Fixed across `es/about.html`, `es/index.html`,
+`es/meetings.html`, `es/policies.html`, and the new `es/letters.html` (now
+`href="index.html"`, staying within `es/`). Also fixed the "Cartas de
+Preocupación" nav link (and a few body links on `es/index.html`) that
+previously pointed at `../letters.html` (the English page) to instead point
+at the new `letters.html` sibling.

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Keeps the "Letters Submitted" count-banner numbers in letters.html roughly
-in sync with reality, so the on-load count-up animation (see letters.html's
+Keeps the "Letters Submitted" count-banner numbers in letters.html (and its
+Spanish counterpart, es/letters.html -- same feed, same two span ids) roughly
+in sync with reality, so the on-load count-up animation (see either page's
 inline script) starts from a real, recent number instead of always
 starting from 0.
 
@@ -21,6 +22,7 @@ from pathlib import Path
 import requests
 
 LETTERS_HTML_PATH = Path(__file__).resolve().parent.parent / "letters.html"
+LETTERS_HTML_ES_PATH = Path(__file__).resolve().parent.parent / "es" / "letters.html"
 FEED_URL_RE = re.compile(r"var LETTERS_FEED_URL = '([^']+)';")
 USER_AGENT = "Mozilla/5.0 (compatible; SavingVistaSchoolBot/1.0; +https://savingvistaschool.org)"
 
@@ -44,7 +46,7 @@ def get_total_submitted(feed_url):
     return data["totalSubmitted"]
 
 
-def update_span(html, elem_id, new_value):
+def update_span(html, elem_id, new_value, label="letters.html"):
     # Matches the count-banner spans regardless of attribute order, as long
     # as id comes before data-count in the tag (that's how letters.html
     # writes them): <span ... id="X" data-count="18" ...>18</span>
@@ -58,9 +60,9 @@ def update_span(html, elem_id, new_value):
     )
     if count != 1:
         sys.exit(
-            "Expected exactly one #{} span in letters.html, found {} "
+            "Expected exactly one #{} span in {}, found {} "
             "-- markup may have changed, update this script's pattern.".format(
-                elem_id, count
+                elem_id, label, count
             )
         )
     return new_html
@@ -74,12 +76,21 @@ def main():
     updated = update_span(html, "total-count-banner", total)
     updated = update_span(updated, "total-count-banner-2", total)
 
-    if updated == html:
-        print("Letter count unchanged ({}); nothing to write.".format(total))
-        return
+    if updated != html:
+        LETTERS_HTML_PATH.write_text(updated, encoding="utf-8")
+        print("Updated letters.html seed count to {}.".format(total))
+    else:
+        print("letters.html count unchanged ({}); nothing to write.".format(total))
 
-    LETTERS_HTML_PATH.write_text(updated, encoding="utf-8")
-    print("Updated letters.html seed count to {}.".format(total))
+    if LETTERS_HTML_ES_PATH.exists():
+        es_html = LETTERS_HTML_ES_PATH.read_text(encoding="utf-8")
+        es_updated = update_span(es_html, "total-count-banner", total, label="es/letters.html")
+        es_updated = update_span(es_updated, "total-count-banner-2", total, label="es/letters.html")
+        if es_updated != es_html:
+            LETTERS_HTML_ES_PATH.write_text(es_updated, encoding="utf-8")
+            print("Updated es/letters.html seed count to {}.".format(total))
+        else:
+            print("es/letters.html count unchanged ({}); nothing to write.".format(total))
 
 
 if __name__ == "__main__":
