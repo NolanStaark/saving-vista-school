@@ -232,7 +232,14 @@
   // one of its buttons matched no letters at all. The recipient is still
   // shown on each card; this just keeps the published count honest once
   // feed-loaded letters are added to the static ones.
-  var COUNT_IDS = ['total-count-banner', 'total-count-banner-2'];
+  //
+  // Only the big banner number (#total-count-banner) animates and gets
+  // corrected against the live feed. The small inline number in the CTA
+  // sentence (#total-count-banner-2) is left alone entirely -- it's plain
+  // static text, kept accurate only by the scheduled GitHub Action
+  // (scripts/update_letter_count.py) committing a fresh number into this
+  // file. No JS touches it, so it never animates and never moves on load.
+  var ANIMATED_COUNT_ID = 'total-count-banner';
   var PREFERS_REDUCED_MOTION = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -264,15 +271,13 @@
   }
 
   function setCounts(total, animate) {
-    COUNT_IDS.forEach(function (id) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      if (animate) {
-        animateCountTo(el, total, 1400);
-      } else {
-        el.textContent = total;
-      }
-    });
+    var el = document.getElementById(ANIMATED_COUNT_ID);
+    if (!el) return;
+    if (animate) {
+      animateCountTo(el, total, 1400);
+    } else {
+      el.textContent = total;
+    }
   }
 
   // Animate up from the number baked into the page (data-count, kept in
@@ -281,14 +286,12 @@
   // instead of a blank state or a shimmer, while the live feed loads in the
   // background and corrects the number if it's since moved.
   (function animateSeedOnLoad() {
-    COUNT_IDS.forEach(function (id) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      var seed = parseInt(el.getAttribute('data-count'), 10);
-      if (isNaN(seed)) return;
-      el.textContent = '0';
-      animateCountTo(el, seed, 1400);
-    });
+    var el = document.getElementById(ANIMATED_COUNT_ID);
+    if (!el) return;
+    var seed = parseInt(el.getAttribute('data-count'), 10);
+    if (isNaN(seed)) return;
+    el.textContent = '0';
+    animateCountTo(el, seed, 1400);
   })();
 
   var list = document.querySelector('.letter-list');
