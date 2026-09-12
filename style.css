@@ -895,3 +895,74 @@ footer.site-footer a {
   color: #cfe0e8;
   font-size: 0.9rem;
 }
+
+/* Home page: hero CTA buttons + "get involved" buttons */
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  padding: 12px 22px;
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--maroon);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--maroon-dark);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--navy);
+  border: 1px solid var(--navy);
+}
+.btn-outline:hover {
+  background: var(--navy);
+  color: #fff;
+}
+
+/* Home page: small "next meeting" teaser pill inside the hero */
+.home-next-meeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 22px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #eef2f6;
+  font-size: 0.9rem;
+  padding: 10px 18px;
+  border-radius: 999px;
+}
+.home-next-meeting a {
+  color: var(--gold);
+  font-weight: 600;
+}
