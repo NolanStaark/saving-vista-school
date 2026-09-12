@@ -1,18 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
   <rect width="200" height="200" rx="34" fill="#003e56"/>
 
-  <!-- parent figure -->
-  <circle cx="76" cy="70" r="21" fill="none" stroke="#ffffff" stroke-width="9"/>
-  <path d="M40 162 Q40 106 76 106 Q112 106 112 162" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <!-- reaching figure, original pose (not Vista's own mascot art) -->
+  <circle cx="90" cy="68" r="20" fill="none" stroke="#ffffff" stroke-width="9"/>
+  <path d="M55 166 Q55 108 90 108 Q118 108 122 140" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+  <path d="M113 118 Q136 104 149 82" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
 
-  <!-- child figure, smaller, hand joined to parent -->
-  <circle cx="142" cy="100" r="14" fill="none" stroke="#ffffff" stroke-width="9"/>
-  <path d="M119 162 Q119 130 142 130 Q165 130 165 162" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
-
-  <!-- joined hands -->
-  <path d="M109 144 L122 144" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
-
-  <!-- gold accents -->
-  <circle cx="168" cy="36" r="12" fill="#eca73a"/>
-  <circle cx="30" cy="174" r="9" fill="#eca73a"/>
+  <!-- gold stars ("Rising Stars") -->
+  <polygon points="152.3,28.7 161.2,41.6 176.5,38.0 167.0,50.5 175.1,63.8 160.3,58.7 150.1,70.5 150.5,54.9 136.0,48.8 151.0,44.3" fill="#eca73a"/>
+  <polygon points="34.0,161.0 36.5,168.5 44.5,168.6 38.1,173.3 40.5,180.9 34.0,176.3 27.5,180.9 29.9,173.3 23.5,168.6 31.5,168.5" fill="#eca73a"/>
 </svg>
