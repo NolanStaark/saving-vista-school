@@ -487,3 +487,19 @@ Nothing here touches `style.css` or `assets/js/` -- those were mid-edit
 by a concurrent chat when this work was done; this chat's `git add` was
 scoped to only the files it created/edited, confirmed via `git status`
 before and after commit.
+
+## Favicon replaced: parent-and-child icon (Sept 2026, supersedes note above)
+
+Russ didn't like the envelope-graphic favicon (reused from letters.html's
+page header) noted above -- asked for something that reflects "a
+concerned parent" instead. Replaced with a purpose-built icon: a parent
+and child figure holding hands (simple white line silhouette, navy
+`#003e56` rounded-square background, two small gold `#eca73a` accent
+dots), same treatment/format as before -- `assets/favicon.svg` +
+`assets/favicon.ico` (multi-res, also copied to repo root `/favicon.ico`)
++ `assets/apple-touch-icon.png` (180x180). `assets/social-preview.png`
+(the shared OG/Twitter image) was also rebuilt with the same new icon so
+the two stay visually consistent. All three kept their original
+filenames, so no HTML changes were needed -- every page's existing
+favicon/OG `<link>`/`<meta>` tags already point at these paths. Commit
+`25f1b90`.
