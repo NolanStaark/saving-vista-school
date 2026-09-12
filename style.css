@@ -949,7 +949,15 @@ footer.site-footer a {
   color: #fff;
 }
 
-/* Home page: small "next meeting" teaser pill inside the hero */
+/* Home page: small "next meeting" teaser pill inside the hero.
+   Stays hidden (via the [hidden] attribute, toggled off by JS once
+   meetings.json loads successfully) until then -- the [hidden] variant
+   of the selector below is required because .home-next-meeting's own
+   `display` would otherwise override the browser's default
+   `[hidden] { display: none }` rule at equal specificity. */
+.home-next-meeting[hidden] {
+  display: none;
+}
 .home-next-meeting {
   display: inline-flex;
   align-items: center;
