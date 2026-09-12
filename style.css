@@ -1368,3 +1368,12 @@ footer.site-footer a {
     position: static;
   }
 }
+
+/* Widens just the home page's main-content+sidebar section beyond the
+   site's normal 1080px container -- at the standard width the sidebar
+   left the main column (and its charts) noticeably smaller than before
+   the sidebar was added. Only applied where explicitly opted in via this
+   second class, so every other section/page keeps the normal width. */
+.container--wide {
+  max-width: 1320px;
+}

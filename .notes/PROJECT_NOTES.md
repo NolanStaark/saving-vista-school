@@ -855,3 +855,34 @@ above -- same Sheet, same columns, same pending Apps Script deployment
 step, same `SOCIAL_POSTS_FEED_URL` placeholder in the JS. Only the HTML
 placement/layout and the on-page heading text changed. New CSS:
 `.home-main-layout`, `.home-sidebar` (appended to the end of style.css).
+
+## Salary section trimmed; wider container for the new sidebar layout (Sept 2026)
+
+Three follow-up corrections from Russ on the home page:
+
+1. **salary-comparison-chart.png regenerated** to drop the "Deputy
+   Director" (Christine Giles, 2026 YTD) and "6-9 Principal" (Chad Allman,
+   2026 YTD) categories -- Russ didn't want those two partial-year bars.
+   Chart now shows just the three full-year 2025 comparisons: Director,
+   Chief Operating Officer, and Asst. Principal/Comparable Role. Source
+   script: scratchpad `make_charts.py` (cloud-side, not committed to this
+   repo), chart 5. Verified the new PNG landed correctly on the device by
+   re-staging and visually inspecting it after commit, not just by hash
+   (the hash didn't match the source file byte-for-byte even after a
+   successful write -- some re-encoding happens in the transfer -- so
+   dimensions/visual inspection is the real check here, not md5 alone).
+2. **"A Parent Request to the Board" section removed entirely** --
+   the hand-photographed letter (`salary-audit-request-letter.jpg`) and
+   its caption are gone from home-full.html. That image file itself was
+   left in place in `assets/leadership/` (not deleted or moved) since
+   it's a redacted source document, not a chart with a redraw
+   counterpart -- it's simply unreferenced now. The salary chart got its
+   own new `<h3>Administrator Salaries</h3>` heading + a fresh caption,
+   since the old caption referenced "the letter above."
+3. **Wider container for the main+sidebar section** -- after the sidebar
+   restructure (see note above), the main content column (and its charts)
+   became noticeably narrower than before, since it now shares the
+   standard 1080px container with the new sidebar. Added `.container--wide`
+   (max-width 1320px, style.css) and applied it only to that one section's
+   `.container` div, so every other section/page keeps the normal 1080px
+   width.
