@@ -84,7 +84,7 @@ header.site-header .container {
 nav.main-nav ul {
   list-style: none;
   display: flex;
-  gap: 22px;
+  gap: 16px;
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
