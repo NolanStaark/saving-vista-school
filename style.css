@@ -1245,3 +1245,11 @@ footer.site-footer a {
   position: relative;
   overflow: hidden;
 }
+
+/* The icon should sit at the edge of the centered content column (like
+   .page-header .container does), not the edge of the full-width hero
+   band -- otherwise it drifts far to the right on wide screens. */
+.hero .container {
+  position: relative;
+  z-index: 1;
+}

@@ -23,14 +23,17 @@
 <link rel="stylesheet" href="style.css">
 <style>
   .under-construction {
-    position: relative;
-    overflow: hidden;
     min-height: 70vh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     padding: 60px 20px;
+  }
+  .under-construction .container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
   }
   .under-construction .box {
     max-width: 560px;
@@ -71,6 +74,7 @@
 </div>
 
 <div class="under-construction">
+  <div class="container">
     <svg class="page-header-graphic" width="104" height="104" viewBox="0 0 200 200" fill="none" aria-hidden="true">
       <circle cx="90" cy="68" r="20" stroke="var(--navy)" stroke-width="9"/>
       <path d="M55 166 Q55 108 90 108 Q118 108 122 140" stroke="var(--navy)" stroke-width="9" stroke-linecap="round"/>
@@ -85,6 +89,7 @@
       Saving Vista School is putting together a home for letters of concern, school media,
       and live meeting streams. The site isn't ready yet &mdash; check back soon.
     </p>
+  </div>
   </div>
 </div>
 
