@@ -98,15 +98,31 @@
     <p style="color:var(--muted);">Browse our archive of past meeting recordings below.</p>
 
     <!--
-      Create a YouTube playlist called "Vista School Meetings," add each recording to it,
-      then replace YOUR_PLAYLIST_ID below.
+      Board and Townhall meetings are on separate YouTube playlists
+      (both on the @SavingVistaSchool channel), so they're embedded
+      side by side rather than as a single combined playlist.
     -->
-    <div class="video-embed">
-      <iframe
-        src="https://www.youtube.com/embed/videoseries?list=YOUR_PLAYLIST_ID"
-        title="Past Vista School Meetings"
-        allowfullscreen>
-      </iframe>
+    <div class="video-embed-grid">
+      <div>
+        <h3 class="video-embed-label">Board Meetings</h3>
+        <div class="video-embed">
+          <iframe
+            src="https://www.youtube.com/embed/videoseries?list=PLcz4BuaUMKq4"
+            title="Past Vista School Board Meetings"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+      <div>
+        <h3 class="video-embed-label">Townhall Meetings</h3>
+        <div class="video-embed">
+          <iframe
+            src="https://www.youtube.com/embed/videoseries?list=PLGbOtQelu0FA"
+            title="Past Vista School Townhall Meetings"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </div>
     </div>
 
     <details class="archive-details">

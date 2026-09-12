@@ -536,6 +536,23 @@ h2 {
   display: block;
 }
 
+.video-embed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.video-embed-grid .video-embed {
+  margin-top: 8px;
+}
+
+.video-embed-label {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
 .schedule-list {
   list-style: none;
   padding: 0;
