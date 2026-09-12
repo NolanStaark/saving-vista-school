@@ -1058,3 +1058,87 @@ Entrada" at the time of this note, so no other page needed the same fix
 project's own Claude-project description (in claude.ai project settings,
 not a repo file) still says "Vista at Entrada School of Performing Arts
 and Technology," which Russ may want to update separately.
+
+## Spanish localization added for main content (Sept 2026)
+
+Per Russ: translate the site's main content into Spanish -- explicitly
+**not** Letters of Concern (submitted, unscreened parent content) and
+**not** the charts/photos themselves (source images stay English-only).
+
+**Structure decided with Russ:** a new `/es/` folder holds Spanish
+duplicate pages, plain static HTML (no Jekyll templating -- confirmed
+GitHub Pages' "Deploy from a branch" build does NOT support i18n plugins
+like jekyll-polyglot or jekyll-multiple-languages-plugin; only a fixed
+gem whitelist is allowed, and this repo has no `_config.yml`/front matter
+at all today). English pages stay exactly where they are at the root --
+this is additive, not a restructuring.
+
+**Pages translated:** `es/about.html`, `es/meetings.html`,
+`es/policies.html`, `es/home-full.html` (the staged home-page redesign,
+not the live `index.html` placeholder -- see below). Each is a full,
+independent copy: own inline JS with translated UI strings (button
+labels, empty/error states, ARIA labels), own `<head>` meta (title,
+description, OG/Twitter tags in Spanish, `og:url` pointed at the `/es/`
+path), `lang="es"` on `<html>`.
+
+**Nav / language switcher:** every translated page (both the English
+original and its `/es/` counterpart) gained an extra nav item,
+`<li class="lang-toggle-item">`, linking to the other language's version
+of that same page (`Español` / `English`). New CSS in `style.css`:
+`.lang-toggle-item` (a thin divider on desktop, appended at the very end
+of the file). `404.html` and `letters.html` were left alone -- no Spanish
+version, so no toggle link was added to avoid a dead link.
+`hreflang="en"/"es"/"x-default"` `<link rel="alternate">` tags were added
+to each translated page's `<head>` (both languages) for SEO.
+
+**What did NOT get translated, on purpose:**
+- Letters of Concern (`letters.html`) -- out of scope per Russ.
+- The actual chart/photo images in `assets/leadership/` and
+  `assets/policies/` -- same English-labeled images are reused on the
+  Spanish pages. Surrounding prose captions ARE translated; the very
+  long data-transcription `alt` text on the leadership exhibit charts is
+  also translated (it's just descriptive text, not the image itself),
+  but this was a judgment call -- flag to Russ if he'd rather those
+  stayed English to exactly mirror "no images work" scope.
+- Two verbatim, individually-attributed English-language quotes (Dr.
+  Blasko's "Hindsight Is 20/20," and Transparent Utah's "Trust requires
+  transparency...") are kept in their original English wording on
+  `es/home-full.html`, with a Spanish gloss added alongside/underneath --
+  translating a specific person's or agency's exact quoted words risks
+  misquoting them, so this follows normal journalistic practice (quote
+  preserved, translation offered) rather than silently translating the
+  quote itself.
+- The `exhibit-sources` citation list (news article titles) stays in
+  English on the Spanish page too -- translating a citation's title
+  would misrepresent the actual published source; a one-line note was
+  added explaining this.
+- Dynamic, JSON-fed content -- `assets/data/meetings.json` (meeting
+  dates/times, produced by `scripts/update_meetings.py`) and the Vista
+  Social Media Tracker feed (Google Sheet via Apps Script) -- is NOT
+  localized. The Spanish pages' JS wrapper labels (Agenda/Actas/
+  Grabación, Reunión de la Junta/Reunión Comunitaria, etc.) are
+  translated, but the actual date strings and post excerpts these feeds
+  return will show in whatever language they were generated/entered in
+  (currently English). Fully localizing that would mean touching the
+  Python generator script and the Google Sheet data itself -- out of
+  scope for this pass; flag to Russ if he wants that taken further.
+- `es/home-full.html`'s "Letters of Concern" feature-card links to the
+  English `letters.html` (with a one-line "(Disponible solo en inglés)"
+  note) since there's no Spanish letters page.
+
+**Not yet done:** `sitemap.xml` needs the new `/es/` page entries added
+(about/meetings/policies -- home-full.html isn't in the sitemap either,
+matching the English one). `es/home-full.html` isn't linked from
+anywhere on the live site yet since the English `home-full.html` itself
+isn't live (still staged, per the note above) -- once/if `home-full.html`
+replaces `index.html`, its Spanish counterpart should be renamed
+`es/index.html` to match, and its `lang-toggle-item` href updated from
+`es/home-full.html` accordingly.
+
+Concurrent work note: another chat was mid-edit on `home-full.html`,
+`style.css`, and this same notes file (the social-post carousel feature)
+while this work was done. Used the established blob-surgery technique
+(`git hash-object` + `git update-index --cacheinfo` against a fresh
+`git show HEAD:<file>` copy) to stage only this chat's own diff on each
+shared file, leaving their in-progress uncommitted work untouched in the
+working tree for them to commit separately.
