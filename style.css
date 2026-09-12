@@ -1237,3 +1237,11 @@ footer.site-footer a {
 }
 
 .policy-card-note strong { color: var(--navy); }
+
+/* Home hero: positioning context for the reaching-figure-and-star
+   watermark icon (same treatment/markup as .page-header-graphic on the
+   other pages), added so the hero can host it too. */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
