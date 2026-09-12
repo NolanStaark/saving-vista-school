@@ -1377,3 +1377,16 @@ footer.site-footer a {
 .container--wide {
   max-width: 1320px;
 }
+
+/* Two-up image gallery inside a policy card (truancy: both pages of the
+   excuse-a-student flow) */
+.policy-card-image-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.policy-card-image-row figure {
+  margin: 0;
+  max-width: 260px;
+}

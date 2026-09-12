@@ -95,9 +95,15 @@ still stands even if not repeated in a given chat.
   rear-pockets requirement -- embedded in the "Vista's own board-adopted
   policies" card) and `absence-reason-options.jpg` (the excused-absence
   reason list from Vista's parent-portal app, cropped to drop the phone
-  chrome -- embedded in "Compulsory education & truancy"). New CSS:
-  `.policy-card-image` in style.css, plus `.filter-bar .tag` gained
-  `display:inline-flex` for the icon+label pairing.
+  chrome) and a recreated mockup, `absence-confirm-mockup.png` (page 1 of
+  that same flow -- placeholder name/date, since the real screenshot of
+  that screen named a specific student). Both sit side-by-side in
+  "Compulsory education & truancy" via `.policy-card-image-row`, with a
+  `.policy-card-note` underneath raising a Student Data Protection Act
+  question about the reason categories. New CSS: `.policy-card-image`,
+  `.policy-card-image-row`, `.policy-card-note` in style.css, plus
+  `.filter-bar .tag` gained `display:inline-flex` for the icon+label
+  pairing.
 - `media.html`, `about.html`, `404.html` — mostly static; keep their nav
   in sync when pages are added/renamed.
 - `home-full.html` — the finished replacement home page (hero + "Why This
@@ -304,6 +310,18 @@ with a Display Title -> the Apps Script feed picks it up automatically.
   -- so the point got reframed as a Utah Student Data Protection Act
   (§53E-9) data-minimization question instead, added as a `.policy-card-note`
   under that image. Standing instruction, not a one-off.
+- Sept 2026, same session: Russ asked for "both pages" of the
+  excuse-a-student flow on the truancy card. Page 2 (the reason list) was
+  already the screened `absence-reason-options.jpg`. Page 1 in the source
+  Drive folder is `policies-absence.jpg` -- the never-publish minor's-name
+  screenshot from above -- so instead of using it, recreated that screen
+  as a clean mockup (`assets/policies/absence-confirm-mockup.png`,
+  built with Playwright from HTML/CSS, placeholder name "[Student Name]"
+  and date "[date]", explicitly labeled "Recreated ... not an actual
+  student record" in the image itself and in the caption). Same pattern
+  as the home-page org-chart recreation: when the real source image has a
+  never-publish problem but the *structure* is still useful to show,
+  rebuild it generically rather than publish the original or skip it.
 
 
 ## Home page: leadership charts recreated (Sept 2026)
