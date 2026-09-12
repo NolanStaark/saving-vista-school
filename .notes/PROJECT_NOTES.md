@@ -628,3 +628,27 @@ answer was both. Added it as a faint background watermark (same
   the file rather than edited into the existing `.hero {}` block, to
   avoid colliding with the other chat's concurrent edits to that same
   file. Commit `b789fb1`.
+
+## Home-page icon was drifting too far right -- fixed (Sept 2026)
+
+Russ flagged the icon added in the previous note as "too far to the
+right." Root cause: it was positioned absolute relative to the
+full-width `.hero`/`.under-construction` band, instead of the centered
+1080px `.container` that `.page-header-graphic` normally anchors to on
+every other page (`.page-header .container { position:relative; }` is
+what actually does that there, not `.page-header` itself) -- so on wide
+screens it sat near the browser edge instead of the content column edge.
+
+Fixed by mirroring that exact pattern:
+- `style.css`: added `.hero .container { position:relative; z-index:1; }`.
+- `index.html`: restructured so `.box` is now wrapped in a `.container`
+  div (previously `.under-construction` only had `.box`, no `.container`
+  at all) with the icon as `.container`'s first child; also needed
+  `.under-construction .container { width:100% }` since
+  `.under-construction` is `display:flex` and its child would otherwise
+  shrink-wrap to `.box`'s width rather than filling the available space.
+
+Verified with Playwright screenshots (rendered locally in a scratch
+container, not committed) at 900/1100/1600px: icon sits in the side
+gutter next to the text at wide widths, no overlap, and still hides
+below 1080px like every other page. Commit `9d0da9c`.
