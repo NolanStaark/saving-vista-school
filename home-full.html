@@ -6,6 +6,54 @@
 <title>Saving Vista School</title>
 <meta name="description" content="Saving Vista School is an independent, parent-led nonprofit pushing for transparency and accountability at Vista School in Ivins, Utah — letters of concern, meeting access, and family resources, all in one place.">
 <link rel="stylesheet" href="style.css">
+<style>
+  /* Inline glossary tooltips: wraps the first mention of a defined term
+     (see GLOSSARY in the script near the end of this page) in a dotted
+     underline with a definition on hover/focus. Self-contained to this
+     page on purpose -- copy this block + the matching script if another
+     page wants the same treatment. */
+  .glossary-term {
+    border-bottom: 1px dotted var(--muted);
+    cursor: help;
+    position: relative;
+  }
+  .glossary-term .glossary-tip {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .15s ease;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 130%;
+    background: var(--navy-dark);
+    color: #fff;
+    text-align: left;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 1.45;
+    width: 260px;
+    max-width: 70vw;
+    z-index: 20;
+    box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  }
+  .glossary-term .glossary-tip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--navy-dark) transparent transparent transparent;
+  }
+  .glossary-term:hover .glossary-tip,
+  .glossary-term:focus .glossary-tip {
+    visibility: visible;
+    opacity: 1;
+  }
+</style>
 </head>
 <body>
 
@@ -104,18 +152,19 @@
     <h3 class="exhibit-subhead">Administrative &amp; Teacher Turnover</h3>
     <p class="exhibit-subhead-note">
       Compiled by Vista parents using Utah's public compensation database,
-      <a href="https://transparent.utah.gov/" target="_blank" rel="noopener">Transparent Utah</a>.
-      The dashed vertical lines mark years in which Vista changed directors. These charts were
-      put together by parents, not produced by Saving Vista School &mdash; the underlying data is
-      public and can be checked directly at transparent.utah.gov.
+      <a href="https://transparent.utah.gov/" target="_blank" rel="noopener">Transparent Utah</a>,
+      and redrawn here for readability. The dashed vertical lines mark years in which Vista
+      changed directors. These charts were put together by parents, not produced or independently
+      verified by Saving Vista School &mdash; the underlying data is public and can be checked
+      directly at transparent.utah.gov.
     </p>
-    <div class="exhibit-grid">
+    <div class="exhibit-grid" style="grid-template-columns:1fr;max-width:900px;margin-left:auto;margin-right:auto;">
       <div class="exhibit-card">
-        <img src="assets/leadership/teacher-experience-exiting-chart.jpg" alt="Hand-drawn chart titled 'Years of Teacher Experience at Vista, Exiting Each Year,' sourced to Transparent Utah, showing a rise in the experience level of exiting teachers in recent years, with director-change years marked.">
-        <p class="exhibit-caption">Years of experience held by teachers who left Vista, by year.</p>
+        <img src="assets/leadership/teacher-experience-exiting-chart.png" alt="Chart titled 'Years of Teacher Experience at Vista, Exiting Each Year,' sourced to Transparent Utah, showing a rise in combined years of experience among exiting teachers in recent years, with director-change years marked: 2015, 2021, and 2023.">
+        <p class="exhibit-caption">Combined years of experience held by teachers who left Vista, by year.</p>
       </div>
       <div class="exhibit-card">
-        <img src="assets/leadership/teacher-exits-chart.jpg" alt="Hand-drawn chart titled 'Teacher Exits, Exiting Each Year,' sourced to Transparent Utah, showing the number of teachers leaving Vista rising to 17 and 13 in the most recent two years shown, with director-change years marked.">
+        <img src="assets/leadership/teacher-exits-chart.png" alt="Chart titled 'Teacher Exits, Exiting Each Year,' sourced to Transparent Utah, showing the number of teachers leaving Vista rising to 17 and 13 in the most recent two years shown, with director-change years marked.">
         <p class="exhibit-caption">Number of teachers exiting Vista, by year.</p>
       </div>
     </div>
@@ -134,19 +183,36 @@
     </div>
 
     <h3 class="exhibit-subhead">Enrollment</h3>
-    <p class="exhibit-subhead-note">Presented at Vista's July 29, 2026 Board meeting.</p>
-    <div class="exhibit-grid" style="max-width:500px;margin-left:auto;margin-right:auto;">
+    <p class="exhibit-subhead-note">Presented at Vista's July 29, 2026 Board meeting, redrawn here for readability.</p>
+    <div class="exhibit-grid" style="grid-template-columns:1fr;max-width:900px;margin-left:auto;margin-right:auto;">
       <div class="exhibit-card">
-        <img src="assets/leadership/enrollment-numbers-2026.jpg" alt="Table of Vista School enrollment by grade for August 2026, showing enrollment above the school's own stated per-grade targets in most grades.">
+        <img src="assets/leadership/enrollment-by-grade-chart.png" alt="Bar chart of Vista School enrollment by grade for August 2026 compared to the school's own stated per-grade targets, showing enrollment above target in every grade. Totals: 1,149 enrolled versus a target of 1,083.">
         <p class="exhibit-caption">Enrollment by grade, August 2026, compared to the school's own stated targets.</p>
+      </div>
+    </div>
+
+    <p class="exhibit-subhead-note" style="margin-top:20px;">
+      For independent confirmation, the Utah State Charter School Board publishes its own
+      official enrollment count for every charter school each year.
+    </p>
+    <div class="exhibit-grid" style="grid-template-columns:1fr;max-width:900px;margin-left:auto;margin-right:auto;">
+      <div class="exhibit-card">
+        <img src="assets/leadership/enrollment-trend-chart.png" alt="Bar chart of Vista School's official total enrollment on October 1 of each year from 2022 to 2026, per the Utah State Charter School Board: 1099, 1113, 1117, 1115, and 1088 students.">
+        <p class="exhibit-caption">Vista's official October 1 headcount, 2022&ndash;2026, per the Utah State Charter School Board's <a href="https://ucap.schools.utah.gov/SCSB/SchoolDashboard/186115" target="_blank" rel="noopener">Utah Charter Access Point dashboard</a>.</p>
       </div>
     </div>
 
     <h3 class="exhibit-subhead">A Parent Request to the Board</h3>
     <div class="exhibit-grid" style="max-width:500px;margin-left:auto;margin-right:auto;">
       <div class="exhibit-card">
-        <img src="assets/leadership/salary-audit-request-letter.jpg" alt="Handwritten letter from a Vista parent to the Vista School Board requesting a third-party salary audit and a published pay scale, with a table comparing administrator salaries and enrollment at Vista and George Washington Academy.">
-        <p class="exhibit-caption">A parent's request to the Vista School Board for a third-party salary audit and a published pay scale, with administrator salary figures compared to George Washington Academy.</p>
+        <img src="assets/leadership/salary-audit-request-letter.jpg" alt="Letter from a Vista parent to the Vista School Board requesting a third-party salary audit and a published pay scale, with a table comparing administrator salaries and enrollment at Vista and George Washington Academy. The author's name and phone number have been redacted.">
+        <p class="exhibit-caption">A parent's request to the Vista School Board for a third-party salary audit and a published pay scale, with administrator salary figures compared to George Washington Academy. Name and phone number redacted at the author's and Russ's request.</p>
+      </div>
+    </div>
+    <div class="exhibit-grid" style="grid-template-columns:1fr;max-width:900px;margin-left:auto;margin-right:auto;margin-top:20px;">
+      <div class="exhibit-card">
+        <img src="assets/leadership/salary-comparison-chart.png" alt="Bar chart comparing 2025 administrator salaries at Vista School and George Washington Academy: Directors $180,746 vs $137,919; Chief Operating Officer $141,924 vs no equivalent role; Assistant Principal/comparable role $93,938 vs $103,810.">
+        <p class="exhibit-caption">The same salary comparison, redrawn from the figures in the letter above.</p>
       </div>
     </div>
 
@@ -156,6 +222,7 @@
         <li><a href="https://www.stgeorgeutah.com/news/education/hindsight-is-20-20-vista-school-in-ivins-welcomes-new-director-amid-concerns-from-parents/article_d95c9be0-bdf1-593a-82ac-5e36476e5ff6.html" target="_blank" rel="noopener">St. George News: "Hindsight is 20/20": Vista School in Ivins welcomes new director amid concerns from parents</a> (Aug. 11, 2023)</li>
         <li><a href="https://www.heraldnet.com/2022/05/27/expletive-idiot-scathing-report-paints-monroe-schools-supe-as-bully/" target="_blank" rel="noopener">HeraldNet: "'Expletive,' 'idiot': Scathing report paints Monroe schools' supe as bully"</a> (May 27, 2022)</li>
         <li><a href="https://www.seattletimes.com/seattle-news/monroe-superintendent-to-resign-receive-nearly-400k-despite-complaints-about-toxic-behavior/" target="_blank" rel="noopener">Seattle Times: Monroe superintendent to resign, receive nearly $400K despite complaints about toxic behavior</a></li>
+        <li><a href="https://s3.documentcloud.org/documents/22041136/1-alleged-misconduct-investigation.pdf" target="_blank" rel="noopener">DocumentCloud: Independent investigation report into complaints against then-Superintendent Justin Blasko, Monroe School District</a></li>
       </ul>
     </div>
   </div>
@@ -201,6 +268,64 @@ fetch('assets/data/meetings.json')
     el.hidden = false;
   })
   .catch(function () { /* leave the teaser hidden */ });
+</script>
+<script>
+// Inline glossary: define terms here; each one gets a dotted-underline
+// tooltip the first time it appears (as its own word) in the page's
+// visible text. Add more entries as new jargon shows up in the copy.
+(function () {
+  var GLOSSARY = {
+    "Title IX": "Title IX — a 1972 federal civil rights law that prohibits sex-based discrimination in any school program or activity that receives federal funding.",
+    "LEA": "LEA — Local Education Agency, the entity legally authorized to operate a school. Vista is its own LEA (the school and the LEA are the same organization), which is how state and charter-board reports refer to it."
+  };
+  var terms = Object.keys(GLOSSARY).sort(function (a, b) { return b.length - a.length; });
+  var already = {};
+
+  function wrapIfWholeWord(textNode, term) {
+    var value = textNode.nodeValue;
+    var idx = value.indexOf(term);
+    if (idx === -1) return false;
+    var before = value.charAt(idx - 1);
+    var after = value.charAt(idx + term.length);
+    if ((before && /[\w]/.test(before)) || (after && /[\w]/.test(after))) return false;
+
+    var span = document.createElement('span');
+    span.className = 'glossary-term';
+    span.tabIndex = 0;
+    span.textContent = term;
+    var tip = document.createElement('span');
+    tip.className = 'glossary-tip';
+    tip.textContent = GLOSSARY[term];
+    span.appendChild(tip);
+
+    var afterNode = textNode.splitText(idx);
+    afterNode.nodeValue = afterNode.nodeValue.slice(term.length);
+    textNode.parentNode.insertBefore(span, afterNode);
+    return true;
+  }
+
+  function walk(el) {
+    var child = el.firstChild;
+    while (child) {
+      var next = child.nextSibling;
+      if (child.nodeType === 3) {
+        for (var i = 0; i < terms.length; i++) {
+          var term = terms[i];
+          if (already[term]) continue;
+          if (child.nodeValue.indexOf(term) !== -1 && wrapIfWholeWord(child, term)) {
+            already[term] = true;
+            break;
+          }
+        }
+      } else if (child.nodeType === 1 && child.tagName !== 'SCRIPT' && child.tagName !== 'STYLE') {
+        walk(child);
+      }
+      child = next;
+    }
+  }
+
+  document.querySelectorAll('section').forEach(walk);
+})();
 </script>
 </body>
 </html>
