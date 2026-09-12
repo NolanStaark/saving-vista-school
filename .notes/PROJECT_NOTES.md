@@ -503,3 +503,64 @@ the two stay visually consistent. All three kept their original
 filenames, so no HTML changes were needed -- every page's existing
 favicon/OG `<link>`/`<meta>` tags already point at these paths. Commit
 `25f1b90`.
+
+## Mobile hamburger nav added (Sept 2026)
+
+The 6-link nav no longer just wraps onto extra crowded lines on phones --
+below 768px it collapses into a hamburger button that opens the nav as a
+dropdown panel under the navy header (bars animate into an X on open).
+Desktop (>768px) look is unchanged. Confirmed with Russ up front: dropdown
+panel (not full-screen overlay), 768px breakpoint, animated X.
+
+- Markup: every real page's header (`home-full`, `letters`, `policies`,
+  `media`, `meetings`, `about`, `404` -- not `index.html`, which has no
+  nav yet per the placeholder-page note above) got a
+  `<button class="nav-toggle" aria-expanded aria-controls="primary-nav">`
+  with three `.nav-toggle-bar` spans, and `nav.main-nav` gained
+  `id="primary-nav"`.
+- CSS: new `.nav-toggle`/`.nav-toggle-bar` rules + a `@media (max-width:
+  768px)` block in `style.css` (hides the toggle above that width so
+  desktop is byte-for-byte the same nav CSS as before).
+- JS: new shared `assets/js/nav.js` (loaded via `<script src="assets/js/
+  nav.js" defer>` at the end of `<body>` on each page) -- toggles
+  `.nav-open` + `aria-expanded`, closes on link click / Escape / resize
+  back past 768px.
+- Verified with Playwright in a scratch copy of the site (device_bash
+  can't reach the built-in browser over localhost, and the built-in
+  browser can't open file:// -- staged the files into the cloud
+  workspace's container just for this screenshot/interaction test, never
+  fed anything back from there): desktop nav pixel-identical across all
+  7 pages, mobile open/close/animate/Escape/resize-reset all behave.
+
+**Flag for other chats -- concurrent git activity nearly lost this
+work:** while committing, another chat's git operations on this same
+repo (a favicon/OG-tags commit, then a "swap gold dots for stars" commit)
+raced with this chat's `git add`/`git commit` on the shared working tree
+and `.git` directory. Symptoms hit, in order: (1) a plain `git add
+style.css assets/js/nav.js` staged half a dozen unrelated files too
+(favicons, letters.html, policies.html) -- always re-run `git status
+--short` right after `git add` and `git reset` (not `--hard`) if it shows
+anything beyond what you meant to add; (2) stale zero-byte `.git/
+{HEAD,index}.lock` / `.git/refs/heads/main.lock` needed `device_request_
+delete_permission` + `rm -f` before git would run at all, matching the
+gotcha noted above; (3) most seriously, this chat's first nav commit
+(`528d459`) was cleanly made, confirmed in `git log`, then *silently
+vanished from history* less than a minute later -- `git log` showed a
+different HEAD with no trace of it, evidently because a concurrent
+chat's git command rewrote/reset the branch. The file content wasn't
+lost (still sat uncommitted in the shared working tree), so it was just
+re-committed as `574f65b` on top of the new HEAD, verified twice a few
+seconds apart. If a commit you just made isn't in `git log` a minute
+later, that's what happened -- diff your working tree against HEAD
+before assuming your edits are gone, they're probably still sitting
+there uncommitted. Also noticed mid-session: `style.css` is CRLF
+line-endings (unlike the HTML files, which are LF) -- if you edit it
+with a plain Python read/write, `open(..., "w")` normalizes to LF and
+turns the whole file into a 1000+ line diff. Reading with
+`newline=None` and writing back with `.replace("\n", "\r\n")` keeps it
+CRLF and the diff sane.
+
+Given how much git-collision risk showed up in a single session, worth
+raising with Russ: consider not running multiple chats that commit to
+this repo at the same moment, or having each push to origin promptly so
+a lost/orphaned local commit is recoverable from the remote.
