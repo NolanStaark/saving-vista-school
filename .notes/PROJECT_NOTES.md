@@ -804,3 +804,30 @@ columns (here, "Who told us about it" and "Reviewer notes").
 
 Not yet committed as of this note -- see git log for the actual commit
 once it lands.
+
+## Logo icon + bigger home-page icon (Sept 2026)
+
+Russ asked for the icon in the header logo (every page) and bigger on
+the home page(s).
+- `.brand` (the header logo link, present on all 8 real pages) now shows
+  the reaching-figure-and-star icon before the "Saving Vista School"
+  text, white stroke/gold stars -- header background is navy everywhere
+  so one version works site-wide. `.brand` switched to flex layout;
+  new `.brand-icon` class.
+- `index.html`/`home-full.html`: the hero/under-construction watermark
+  icon is now 220px (was the standard 104px `.page-header-graphic`
+  size used on every other page) -- more visual weight on the site's
+  front door specifically.
+
+Verified with Playwright at desktop (1600px) and mobile (400px) widths
+before committing. Commit `9d7c225`.
+
+Housekeeping note: the CSS for both of these (the `.hero`/
+`.under-construction` size override and the new `.brand`/`.brand-icon`
+rules) ended up committed as part of `10d5325` (the other chat's
+"What Parents Are Saying" commit) rather than this one -- both chats
+were editing `style.css` at the same moment, and its uncommitted tail
+(this session's rules, appended after their in-progress content) got
+swept in when they staged and committed the whole file. Content is
+correct in HEAD either way; noting it so the commit history isn't
+confusing later.
