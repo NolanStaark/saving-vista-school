@@ -105,6 +105,88 @@ nav.main-nav a.active {
   border-bottom-color: var(--maroon);
 }
 
+/* Mobile nav toggle (hamburger). Hidden above 768px so the desktop nav
+   is visually unchanged; below 768px it replaces the wrapped link row
+   with a button that opens the nav as a dropdown panel under the header.
+   Matches the site's existing Feather-style icon stroke language. */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.nav-toggle-bar {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #fff;
+  border-radius: 1px;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+/* Animate the three bars into an X when the menu is open. */
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-toggle-bar { transition: none; }
+}
+
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  nav.main-nav {
+    display: none;
+    width: 100%;
+    order: 3;
+  }
+
+  nav.main-nav.nav-open {
+    display: block;
+  }
+
+  nav.main-nav ul {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0;
+    width: 100%;
+    padding-top: 10px;
+    margin-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  nav.main-nav li {
+    width: 100%;
+  }
+
+  nav.main-nav a {
+    display: block;
+    padding: 12px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}
+
 /* Hero */
 .hero {
   background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
@@ -551,6 +633,52 @@ h2 {
   margin: 0;
   font-size: 1rem;
   color: var(--muted);
+}
+
+.table-scroll {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.meetings-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.meetings-table th,
+.meetings-table td {
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.meetings-table th {
+  background: var(--navy);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.meetings-table th:first-child {
+  border-top-left-radius: var(--radius);
+}
+
+.meetings-table th:last-child {
+  border-top-right-radius: var(--radius);
+}
+
+.meetings-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.meetings-table tbody tr:hover {
+  background: var(--cream);
 }
 
 .schedule-list {
