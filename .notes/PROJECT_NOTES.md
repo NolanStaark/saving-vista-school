@@ -608,3 +608,23 @@ lost work someone still wants; not touched here since it's outside this
 task's scope.
 
 Commits: `63b0d4e` (reaching-figure-and-star redesign + star accents).
+
+## Icon added to the home page(s) too (Sept 2026)
+
+Russ asked for the reaching-figure-and-star icon on the home page as
+well (not just the favicon/OG image). Since it wasn't clear whether
+"home page" meant the live placeholder or the staged redesign, asked --
+answer was both. Added it as a faint background watermark (same
+`.page-header-graphic` treatment as letters.html/policies.html: 104x104,
+16% opacity, top-right of the band, hidden below 1080px) in:
+- `home-full.html`'s hero (white stroke, matches its navy gradient bg).
+- `index.html`'s under-construction box (navy stroke instead of white,
+  since that page's background is light -- same faint-watermark effect,
+  recolored). Needed `position:relative` on `.under-construction`, added
+  inline in index.html's own `<style>` block (not shared CSS, so no
+  cross-chat collision risk there).
+- `style.css` gained a small new `.hero { position:relative;
+  overflow:hidden; }` rule, appended as a separate block at the end of
+  the file rather than edited into the existing `.hero {}` block, to
+  avoid colliding with the other chat's concurrent edits to that same
+  file. Commit `b789fb1`.
