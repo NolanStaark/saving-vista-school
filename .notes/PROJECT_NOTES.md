@@ -445,3 +445,45 @@ where they are now. `allman-assistant-principal-announcement.jpg`,
 `giles-deputy-director-announcement.jpg`, and `salary-audit-request-letter.jpg`
 were left in place (out of scope for this pass; salary-audit-request-letter.jpg
 is still actively referenced).
+
+## Site-wide basics added: favicon, OG/Twitter tags, robots.txt, sitemap.xml (Sept 2026)
+
+Added the standard metadata basics that were missing across every page
+(commit `15de92e`):
+
+- **Favicon**: `assets/favicon.svg` (navy rounded-square background,
+  `#003e56`, with the white envelope + gold-dot graphic already used as
+  the `.page-header-graphic` on `letters.html`, reused rather than
+  designing something new, per Russ's instruction) + `assets/favicon.ico`
+  (multi-res 16/32/48/64, built with PIL) + `assets/apple-touch-icon.png`
+  (180x180). A copy of `favicon.ico` also sits at the repo root
+  (`/favicon.ico`) for browsers/crawlers that probe that path directly
+  regardless of `<link rel="icon">` tags. All three are linked in every
+  page's `<head>`, including the two redirect stubs (favicon links only
+  there, no OG tags -- they're not content to share).
+- **OG / Twitter Card tags**: `og:type`, `og:site_name`, `og:url`,
+  `og:title`, `og:description`, `og:image` (+ width/height),
+  `twitter:card` (`summary_large_image`), `twitter:title`,
+  `twitter:description`, `twitter:image` added to every real page's
+  `<head>` (index, home-full, letters, meetings, policies, media, about,
+  404), reusing each page's existing `<title>`/`<meta name="description">`
+  text verbatim rather than writing new copy. `home-full.html` got these
+  too even though it's not swapped in for `index.html` yet -- harmless
+  now, saves redoing this when it goes live -- but it's still excluded
+  from the sitemap below since `index.html` is the current real homepage.
+- **Shared social-preview image**: `assets/social-preview.png` (1200x630,
+  navy/gold, same envelope graphic + "Saving Vista School" wordmark),
+  referenced as `og:image`/`twitter:image` on every page. Built with
+  cairosvg (installed via pip in the device_bash shell for this task).
+- **robots.txt** (repo root): `Allow: /` for all user agents + a
+  `Sitemap:` line pointing at `sitemap.xml`.
+- **sitemap.xml** (repo root): lists the 6 real public pages (home,
+  letters, meetings, policies, media, about) with `lastmod`/`changefreq`/
+  `priority`. Deliberately excludes the `live-meetings.html`/
+  `parent-letters.html` redirect stubs, `home-full.html` (not live), and
+  `404.html`, per Russ's instruction.
+
+Nothing here touches `style.css` or `assets/js/` -- those were mid-edit
+by a concurrent chat when this work was done; this chat's `git add` was
+scoped to only the files it created/edited, confirmed via `git status`
+before and after commit.
