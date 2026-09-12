@@ -380,3 +380,53 @@ be treated as covered by that restriction until Russ confirms otherwise --
 with him first. (A second, generic absence-reason-categories screenshot in
 the same folder, `policy-absense-reasons`, does NOT name a student and
 looks fine.)
+
+
+## Home page: org chart rebuilt again + enrollment chart axis (Sept 2026)
+
+Two follow-up rounds after the initial chart recreation (see above):
+
+**Org chart** -- the first AI-recreated version (graphviz) packed all 14
+third-tier reports into one very wide row, so the whole chart shrank to
+illegible text once the image scaled down to page width. Replaced with a
+hand-laid-out PIL version: each of the three branches (Giles/Perkes/
+Bradshaw) renders as a single-file indented outline (like a folder tree),
+so no connector line ever passes behind an unrelated box and the canvas
+stays narrow enough for large, legible text. Generator script:
+`make_orgchart_v4.py` pattern (not committed to the repo -- built in a
+scratch cloud session each time; ask if you need to regenerate it).
+
+Also, per Russ: **pulled current titles from vistautah.com instead of the
+board-meeting chart's wording.** Confirmed via vistautah.com's
+Administration, Staff, and Counselors pages:
+- Marilyn Russell: ELL -> **ESL Coordinator**
+- Katelynn George: Title I -> **Title 1 Coordinator**
+- LaNessa Stevens: Instructional Coach -> **Learning Coach**
+- Bruce Hatch: IT Specialist -> **Assessment Director / IT Specialist**
+- Marie Ehlers: 7-9 College & Career Counselor -> **Head School Counselor (7-9)**
+- Danielle Robb: Social Worker -> **School Social Worker**
+- Nicole Richins: Student Council Advisor -> **College & Career Readiness /
+  Student Council Adviser**
+
+**Flag for Russ (acted on a default, needs his confirmation):** the original
+chart's "Cori Fix / Special Education" box doesn't match the site --
+vistautah.com's SPED Personnel page lists **Alicia Hutchinson** as SPED
+Coordinator and doesn't mention Cori Fix at all. Swapped in Alicia
+Hutchinson/SPED Coordinator by default (told Russ in chat I'd do this unless
+he said otherwise); he hadn't responded as of this note. If he wants it
+reverted or the box dropped instead, that's a one-line data change in the
+org chart generator's GILES_TREE list.
+
+Also fixed a diagonal connector jog under each branch head (looked like a
+spacing bug) -- now a clean right-angle elbow like the rest of the chart.
+
+**Enrollment trend chart** -- per Russ, the 2025->2026 decline (1115->1088)
+wasn't visually obvious on a 0-1,300 axis. Changed the y-axis to start at
+1,000 instead of 0 so the year-to-year change reads clearly, and added an
+axis-break mark plus a caption note ("the vertical axis starts at 1,000,
+not 0...") so the zoom is disclosed rather than hidden -- same actual
+numbers, just a closer-in view. Standard, defensible practice as long as
+the truncation is flagged, which it now is both visually and in text.
+
+Commits: `617cc19` (line chart + first org chart legibility pass),
+`fe45f68` (title corrections + connector fix + axis zoom).
