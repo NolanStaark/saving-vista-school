@@ -249,3 +249,79 @@ Notes for whoever touches this next:
   something isn't known rather than guessing; never restate a claim from
   Vista's own materials as fact without verifying it (see the "4th
   Tuesday" schedule correction above — Russ caught that one).
+
+
+## Home page: leadership charts recreated (Sept 2026)
+
+The phone-photo hand-drawn charts in `home-full.html`'s "A Closer Look at
+Vista's Leadership" section were redrawn as clean landscape PNG charts
+(matplotlib, site color palette) using the exact data read off the original
+photos -- same numbers, same "compiled by parents, not independently
+verified" framing, just legible:
+- `assets/leadership/teacher-experience-exiting-chart.png` (was
+  `teacher-experience-exiting-chart.jpg`)
+- `assets/leadership/teacher-exits-chart.png` (was `teacher-exits-chart.jpg`)
+- `assets/leadership/enrollment-by-grade-chart.png` (was
+  `enrollment-numbers-2026.jpg`, a blurry projector-screen photo)
+- `assets/leadership/enrollment-trend-chart.png` -- NEW: official 5-year
+  Oct-1 enrollment (2022-2026: 1099/1113/1117/1115/1088), pulled from the
+  Utah State Charter School Board's own dashboard for Vista
+  (`ucap.schools.utah.gov/SCSB/SchoolDashboard/186115`, via its
+  `GetSchoolsEnrollmentHistory` API) -- an independent, non-parent-compiled
+  source, added per Russ.
+- `assets/leadership/salary-comparison-chart.png` -- NEW: redraws the
+  salary table from the parent's letter as a bar chart. The letter photo
+  (`salary-audit-request-letter.jpg`, name/phone already redacted) is kept
+  alongside it as the primary-source document.
+
+The old `.jpg` chart/table files are still in the repo (unused/unreferenced)
+in case anyone wants to diff against the originals.
+
+Also added: a small self-contained inline-glossary tooltip mechanism in
+`home-full.html` (CSS block after the stylesheet link, JS block before
+`</body>`) that auto-wraps the first mention of a defined term (currently
+`LEA`, `Title IX`) in the page's visible text with a dotted-underline
+hover/focus tooltip. Neither term is actually used in the home page copy
+yet -- it's dormant until one appears naturally in the text, per Russ ("if
+they're going to be used"). Deliberately scoped to this one page rather
+than style.css/site-wide; copy the block if another page wants the same
+pattern.
+
+Added a DocumentCloud link (the actual independent investigation report
+into Blasko at Monroe SD) to the Sources list, found via a Google Doc
+("Monroe doc") in the "Vista Website Media" Drive folder that was just a
+link to it.
+
+**Pending, not yet added:** Russ asked for a quoted pull-quote on the
+Blasko blurb -- "Just don't google him" -- said to have been told to him by
+former Vista board members (the ones who hired Blasko, no longer on the
+board) -- not a published/attributable quote. Flagged back to Russ as
+hearsay from unnamed sources per the defamation-screening checklist above;
+holding off pending his call on how (or whether) to present it. Whoever
+picks this up next: don't add it without checking with Russ first.
+
+## Drive folder images renamed by page (Sept 2026) -- flag for other chats
+
+Russ renamed images in the "Vista Website Media" Google Drive folder
+(shared by kimmeeg@gmail.com, folder ID `1EnKnibWZSRLLtwTY0XhWYZGBA5O2KaOK`)
+with a page prefix (`home-`, `policy-`/`policies-`, `meetings-`) to indicate
+where each belongs; a few are unprefixed because no page has been decided
+yet: `alman` (Chad Allman Facebook announcement -- duplicate of
+`assets/leadership/allman-assistant-principal-announcement.jpg`, already
+used on the home page), `giles.jpg`, `giles-bio`, and `org-chart.jpg`
+(duplicate of `assets/leadership/vista-org-chart.jpg`, already used on the
+home page). Left untouched -- don't assign them a page without checking
+with Russ.
+
+**Important flag, applies regardless of which page/chat is working:** one
+file in that same Drive folder, now renamed `policies-absence`
+(file ID `1BQYPMqd_VVbuwF4eWA4IO46hsnWweSVF`), shows an absence-confirmation
+screen naming a specific minor student ("Absence for Josefa Tanielu...").
+This matches the description in the "Never publish / redact" list above of
+the two flagged images from this same folder (a screenshot naming a minor
+student's private attendance/absence record) closely enough that it should
+be treated as covered by that restriction until Russ confirms otherwise --
+**do not publish it** on policies.html or anywhere else without checking
+with him first. (A second, generic absence-reason-categories screenshot in
+the same folder, `policy-absense-reasons`, does NOT name a student and
+looks fine.)
