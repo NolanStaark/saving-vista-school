@@ -19,6 +19,29 @@
     "display_date": "October 20, 2026",
     "time": "6:00 PM"
   },
+  "current_year_board_meetings": [
+    {
+      "date": "2026-07-29",
+      "display_date": "July 29, 2026",
+      "agenda_url": "https://drive.google.com/file/d/1yPnWrehf1UiOJCpm8ymrgr-wfztI3F-O/view?usp=sharing",
+      "minutes_url": "https://drive.google.com/file/d/1DuxIKPLfxgcvb2YHWAB-J3wwCIkh74Kb/view?usp=drive_link",
+      "recording_url": "https://drive.google.com/file/d/1yCIvy4imW1te4smkNC9QLcUCbGUfDBFv/view?usp=sharing"
+    },
+    {
+      "date": "2026-08-24",
+      "display_date": "August 24, 2026",
+      "agenda_url": "https://drive.google.com/drive/folders/1got85Kq9C4wA_5Ge563yJ8e5Y-yq5lq9",
+      "minutes_url": "https://drive.google.com/file/d/1tGA3e2oXIXgCSiO7aZFcfGVz8-bNOE2J/view?usp=drive_link",
+      "recording_url": "https://drive.google.com/file/d/1JMGFuRUfOG1ezEpwwQ1jqclgbsRf4Ti6/view?usp=sharing"
+    },
+    {
+      "date": "2026-09-29",
+      "display_date": "September 29, 2026",
+      "agenda_url": null,
+      "minutes_url": null,
+      "recording_url": null
+    }
+  ],
   "archive_years": [
     {
       "label": "2025-2026",

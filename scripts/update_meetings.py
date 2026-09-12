@@ -7,6 +7,14 @@ board-meetings page where available, into assets/data/meetings.json so
 meetings.html can show "what's next" for each meeting type at the top of
 the page without anyone here updating it by hand.
 
+Also scrapes the full current-year Board Meetings table (Date/Agenda/
+Minutes/Recording, one row per meeting Vista has actually dated) from that
+same board-meetings page into `current_year_board_meetings`, so
+meetings.html can show a full-year table mirroring Vista's own page.
+Board only -- Vista doesn't publish a Townhall equivalent. Rows on Vista's
+page with no date yet (placeholder rows for meetings not yet scheduled)
+are skipped since they carry no information.
+
 Vista's calendar has real Google Calendar recurrence rules with per-meeting
 overrides (a single occurrence can be moved without changing the recurring
 series -- Vista's board meetings run monthly on a nominal "4th Tuesday" but
@@ -124,11 +132,14 @@ def next_of_type(meetings, kind):
 
 
 def parse_board_page(html):
-    """Pull Agenda/Minutes/Recording links (keyed by date) and the list of
-    archived-year page links from Vista's own board-meetings page. This page
-    only covers Board meetings -- Vista doesn't publish Townhall docs."""
+    """Pull the full current-year Board Meetings table (one row per meeting
+    Vista has actually dated -- their page also includes blank placeholder
+    rows for meetings not yet scheduled, which are skipped here since they
+    carry no information) plus the list of archived-year page links, from
+    Vista's own board-meetings page. This page only covers Board meetings
+    -- Vista doesn't publish Townhall docs."""
     soup = BeautifulSoup(html, "html.parser")
-    docs_by_date = {}
+    rows_ordered = []
 
     for table in soup.find_all("table"):
         header_cells = [th.get_text(strip=True).lower() for th in table.find_all("th")]
@@ -159,11 +170,20 @@ def parse_board_page(html):
                     return None
                 return urljoin(BOARD_PAGE_URL, a["href"])
 
-            docs_by_date[iso_date] = {
+            rows_ordered.append({
+                "date": iso_date,
+                "display_date": datetime.fromisoformat(iso_date).strftime("%B %-d, %Y"),
                 "agenda_url": link_or_none(cells[1]),
                 "minutes_url": link_or_none(cells[2]),
                 "recording_url": link_or_none(cells[3]),
-            }
+            })
+
+    rows_ordered.sort(key=lambda r: r["date"])
+    docs_by_date = {r["date"]: {
+        "agenda_url": r["agenda_url"],
+        "minutes_url": r["minutes_url"],
+        "recording_url": r["recording_url"],
+    } for r in rows_ordered}
 
     archive_years = []
     seen = set()
@@ -174,7 +194,7 @@ def parse_board_page(html):
             seen.add(href)
             archive_years.append({"label": text, "url": urljoin(BOARD_PAGE_URL, href)})
 
-    return docs_by_date, archive_years
+    return rows_ordered, docs_by_date, archive_years
 
 
 def main():
@@ -189,14 +209,16 @@ def main():
         print("No upcoming meetings resolved from Vista's calendar -- not writing output.", file=sys.stderr)
         sys.exit(1)
 
+    current_year_board_meetings = []
     docs_by_date = {}
     archive_years = []
     try:
         board_html = fetch_text(BOARD_PAGE_URL)
-        docs_by_date, archive_years = parse_board_page(board_html)
+        current_year_board_meetings, docs_by_date, archive_years = parse_board_page(board_html)
     except Exception as exc:
-        # Doc links and the archive list are a bonus, not the source of
-        # truth for dates -- don't fail the whole run over them.
+        # Doc links, the full-year table, and the archive list are a bonus,
+        # not the source of truth for dates -- don't fail the whole run
+        # over them.
         print(f"Warning: couldn't fetch/parse Vista's board-meetings page ({exc}); "
               f"continuing with calendar dates only.", file=sys.stderr)
 
@@ -209,6 +231,7 @@ def main():
         "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "next_board": next_board,
         "next_townhall": next_townhall,
+        "current_year_board_meetings": current_year_board_meetings,
         "archive_years": archive_years,
     }
 
@@ -218,7 +241,8 @@ def main():
         f.write("\n")
 
     print(f"Wrote next_board={next_board and next_board['date']} "
-          f"next_townhall={next_townhall and next_townhall['date']} "
+          f"next_townhall={next_townhall and next_townhall['date']}, "
+          f"{len(current_year_board_meetings)} current-year board meeting rows, "
           f"and {len(archive_years)} archive years to {OUTPUT_PATH}")
 
 

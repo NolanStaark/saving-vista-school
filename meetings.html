@@ -79,6 +79,33 @@
 
 <section>
   <div class="container">
+    <h2>This Year's Board Meetings</h2>
+    <p style="color:var(--muted);font-size:0.9rem;margin:0 0 16px;">
+      Every Vista School Board Meeting for the current school year, with Agenda, Minutes, and
+      Recording links as Vista posts them &mdash; pulled directly from
+      <a href="https://www.vistautah.com/board-meetings" target="_blank" rel="noopener">Vista's own Board Meetings page</a>.
+      Vista doesn't publish an equivalent table for Townhall meetings.
+    </p>
+
+    <div class="table-scroll">
+      <table class="meetings-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Agenda</th>
+            <th>Minutes</th>
+            <th>Recording</th>
+          </tr>
+        </thead>
+        <tbody id="current-year-board-meetings"></tbody>
+      </table>
+    </div>
+    <p id="current-year-board-empty" class="empty-state" hidden>No Board Meeting dates posted yet for this school year.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
     <h2>Live Stream</h2>
 
     <!--
@@ -210,6 +237,32 @@
     }
   }
 
+  function renderCurrentYearBoardMeetings(data) {
+    var tbody = document.getElementById('current-year-board-meetings');
+    var emptyEl = document.getElementById('current-year-board-empty');
+    if (!tbody) return;
+
+    var rows = (data && Array.isArray(data.current_year_board_meetings)) ? data.current_year_board_meetings : [];
+
+    if (!rows.length) {
+      tbody.innerHTML = '';
+      if (emptyEl) emptyEl.hidden = false;
+      return;
+    }
+
+    if (emptyEl) emptyEl.hidden = true;
+    tbody.innerHTML = rows.map(function (m) {
+      return (
+        '<tr>' +
+          '<td>' + (m.display_date || m.date) + '</td>' +
+          '<td>' + docLink(m.agenda_url, 'Agenda') + '</td>' +
+          '<td>' + docLink(m.minutes_url, 'Minutes') + '</td>' +
+          '<td>' + docLink(m.recording_url, 'Recording') + '</td>' +
+        '</tr>'
+      );
+    }).join('');
+  }
+
   function parseMeetingDateTime(m) {
     if (!m || !m.date) return null;
     var timeMatch = /(\d+):(\d+)\s*(AM|PM)/i.exec(m.time || '');
@@ -270,12 +323,15 @@
     .then(function (res) { return res.json(); })
     .then(function (data) {
       renderNextMeetings(data);
+      renderCurrentYearBoardMeetings(data);
       updateLiveStreamPlaceholder(data);
     })
     .catch(function (err) {
       console.warn('Could not load meeting schedule:', err);
       var empty = document.getElementById('next-meetings-empty');
       if (empty) empty.hidden = false;
+      var boardEmpty = document.getElementById('current-year-board-empty');
+      if (boardEmpty) boardEmpty.hidden = false;
       // Leave the live-placeholder visible (its default state) rather than
       // risk showing YouTube's raw "unavailable" error underneath it.
     });
