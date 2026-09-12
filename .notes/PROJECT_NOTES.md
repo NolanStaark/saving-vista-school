@@ -1000,3 +1000,25 @@ action was taken this session. Once videos are live, still need to come
 back and confirm the playlist IDs already in meetings.html are correct
 (they should be, per the above) or update them if Russ used different
 playlists.
+
+## Social posts Apps Script deployed -- live (Sept 2026)
+
+Russ deployed the Apps Script from the note above. Verified it directly
+(navigated to the URL in a browser and read the raw JSON response) --
+returns `{"items":[...],"totalPublished":N}` correctly for the one
+`Published` row added so far. Pasted the real URL into home-full.html's
+`SOCIAL_POSTS_FEED_URL` (was `PASTE_APPS_SCRIPT_WEB_APP_URL_HERE`) and
+removed the now-stale "Russ: replace this placeholder" comment above it.
+
+Feed URL: `https://script.google.com/macros/s/AKfycbwRIwwfL2o6VKP4Ce8vwNuQ3BhZyECR9u3u8Lid64HaW4VHsziWtzQJ4N9GP87ztvnfLQ/exec`
+
+Note for whoever adds rows: the sheet's Status dropdown now also has a
+"Rejected" option (not just Unreviewed/Reviewed/Published) -- the script
+only ever matches the exact string "Published", so this doesn't affect
+the feed either way. Also, the one live row has empty "What it says" and
+"Date added" cells, so its card on the site shows just the platform badge
+and a "View Post" link with no excerpt/date -- filling those two columns
+in for future rows makes for a more informative card, but isn't required.
+
+The Vista Social Media Tracker sidebar on home-full.html is now fully
+live end-to-end (staged, not yet pushed/deployed to the actual site).

@@ -401,12 +401,7 @@ fetch('assets/data/meetings.json')
   // Published, and only the fields safe to show publicly (platform, post
   // URL, excerpt, date) -- never the "Who told us about it" or "Reviewer
   // notes" columns from the sheet.
-  //
-  // Russ: replace this placeholder once the Apps Script is deployed --
-  // the script code and deployment steps are in .notes/PROJECT_NOTES.md.
-  // Until then this fetch just fails harmlessly and the section shows the
-  // "couldn't load" message below instead of breaking the page.
-  var SOCIAL_POSTS_FEED_URL = 'PASTE_APPS_SCRIPT_WEB_APP_URL_HERE';
+  var SOCIAL_POSTS_FEED_URL = 'https://script.google.com/macros/s/AKfycbwRIwwfL2o6VKP4Ce8vwNuQ3BhZyECR9u3u8Lid64HaW4VHsziWtzQJ4N9GP87ztvnfLQ/exec';
 
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, function (c) {
