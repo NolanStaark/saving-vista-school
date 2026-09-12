@@ -1253,3 +1253,77 @@ footer.site-footer a {
   position: relative;
   z-index: 1;
 }
+
+/* Home page: "What Parents Are Saying" social-media-posts section. Cards
+   are populated at page-load time from a public feed (see the inline
+   script near the end of home-full.html) fed by a private "Vista Social
+   Media Posts" Google Sheet that only surfaces rows a human has manually
+   set to Status = Published -- mirrors the Letters-of-Concern pattern.
+   Skeleton lines reuse the .skeleton-line family defined above. */
+.social-post-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.social-post-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--navy);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.social-post-card[hidden] { display: none; }
+
+.social-post-card.is-skeleton { border-left-color: var(--border); }
+
+.social-post-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.social-post-top .meta {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.social-post-excerpt {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.social-post-card a.download {
+  font-weight: 600;
+  text-decoration: none;
+  align-self: flex-start;
+}
+
+/* Home page(s): the reaching-figure-and-star watermark reads better
+   bigger here than the standard 104px page-header-graphic size used
+   elsewhere -- this is the site's "front door", so give it more room. */
+.hero .page-header-graphic,
+.under-construction .page-header-graphic {
+  width: 220px;
+  height: 220px;
+}
+
+/* Site logo/brand: icon + wordmark, every page's header. */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.brand-icon {
+  flex-shrink: 0;
+}

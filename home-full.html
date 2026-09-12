@@ -255,6 +255,44 @@
   </div>
 </section>
 
+<section>
+  <div class="container">
+    <h2 style="text-align:center;">What Parents Are Saying</h2>
+    <p style="max-width:700px;margin:0 auto 20px;text-align:center;color:var(--muted);">
+      Posts from parents and community members talking about Vista at Entrada online.
+      Have one to add? <a href="about.html#contact">Send us the link</a>.
+    </p>
+
+    <p class="policy-note" style="max-width:760px;margin:0 auto 26px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--gold);flex-shrink:0;vertical-align:-3px;margin-right:6px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><strong>A note on these posts:</strong> each is a link to a real, public post by its
+      original author. Before listing one here, our team manually confirms it's genuinely
+      about Vista at Entrada &mdash; the K-9 charter school in Ivins, Utah &mdash; and not a
+      different school with a similar name. We don't otherwise verify what a post says; the
+      views in it belong to the original poster, not Saving Vista School.
+    </p>
+
+    <div class="social-post-list" aria-live="polite" aria-busy="true">
+      <div class="social-post-card is-skeleton" aria-hidden="true">
+        <div class="skeleton-line skeleton-meta" style="width:90px"></div>
+        <div class="skeleton-line skeleton-title" style="width:100%"></div>
+        <div class="skeleton-line skeleton-title" style="width:70%"></div>
+        <div class="skeleton-line skeleton-button"></div>
+      </div>
+      <div class="social-post-card is-skeleton" aria-hidden="true">
+        <div class="skeleton-line skeleton-meta" style="width:70px"></div>
+        <div class="skeleton-line skeleton-title" style="width:95%"></div>
+        <div class="skeleton-line skeleton-title" style="width:55%"></div>
+        <div class="skeleton-line skeleton-button"></div>
+      </div>
+      <div class="social-post-card is-skeleton" aria-hidden="true">
+        <div class="skeleton-line skeleton-meta" style="width:110px"></div>
+        <div class="skeleton-line skeleton-title" style="width:88%"></div>
+        <div class="skeleton-line skeleton-button"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="alt">
   <div class="container" style="text-align:center;">
     <h2>Get Involved</h2>
@@ -352,6 +390,79 @@ fetch('assets/data/meetings.json')
   }
 
   document.querySelectorAll('section').forEach(walk);
+})();
+</script>
+<script>
+(function () {
+  // Public feed of team-verified social media posts, served by a Google
+  // Apps Script Web App bound to the private "Vista Social Media Posts"
+  // Google Sheet. Mirrors the Letters-of-Concern feed on letters.html: it
+  // only ever returns rows a human has manually set to Status =
+  // Published, and only the fields safe to show publicly (platform, post
+  // URL, excerpt, date) -- never the "Who told us about it" or "Reviewer
+  // notes" columns from the sheet.
+  //
+  // Russ: replace this placeholder once the Apps Script is deployed --
+  // the script code and deployment steps are in .notes/PROJECT_NOTES.md.
+  // Until then this fetch just fails harmlessly and the section shows the
+  // "couldn't load" message below instead of breaking the page.
+  var SOCIAL_POSTS_FEED_URL = 'PASTE_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function buildPostCard(item) {
+    var card = document.createElement('div');
+    card.className = 'social-post-card';
+
+    var top = (item.platform ? '<span class="category-badge">' + escapeHtml(item.platform) + '</span>' : '<span></span>') +
+      (item.date ? '<span class="meta">' + escapeHtml(item.date) + '</span>' : '');
+
+    card.innerHTML =
+      '<div class="social-post-top">' + top + '</div>' +
+      (item.excerpt ? '<p class="social-post-excerpt">&ldquo;' + escapeHtml(item.excerpt) + '&rdquo;</p>' : '') +
+      (item.url ? '<a class="download" href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">View Post &rarr;</a>' : '');
+
+    return card;
+  }
+
+  var list = document.querySelector('.social-post-list');
+
+  function removeSkeletons() {
+    if (!list) return;
+    list.querySelectorAll('.is-skeleton').forEach(function (el) { el.remove(); });
+    list.setAttribute('aria-busy', 'false');
+  }
+
+  function showEmptyState(message) {
+    if (!list) return;
+    var p = document.createElement('p');
+    p.className = 'empty-state';
+    p.textContent = message;
+    list.appendChild(p);
+  }
+
+  fetch(SOCIAL_POSTS_FEED_URL)
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      if (!list) return;
+      var items = Array.isArray(data) ? data : (data && Array.isArray(data.items) ? data.items : []);
+      if (!items.length) {
+        showEmptyState('No posts have been added yet. Check back soon.');
+        return;
+      }
+      var fragment = document.createDocumentFragment();
+      items.forEach(function (item) { fragment.appendChild(buildPostCard(item)); });
+      list.insertBefore(fragment, list.firstChild);
+    })
+    .catch(function (err) {
+      console.warn('Could not load social media posts:', err);
+      showEmptyState("Posts couldn't be loaded right now. Please refresh the page or check back soon.");
+    })
+    .finally(removeSkeletons);
 })();
 </script>
 <script src="assets/js/nav.js" defer></script>

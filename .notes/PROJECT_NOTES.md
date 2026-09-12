@@ -690,3 +690,117 @@ corner-accent stars as everywhere else. The mascot icon (reaching figure
 + star) stays only on the favicon/OG image and the home page(s), where
 it functions as the site's actual brand mark rather than a page topic
 icon. Commit `930c043`.
+
+## Home page: "What Parents Are Saying" social posts section (Sept 2026)
+
+New section added to the staged home-full.html (not live yet), between
+the Leadership section and "Get Involved": a grid of cards linking out to
+real social media posts parents/community members have made about Vista
+at Entrada, in the same spirit as Letters of Concern but much lighter
+weight (a link + a short excerpt, not a submitted document).
+
+Architecture deliberately mirrors the Letters feed on letters.html:
+- **New Google Sheet: "Vista Social Media Posts"** (fileId
+  `1Y6DznfSLRvGw_8jdPPXc9hTFE89npxGf3zy_5KJ_0uA`, same Drive folder as the
+  Letters sheet). Columns: `Status, Platform, Post URL, What it says
+  (brief summary or excerpt), Confirmed this is Vista at Entrada (Ivins
+  UT)?, Who told us about it (optional), Date added, Reviewer notes`.
+  Uses the same `Unreviewed` / `Reviewed` / `Published` values as the
+  Letters sheet's Status column. Has one example row (`Unreviewed`,
+  marked "EXAMPLE ROW -- delete me") that should be deleted once real
+  rows are being added.
+- **No Tally form** -- Russ was explicit about this. Posts are added by
+  hand (by whoever spots one) directly as a new row in the Sheet, not
+  through any public submission form. The "Confirmed this is Vista at
+  Entrada (Ivins UT)?" column exists because there's at least one other
+  school/org with a similar name -- whoever adds a row should check the
+  post is actually about our Vista before setting Status to Published.
+- **Publishing workflow**: same as letters -- set `Status` to `Published`
+  on a row (with Platform, Post URL, and the excerpt filled in) and it
+  shows up on the home page next load, no deploy needed. `Who told us
+  about it` and `Reviewer notes` are internal-only and are never exposed
+  by the feed.
+- **home-full.html** now has a `.social-post-list` grid (skeleton-loading,
+  same pattern as `.letter-list`) and an inline script reading a
+  `SOCIAL_POSTS_FEED_URL` constant -- currently a placeholder
+  (`PASTE_APPS_SCRIPT_WEB_APP_URL_HERE`). Until a real URL is pasted in,
+  the fetch fails harmlessly and the section shows "Posts couldn't be
+  loaded right now."
+- **style.css** got a new `.social-post-list` / `.social-post-card` block
+  (grid of cards, navy left border to visually distinguish from the
+  maroon-bordered `.letter-card`), appended at the end of the file.
+
+### Apps Script still needs to be deployed manually (only Russ can do this)
+
+This session has no Apps Script API access (only the Gmail/Calendar/Drive
+connectors), so the Web App front-end for the new Sheet has to be
+deployed by hand, the same way the Letters one presumably was. Steps for
+Russ:
+
+1. Open the "Vista Social Media Posts" Sheet, delete the example row once
+   real rows exist.
+2. Extensions -> Apps Script.
+3. Replace the default code with the script below and save.
+4. Deploy -> New deployment -> type "Web app". Execute as "Me", who has
+   access "Anyone". Deploy, authorize when prompted.
+5. Copy the resulting `.../exec` URL and paste it into home-full.html in
+   place of `PASTE_APPS_SCRIPT_WEB_APP_URL_HERE` (the `SOCIAL_POSTS_FEED_URL`
+   constant near the bottom of the file), then commit + push.
+6. If the Sheet's actual tab name isn't "Form Responses 1" (Google Sheets'
+   default for a manually-created sheet, not a form response sheet, is
+   usually just "Sheet1"), update `SHEET_NAME` in the script to match.
+
+```javascript
+function doGet(e) {
+  var SHEET_NAME = 'Sheet1'; // <-- change if your tab is named differently
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+
+  function col(name) { return headers.indexOf(name); }
+
+  var idxStatus = col('Status');
+  var idxPlatform = col('Platform');
+  var idxUrl = col('Post URL');
+  var idxExcerpt = col('What it says (brief summary or excerpt)');
+  var idxDate = col('Date added');
+
+  var items = [];
+  for (var i = 1; i < data.length; i++) {
+    var row = data[i];
+    if (String(row[idxStatus]).trim() !== 'Published') continue;
+    if (!row[idxUrl]) continue;
+
+    var dateStr = '';
+    if (row[idxDate]) {
+      var d = new Date(row[idxDate]);
+      if (!isNaN(d.getTime())) {
+        dateStr = Utilities.formatDate(d, Session.getScriptTimeZone(), 'MMM d, yyyy');
+      } else {
+        dateStr = String(row[idxDate]);
+      }
+    }
+
+    items.push({
+      platform: String(row[idxPlatform] || '').trim(),
+      url: String(row[idxUrl] || '').trim(),
+      excerpt: String(row[idxExcerpt] || '').trim(),
+      date: dateStr
+    });
+  }
+
+  items.reverse(); // newest-added row first
+
+  var out = { items: items, totalPublished: items.length };
+  return ContentService.createTextOutput(JSON.stringify(out))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+```
+
+Only ever returns `platform`, `url`, `excerpt`, `date` for `Published`
+rows -- matches the Letters feed's pattern of never exposing internal
+columns (here, "Who told us about it" and "Reviewer notes").
+
+Not yet committed as of this note -- see git log for the actual commit
+once it lands.
