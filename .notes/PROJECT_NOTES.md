@@ -104,8 +104,10 @@ still stands even if not repeated in a given chat.
   `.policy-card-image-row`, `.policy-card-note` in style.css, plus
   `.filter-bar .tag` gained `display:inline-flex` for the icon+label
   pairing.
-- `media.html`, `about.html`, `404.html` — mostly static; keep their nav
-  in sync when pages are added/renamed.
+- `about.html`, `404.html` — mostly static; keep their nav in sync when
+  pages are added/renamed.
+- `media.html` — REMOVED (Sept 2026, see note below); now a redirect stub
+  to `index.html`, same pattern as `live-meetings.html`/`parent-letters.html`.
 - `home-full.html` — the finished replacement home page (hero + "Why This
   Site Exists" mission blurb + feature cards for Letters/Meetings/
   Policies/Media + a "Next Meeting" teaser pill fed by
@@ -495,9 +497,9 @@ Added the standard metadata basics that were missing across every page
   cairosvg (installed via pip in the device_bash shell for this task).
 - **robots.txt** (repo root): `Allow: /` for all user agents + a
   `Sitemap:` line pointing at `sitemap.xml`.
-- **sitemap.xml** (repo root): lists the 6 real public pages (home,
-  letters, meetings, policies, media, about) with `lastmod`/`changefreq`/
-  `priority`. Deliberately excludes the `live-meetings.html`/
+- **sitemap.xml** (repo root): lists the 5 real public pages (home,
+  letters, meetings, policies, about) with `lastmod`/`changefreq`/
+  `priority` (media.html removed Sept 2026, see note below). Deliberately excludes the `live-meetings.html`/
   `parent-letters.html` redirect stubs, `home-full.html` (not live), and
   `404.html`, per Russ's instruction.
 
@@ -904,3 +906,30 @@ Three follow-up corrections from Russ on the home page:
    (max-width 1320px, style.css) and applied it only to that one section's
    `.container` div, so every other section/page keeps the normal 1080px
    width.
+
+## Media page removed (Sept 2026)
+
+Russ decided not to use the Photos & Video gallery feature after all
+("we're not going to utilize it like we had thought"). Handled the same
+way past page removals/renames have been (see `live-meetings.html`/
+`parent-letters.html`):
+
+- `media.html` is now a redirect stub (meta refresh + `location.replace`)
+  pointing at `index.html`, with honest "this page is no longer available"
+  wording (not "has moved," since nothing replaces it).
+- Removed the `<li><a href="media.html">Media</a></li>` nav link from
+  every page that had it: `404.html`, `about.html`, `home-full.html`,
+  `letters.html`, `meetings.html`, `policies.html`.
+- Removed the "Photos & Video" `.feature-card` block from `home-full.html`'s
+  feature grid (now 3 cards: Letters, Meetings, Policies).
+- Removed media.html's `<url>` entry from `sitemap.xml`.
+- Left `assets/media/` on disk untouched, including the untracked
+  `assets/media/meeting audio recordings/` folder (raw meeting audio
+  awaiting the separate audio-pipeline work) — none of that is linked
+  from the site regardless of this change, so nothing there needed to
+  move.
+
+This is "for now," not a permanent decision — if a media/gallery feature
+comes back later, `media.html`'s original gallery markup is still in git
+history (the commit before this one) rather than lost.
+
