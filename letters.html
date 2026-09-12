@@ -136,26 +136,52 @@
                    Default (unchecked) is anonymous when published. -->
               <div class="tally-embed">
                 <iframe
-                  src="https://tally.so/embed/lbGY16?alignLeft=1&hideTitle=1&transparentBackground=1"
+                  data-tally-src="https://tally.so/embed/lbGY16?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+                  loading="lazy"
                   width="100%"
-                  height="1050"
+                  height="264"
                   frameborder="0"
+                  marginheight="0"
+                  marginwidth="0"
                   title="Submit a Letter">
                 </iframe>
               </div>
+              <script>
+                // Tally's official loader: resizes the iframe above to match
+                // the form's real height via postMessage (dynamicHeight=1),
+                // instead of a fixed guess that leaves dead space when the
+                // form is shorter than that guess. Wrapped in its own scope
+                // so d/w/v/s here don't leak into (or collide with) the
+                // page's other inline scripts.
+                (function () {
+                  var d = document, w = "https://tally.so/widgets/embed.js", v = function () {
+                    "undefined" != typeof Tally ? Tally.loadEmbeds() : d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach(function (e) {
+                      e.src = e.dataset.tallySrc;
+                    });
+                  };
+                  if ("undefined" != typeof Tally) v();
+                  else if (d.querySelector('script[src="' + w + '"]') == null) {
+                    var s = d.createElement("script");
+                    s.src = w;
+                    s.onload = v;
+                    s.onerror = v;
+                    d.body.appendChild(s);
+                  }
+                })();
+              </script>
 
               <p style="color:var(--muted);font-size:0.9rem;margin:16px 0 0;">
                 <strong>Before you submit:</strong> please only share information you believe is
                 accurate to the best of your knowledge. Submitting a letter doesn't guarantee it
                 will be posted &mdash; our team reviews every submission first, may follow up with
                 you before anything goes live, and may lightly edit letters (for example, to
-                remove personal contact information) before posting.
+                remove personal contact information) before publishing.
               </p>
 
               <div class="privacy-tips">
                 <strong>About your privacy:</strong>
                 <ul>
-                  <li>Your name and email are for our team's internal use only, to follow up if we have questions &mdash; they are never published.</li>
+                  <li>Your name and email are for our team's internal use only, to follow up if we have questions &mdash; the email is never published, and the name will only be published if you consent.</li>
                   <li>Leave the "Publishing preference" box unchecked if you'd like your letter posted without your name attached; check it if you're comfortable being named.</li>
                   <li>Don't write your name inside the document itself if you want to stay anonymous even internally to whoever reviews the file.</li>
                   <li>If submitting a photo of a letter, be aware phone photos can carry hidden location data &mdash; consider taking a screenshot of the photo instead, or removing location data before uploading.</li>
