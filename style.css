@@ -70,7 +70,7 @@ header.site-header .container {
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
 }
 
 .brand {
@@ -84,7 +84,7 @@ header.site-header .container {
 nav.main-nav ul {
   list-style: none;
   display: flex;
-  gap: 16px;
+  gap: 10px;
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
@@ -94,7 +94,7 @@ nav.main-nav a {
   color: #eef2f6;
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   padding: 6px 2px;
   border-bottom: 2px solid transparent;
 }
@@ -105,10 +105,14 @@ nav.main-nav a.active {
   border-bottom-color: var(--maroon);
 }
 
-/* Mobile nav toggle (hamburger). Hidden above 768px so the desktop nav
-   is visually unchanged; below 768px it replaces the wrapped link row
+/* Mobile nav toggle (hamburger). Hidden above 1099px so the desktop nav
+   is visually unchanged; below 1099px it replaces the wrapped link row
    with a button that opens the nav as a dropdown panel under the header.
-   Matches the site's existing Feather-style icon stroke language. */
+   Matches the site's existing Feather-style icon stroke language.
+   Raised from the original 768px breakpoint: the Spanish nav labels (and,
+   at narrower widths, even the English ones) don't reliably fit next to
+   the logo below ~1100px once real fonts are accounted for -- see
+   PROJECT_NOTES.md "Spanish nav wrap fix, take 2". */
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -151,7 +155,7 @@ nav.main-nav a.active {
   .nav-toggle-bar { transition: none; }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1099px) {
   .nav-toggle {
     display: flex;
   }
@@ -1546,9 +1550,9 @@ footer.site-footer a {
   opacity: 0.85;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 1100px) {
   .lang-toggle-item {
-    padding-left: 18px;
+    padding-left: 10px;
     border-left: 1px solid rgba(255, 255, 255, 0.25);
   }
 }

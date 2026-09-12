@@ -1,5 +1,5 @@
 // Mobile hamburger nav toggle -- shared across every page's header.
-// Desktop layout (>768px, see style.css) is untouched by this script;
+// Desktop layout (>1099px, see style.css) is untouched by this script;
 // it only matters once .nav-toggle becomes visible at the mobile breakpoint.
 (function () {
   var toggle = document.querySelector('.nav-toggle');
@@ -41,7 +41,7 @@
   // If the window is resized (or rotated) past the mobile breakpoint while
   // the menu is open, reset so it doesn't stay stuck open on desktop.
   window.addEventListener('resize', function () {
-    if (window.innerWidth > 768) {
+    if (window.innerWidth > 1099) {
       closeNav();
     }
   });

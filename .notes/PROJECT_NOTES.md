@@ -1277,3 +1277,53 @@ function resolveCanonicalUrl(url) {
 needed after this): open the Sheet -> Extensions -> Apps Script -> replace
 the code with the above -> Deploy -> Manage deployments -> pencil/edit
 icon on the existing deployment -> Version: "New version" -> Deploy.
+
+## Spanish nav wrap fix, take 2: raised the mobile breakpoint (Sept 2026)
+
+Commit `9dd7c11` ("Fix Spanish nav wrapping under the logo") shortened the
+language-toggle link text (Español/English -> ES/EN) and trimmed the nav's
+`gap` from 22px to 16px. That was verified with a synthetic Playwright
+test, but Russ reported the Spanish nav (and, at some widths, the English
+nav) was still dropping below the logo in his actual browser.
+
+Root cause of the mismatch: the synthetic test page didn't load the real
+`@import` for Manrope/Sora (fonts.googleapis.com is blocked by this cloud
+sandbox's own egress policy, so *every* test run in this environment --
+including this one -- silently falls back to system fonts). That means
+none of the width numbers measured here have ever reflected the real
+Manrope/Sora metrics Russ's browser actually renders. Rather than keep
+chasing an exact pixel budget we can't precisely verify, the fix was
+changed to be robust to that uncertainty instead of relying on it:
+
+- `nav.main-nav ul` gap: 16px -> 10px
+- `header.site-header .container` gap: 12px -> 8px
+- `nav.main-nav a` font-size: 0.95rem -> 0.88rem
+- `.lang-toggle-item` desktop divider padding: 18px -> 10px
+- **The real fix**: the mobile-hamburger breakpoint moved from 768px to
+  1099px (`style.css`, both the `.nav-toggle`/`nav.main-nav` media query
+  and the `.lang-toggle-item` divider media query; `assets/js/nav.js`'s
+  matching `window.innerWidth > 768` resize check updated to `1099` too).
+
+Above 1099px the inline nav is only ever shown once `.container` is at (or
+essentially at) its 1080px max-width -- the *widest* the row's available
+space ever gets, since `.container`'s max-width caps it regardless of how
+much wider the viewport grows beyond that. With the spacing/font trims
+above, the Spanish nav needs ~927px of the ~1040px available at that
+width (even measured with fallback fonts, which if anything under- rather
+than over-states real webfont width for a similar weight/size) -- ~112px
+of margin, vs. the ~30px margin the untouched original had. Below 1099px,
+the width, existing, already-working hamburger dropdown takes over --
+so there's no width at which the row can visibly wrap: it's either
+comfortably inline, or it's the dropdown.
+
+Trade-off: the inline top nav now only appears on fairly wide windows
+(>=~1100px); narrower desktop windows that used to show the inline nav
+(e.g. 800-1099px) now get the hamburger menu instead. That's an
+intentional and much safer choice than continuing to fine-tune label
+text/spacing against font metrics we can't reliably measure in this
+sandbox.
+
+Verified (fallback-font Playwright sweep, 990-1600px): inline nav never
+wraps at any width >=1100px, hamburger cleanly replaces it below that, for
+both `about.html` and `es/about.html`. Not yet confirmed against Russ's
+real browser -- please check and report back if it's still off.
