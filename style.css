@@ -1390,3 +1390,39 @@ footer.site-footer a {
   margin: 0;
   max-width: 260px;
 }
+
+/* Policies page: scannable card structure (bold one-line takeaway above
+   the full explanation) and collapsible detail for multi-step processes,
+   so a card is skimmable without reading everything. */
+.card-tldr {
+  font-weight: 700;
+  color: var(--navy);
+  font-size: 1rem;
+  margin: 0 0 8px;
+}
+
+.card-details {
+  margin: 4px 0 10px;
+  font-size: 0.92rem;
+}
+
+.card-details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--maroon);
+  list-style: none;
+}
+
+.card-details summary::-webkit-details-marker { display: none; }
+.card-details summary::before { content: "+ "; }
+.card-details[open] summary::before { content: "\2212 "; }
+.card-details[open] summary { margin-bottom: 8px; }
+.card-details p { color: var(--text); margin: 0; }
+
+/* Filter bar as tabs: count badge + clearer active state */
+.tag-count {
+  opacity: 0.7;
+  font-size: 0.78em;
+}
+
+.filter-bar .tag.active .tag-count { opacity: 0.85; }

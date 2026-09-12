@@ -103,7 +103,10 @@ still stands even if not repeated in a given chat.
   question about the reason categories. New CSS: `.policy-card-image`,
   `.policy-card-image-row`, `.policy-card-note` in style.css, plus
   `.filter-bar .tag` gained `display:inline-flex` for the icon+label
-  pairing.
+  pairing. The absence-confirm-mockup.png was later resized to exactly
+  match absence-reason-options.jpg's dimensions (540x854) so the two sit
+  at identical height in the side-by-side row -- Russ flagged the
+  mismatch.
 - `about.html`, `404.html` — mostly static; keep their nav in sync when
   pages are added/renamed.
 - `media.html` — REMOVED (Sept 2026, see note below); now a redirect stub
