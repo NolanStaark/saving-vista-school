@@ -652,3 +652,22 @@ Verified with Playwright screenshots (rendered locally in a scratch
 container, not committed) at 900/1100/1600px: icon sits in the side
 gutter next to the text at wide widths, no overlap, and still hides
 below 1080px like every other page. Commit `9d0da9c`.
+
+## Icon rounded out to every page (Sept 2026)
+
+Russ asked to make sure all pages have the icon. Before this it was only
+on letters.html/policies.html (original) plus index.html/home-full.html
+(added earlier this session). Added it to the rest of the real content
+pages too:
+- meetings.html, media.html, about.html: white-stroke version, dropped
+  into their existing `.page-header > .container`, no CSS changes needed.
+- 404.html: navy-stroke version (light background, like index.html),
+  needed `position:relative;z-index:1` added inline on its `.container`
+  since 404 doesn't use the shared `.page-header` class.
+
+Left the two redirect stubs (`live-meetings.html`, `parent-letters.html`)
+alone -- they already have the favicon `<link>` tags but no visual
+content worth decorating (they redirect immediately). Every real page +
+both stubs now have the favicon links; every real page now shows the
+icon. Verified all four newly-touched pages with Playwright screenshots
+at 1600px before committing. Commit `34dc07f`.
