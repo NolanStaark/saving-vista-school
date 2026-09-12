@@ -1,0 +1,42 @@
+name: Update Letter Count
+
+on:
+  schedule:
+    # Twice a day. Letters trickle in rather than flooding in, so this is
+    # just to keep the on-load seed number reasonably fresh -- the live
+    # page always corrects it against the real feed on every visit anyway.
+    - cron: '0 13,23 * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Pull total submitted letter count
+        run: python scripts/update_letter_count.py
+
+      - name: Commit changes if the count moved
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- letters.html; then
+            echo "No change to the letter count."
+          else
+            git add letters.html
+            git commit -m "Update letters-submitted count"
+            git push
+          fi

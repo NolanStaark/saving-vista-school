@@ -73,11 +73,11 @@
             <div class="count-banner">
               <div class="count-banner-stat">
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--gold);flex-shrink:0;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
-                <span class="count-banner-number" id="total-count-banner">18</span>
+                <span class="count-banner-number" id="total-count-banner" data-count="19" aria-live="polite">19</span>
                 <span class="count-banner-label">Letters<br>Submitted</span>
               </div>
               <div class="count-banner-cta">
-                <span id="count-banner-cta-text"><span id="total-count-banner-2">18</span> concerned parents and staff have spoken up.</span>
+                <span id="count-banner-cta-text"><span class="count-banner-cta-number" id="total-count-banner-2" data-count="19">19</span> concerned parents and staff have spoken up.</span>
                 <a href="#submit-a-letter" class="count-banner-link">Add your voice to support Vista &rarr;</a>
               </div>
             </div>
@@ -188,7 +188,7 @@
   // returns rows marked Status = Published, and only the fields safe to
   // show publicly (title, category, date, author name-or-anonymous, file
   // link) -- never name/email of unpublished or anonymous-by-default rows.
-  var LETTERS_FEED_URL = 'https://script.google.com/macros/s/AKfycbxtRxNc8xkxQj9QfGi7u2wVZFdV7PXk26GCM_dFUjHOUeiWzer_L-v_0KLUjuIfzl61/exec';
+  var LETTERS_FEED_URL = 'https://script.google.com/macros/s/AKfycbxifc9jpkUSUXP9-NjOo7VnvAgbPaTICluX2M4yyVASvn9qs7079KFC3nfMF3mP77oA/exec';
 
   function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, function (c) {
@@ -232,13 +232,64 @@
   // one of its buttons matched no letters at all. The recipient is still
   // shown on each card; this just keeps the published count honest once
   // feed-loaded letters are added to the static ones.
-  function updateCounts() {
-    var total = document.querySelectorAll('.letter-card').length;
-    ['total-count-banner', 'total-count-banner-2'].forEach(function (id) {
+  var COUNT_IDS = ['total-count-banner', 'total-count-banner-2'];
+  var PREFERS_REDUCED_MOTION = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Quint (^5) rather than cubic: a sharper deceleration into the
+  // landing, so it visibly slows down as it nears the final number.
+  function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5); }
+
+  // Counts up (or down) from whatever the element currently shows to `to`,
+  // fast at first and slowing into the landing -- easeOutQuint front-loads
+  // the movement instead of a linear tick.
+  function animateCountTo(el, to, duration) {
+    if (!el) return;
+    if (PREFERS_REDUCED_MOTION) { el.textContent = to; return; }
+    var from = parseInt(el.textContent, 10);
+    if (isNaN(from)) from = 0;
+    if (from === to) { el.textContent = to; return; }
+    var startTime = null;
+    function step(timestamp) {
+      if (startTime === null) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / duration, 1);
+      el.textContent = Math.round(from + (to - from) * easeOutQuint(progress));
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = to; // land exactly, no rounding drift
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function setCounts(total, animate) {
+    COUNT_IDS.forEach(function (id) {
       var el = document.getElementById(id);
-      if (el) el.textContent = total;
+      if (!el) return;
+      if (animate) {
+        animateCountTo(el, total, 1400);
+      } else {
+        el.textContent = total;
+      }
     });
   }
+
+  // Animate up from the number baked into the page (data-count, kept in
+  // sync by a scheduled GitHub Action -- see scripts/update_letter_count.py)
+  // the instant the page loads, so visitors see real motion immediately
+  // instead of a blank state or a shimmer, while the live feed loads in the
+  // background and corrects the number if it's since moved.
+  (function animateSeedOnLoad() {
+    COUNT_IDS.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      var seed = parseInt(el.getAttribute('data-count'), 10);
+      if (isNaN(seed)) return;
+      el.textContent = '0';
+      animateCountTo(el, seed, 1400);
+    });
+  })();
 
   var list = document.querySelector('.letter-list');
 
@@ -258,9 +309,20 @@
 
   fetch(LETTERS_FEED_URL)
     .then(function (res) { return res.json(); })
-    .then(function (items) {
+    .then(function (data) {
       if (!list) return;
-      if (!Array.isArray(items) || !items.length) {
+
+      // Accepts both the new {items, totalSubmitted} shape and the old bare
+      // array, so this still works for the few minutes between deploying
+      // this file and redeploying the Apps Script.
+      var items = Array.isArray(data) ? data : (data && Array.isArray(data.items) ? data.items : []);
+      var totalSubmitted = Array.isArray(data) ? null : (data && typeof data.totalSubmitted === 'number' ? data.totalSubmitted : null);
+      // If the live count differs from the page's baked-in seed (a new
+      // letter came in since the last GitHub Action run), correct it --
+      // otherwise leave the seed's on-load animation alone.
+      if (totalSubmitted !== null) setCounts(totalSubmitted, true);
+
+      if (!items.length) {
         showEmptyState('No letters have been published yet. Check back soon.');
         return;
       }
@@ -273,9 +335,10 @@
     .catch(function (err) {
       console.warn('Could not load published letters:', err);
       showEmptyState("Letters couldn't be loaded right now. Please refresh the page or check back soon.");
+      // Leave the seed-animated count showing rather than blanking it --
+      // it's a real (if possibly slightly stale) number.
     })
     .finally(removeSkeletons);
-    //.then(updateCounts);
 })();
 </script>
 </body>
