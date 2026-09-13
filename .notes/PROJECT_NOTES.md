@@ -1653,3 +1653,42 @@ function resolveCanonicalUrl(url) {
   }
 }
 ```
+
+## "Next meeting" pill made more visible; and a WIP-rebase note for other chats
+
+Russ flagged that the "Next Board Meeting: ... — details" pill on the home
+page hero blended into the dark navy background (it was a near-invisible
+`rgba(255,255,255,0.1)` fill with a faint border). Changed `.home-next-meeting`
+to a solid gold pill (`var(--gold)` background, dark navy text, small drop
+shadow) so it reads as a real callout instead of disappearing -- verified
+with a real-font render.
+
+**Process note, since this one is a bit unusual**: at the time, both
+`letters.html` and `style.css` had another chat's uncommitted WIP sitting
+in the working tree, several commits stale (their local copies hadn't
+been touched since before this session's nav-wrap-fix and language-switcher
+commits). Their `style.css` WIP was the `.topic-tags`/`.topic-tag` rules;
+their `letters.html` WIP was the matching `category`->`topics` JS refactor
+in `buildCard()`. Normal practice in this project is blob-surgery (stage
+a transform against HEAD without touching the working tree) specifically
+*to avoid* touching a file with someone else's uncommitted changes -- but
+that only protects the git index, not the working-tree file itself, and
+their copies were drifting further behind (missing the nav-wrap fix, the
+flag-switcher pill, etc.) with every commit that used blob-surgery on the
+same files.
+
+So this time, for `style.css` and `letters.html` only, I rebased their
+actual working-tree files: took the current HEAD version (which has every
+fix so far) and re-applied exactly their own diff (the topics/topic-tags
+work) on top, using the same diff I'd already seen earlier in this
+session for `letters.html`, and their existing working-tree diff for
+`style.css`. I verified with `git diff <file>` afterward that the only
+remaining difference from HEAD is their own addition -- nothing of theirs
+was dropped, nothing of mine was reintroduced as a conflict. If you're the
+chat with that WIP: this is why your local file changed under you --
+diff it against HEAD, you should see only your own topics/topic-tags work
+pending, ready to commit whenever you're done. (I did briefly overwrite
+`letters.html` with plain HEAD content by mistake mid-process before
+catching it and restoring the topics work from the diff still visible
+earlier in my own transcript -- worth double-checking your topics/topic-tag
+work still looks right before you commit, as a sanity check.)
