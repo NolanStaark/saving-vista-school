@@ -1384,3 +1384,39 @@ hreflang tags / ES nav-toggle `<li>` aren't in your working copy, that's
 because they were added *after* your working copy was last synced, not
 because they were removed on purpose. Merge them back in (they're a small,
 isolated diff, easy to reapply by hand) rather than committing over them.
+
+## Language switcher redesigned as a flag-to-flag pill (Sept 2026)
+
+Russ asked for the language switcher to be "a flag with a drop down
+representing the current language," then shared a reference image: a
+maroon rounded pill showing the current page's flag, a small chevron, a
+thin divider, and the other language's flag -- not an expandable menu,
+just a compact two-flag indicator/link. Replaced the old plain-text EN/ES
+nav link with this across all 10 pages (5 English + 5 Spanish):
+
+- US flag (circular, simplified 13-stripe + starless canton) represents
+  English; Mexico flag (circular, green/white/red with a small simplified
+  center emblem) represents Spanish. **Flag choice was an assumption**,
+  not confirmed by Russ -- Mexico was picked as the most likely-relevant
+  Spanish-speaking community for a Southern Utah charter school, over
+  Spain's flag or a generic globe icon. Easy to swap if he'd rather use a
+  different flag or a neutral icon instead.
+- Whole pill is a single link to this page's counterpart in the other
+  language (current language's flag first, then the target language's
+  flag) -- clicking anywhere on the pill navigates, there's no expand/
+  collapse state. If Russ actually wants a true expanding dropdown (click
+  to reveal a menu, useful if a 3rd language is ever added), that's a
+  bigger follow-up, not what's built now.
+- New CSS: `.lang-switcher`, `.lang-switcher-link` (the maroon pill),
+  `.lang-flag-circle`, `.lang-chevron`, `.lang-divider`, replacing the old
+  `.lang-toggle-item` rules. Includes a mobile override so the pill stays
+  compact (not full-width) inside the hamburger dropdown below 1099px.
+- Verified with a real-font Playwright sweep (both languages, 1050-1400px)
+  that the wider pill (~75px vs. the old ~40px text link) doesn't
+  reintroduce the nav-wrap bug -- inline nav still only shows >=1100px,
+  with comfortable margin.
+- letters.html and style.css had another chat's uncommitted work in
+  progress at the time -- applied via the same blob-surgery technique as
+  before (transform built against HEAD, staged as a blob, working tree
+  left untouched) so their WIP isn't disturbed. See the "FLAG FOR OTHER
+  CHATS" note above, which still applies -- now doubly so for style.css.

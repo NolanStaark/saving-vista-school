@@ -1538,21 +1538,65 @@ footer.site-footer a {
 
 .filter-bar .tag.active .tag-count { opacity: 0.85; }
 
-/* Language switcher: an extra nav item on pages that have an /es/
-   translation, and the reciprocal link back on those /es/ pages
-   themselves. Reuses the existing nav link look; on desktop it gets a
-   thin divider so it doesn't read as just another site section. */
-.lang-toggle-item {
+/* Language switcher: a flag-to-flag pill (this page's language, a
+   chevron, the other language's flag) linking to this page's counterpart
+   in the other language. Sits as its own nav item so it doesn't read as
+   just another site section; the maroon pill background does that job
+   instead of a divider line. */
+.lang-switcher {
   margin-left: 4px;
+  display: flex;
+  align-items: center;
 }
 
-.lang-toggle-item a {
-  opacity: 0.85;
+nav.main-nav a.lang-switcher-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--maroon);
+  border-radius: 999px;
+  padding: 4px 9px;
+  border-bottom: none;
 }
 
-@media (min-width: 1100px) {
-  .lang-toggle-item {
-    padding-left: 10px;
-    border-left: 1px solid rgba(255, 255, 255, 0.25);
+nav.main-nav a.lang-switcher-link:hover {
+  background: var(--maroon-dark);
+  border-bottom: none;
+  color: #eef2f6;
+}
+
+.lang-flag-circle {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.lang-flag-circle svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.lang-chevron {
+  color: rgba(255, 255, 255, 0.85);
+  flex-shrink: 0;
+}
+
+.lang-divider {
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+}
+
+@media (max-width: 1099px) {
+  /* The general mobile nav rule makes every nav.main-nav a block-level and
+     full-width; keep the language pill compact and inline instead. */
+  nav.main-nav a.lang-switcher-link {
+    display: inline-flex;
+    margin: 8px 4px 4px;
   }
 }
