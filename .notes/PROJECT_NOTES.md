@@ -1743,3 +1743,99 @@ was found, so it wasn't touched here to avoid another cross-chat
 collision (see the "FLAG FOR OTHER CHATS" note above re: `c6d0da8`).
 Mobile (<=900px) already avoids this since `.home-sidebar` is `position:
 static` there.
+
+## Sheet gets a "Group Type" column for Public/Private (Sept 2026)
+
+Russ wants the sidebar's note text to accurately say whether a group
+post is from a public or private Facebook group, rather than assuming
+every group is private (which happened to be true for the 3 confirmed
+so far, but isn't guaranteed going forward).
+
+**Sheet change (Russ to do)**: add a new column named exactly `Group
+Type`. Leave it blank for non-group posts. For group posts, put either
+`Public` or `Private` (case doesn't matter). Column position doesn't
+matter -- the script finds it by header name.
+
+**Client-side (committed, `22fa4a4`)**: `index.html`'s `excerptMarkup()`
+now reads `item.groupType` and picks the wording accordingly, defaulting
+to the "private" phrasing when it's blank/unset.
+
+**Server-side (NOT yet deployed -- paste + redeploy same as before)**:
+
+```javascript
+function doGet(e) {
+  var SHEET_NAME = 'Sheet1'; // change if your tab is named differently
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  function col(name) { return headers.indexOf(name); }
+
+  var idxStatus = col('Status');
+  var idxUrl = col('Post URL');
+  var idxExcerpt = col('What it says (brief summary or excerpt)');
+  var idxDate = col('Date added');
+  var idxGroupType = col('Group Type'); // "Public" or "Private"; blank if not a group post
+
+  var items = [];
+  for (var i = 1; i < data.length; i++) {
+    var row = data[i];
+    if (String(row[idxStatus]).trim() !== 'Published') continue;
+    if (!row[idxUrl]) continue;
+
+    var dateStr = '';
+    if (idxDate !== -1 && row[idxDate]) {
+      var d = new Date(row[idxDate]);
+      dateStr = !isNaN(d.getTime())
+        ? Utilities.formatDate(d, Session.getScriptTimeZone(), 'MMM d, yyyy')
+        : String(row[idxDate]);
+    }
+
+    var excerptText = String(row[idxExcerpt] || '').trim();
+    var resolved = resolveCanonicalUrl(String(row[idxUrl] || '').trim());
+    var groupTypeRaw = idxGroupType !== -1 ? String(row[idxGroupType] || '').trim().toLowerCase() : '';
+    var isGroup = resolved.isGroup || /\(in a group\)/i.test(excerptText) || groupTypeRaw === 'public' || groupTypeRaw === 'private';
+    // Default to "private" when a group post's type isn't explicitly
+    // set in the sheet -- matches what's been true for every group post
+    // confirmed so far, and it's the more cautious/accurate-leaning
+    // assumption if left unspecified.
+    var groupType = !isGroup ? '' : (groupTypeRaw === 'public' ? 'public' : 'private');
+
+    items.push({
+      platform: 'Facebook',
+      url: resolved.url,
+      excerpt: excerptText,
+      date: dateStr,
+      isGroup: isGroup,
+      groupType: groupType
+    });
+  }
+  items.reverse();
+
+  var out = { items: items, totalPublished: items.length };
+  return ContentService.createTextOutput(JSON.stringify(out))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function resolveCanonicalUrl(url) {
+  if (!url) return { url: url, isGroup: false };
+  var isGroup = url.indexOf('/groups/') !== -1;
+  if (url.indexOf('facebook.com/share') === -1) {
+    return { url: url, isGroup: isGroup };
+  }
+  try {
+    var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, followRedirects: true });
+    var html = res.getContentText();
+    var match = html.match(/<meta property="og:url" content="([^"]+)"/);
+    var finalUrl = (match && match[1]) ? match[1] : url;
+    if (finalUrl.indexOf('/groups/') !== -1) isGroup = true;
+    return { url: finalUrl, isGroup: isGroup };
+  } catch (err) {
+    return { url: url, isGroup: isGroup };
+  }
+}
+```
+
+Same redeploy steps as always: paste over the existing `doGet`/
+`resolveCanonicalUrl`, Deploy -> Manage deployments -> edit -> Version:
+New version -> Deploy. Same `/exec` URL, no HTML change needed after.
