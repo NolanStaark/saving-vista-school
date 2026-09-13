@@ -478,7 +478,25 @@ fetch('assets/data/meetings.json')
   // embed attempt is verified after the fact and swapped for the
   // excerpt + "View Post" link fallback if nothing actually rendered,
   // rather than leaving a visitor staring at a blank card.
+  // A card that's rendering a live embed skips the "Facebook" badge up
+  // top -- the embed itself already shows the platform's own branding
+  // (logo, author name), so a duplicate label just above it is noise.
+  // If that embed then fails and falls back to the excerpt+link
+  // treatment, there's no more platform branding on screen, so this adds
+  // the badge back in at that point rather than leaving the card
+  // unlabeled.
+  function ensureTopBadge(container, item) {
+    var card = container.closest('.social-post-card');
+    if (!card || card.querySelector('.social-post-top')) return;
+    var top = document.createElement('div');
+    top.className = 'social-post-top';
+    top.innerHTML = (item.platform ? '<span class="category-badge">' + escapeHtml(item.platform) + '</span>' : '<span></span>') +
+      (item.date ? '<span class="meta">' + escapeHtml(item.date) + '</span>' : '');
+    card.insertBefore(top, container);
+  }
+
   function fallbackToLink(container, item) {
+    ensureTopBadge(container, item);
     container.classList.remove('social-post-embed');
     container.innerHTML = item.excerpt
       ? '<p class="social-post-excerpt">&ldquo;' + escapeHtml(item.excerpt) + '&rdquo;</p>'
@@ -532,13 +550,19 @@ fetch('assets/data/meetings.json')
     card.className = 'social-post-card';
     if (index !== 0) card.hidden = true;
 
-    var top = (item.platform ? '<span class="category-badge">' + escapeHtml(item.platform) + '</span>' : '<span></span>') +
-      (item.date ? '<span class="meta">' + escapeHtml(item.date) + '</span>' : '');
-
     var canEmbed = !!embedKindFor(item);
 
+    // Skip the platform badge for cards attempting a live embed -- see
+    // the note on ensureTopBadge() above. Fallback-only cards (Group
+    // posts, unsupported platforms, no URL at all) keep it, since
+    // there's nothing else on the card indicating where the post is from.
+    var top = '<div class="social-post-top">' +
+      (item.platform ? '<span class="category-badge">' + escapeHtml(item.platform) + '</span>' : '<span></span>') +
+      (item.date ? '<span class="meta">' + escapeHtml(item.date) + '</span>' : '') +
+      '</div>';
+
     card.innerHTML =
-      '<div class="social-post-top">' + top + '</div>' +
+      (canEmbed ? '' : top) +
       (canEmbed ? '<div class="social-post-embed"></div>' :
         (item.excerpt ? '<p class="social-post-excerpt">&ldquo;' + escapeHtml(item.excerpt) + '&rdquo;</p>' : '')) +
       (item.url ? '<a class="download" href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">View Post &rarr;</a>' : '');
