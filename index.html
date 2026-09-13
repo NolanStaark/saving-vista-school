@@ -495,12 +495,29 @@ fetch('assets/data/meetings.json')
     card.insertBefore(top, container);
   }
 
+  // Shared markup for a post shown as excerpt + link rather than a live
+  // embed -- used both for cards that never attempt an embed (Group
+  // posts, unsupported platforms) and for ones where an attempted embed
+  // failed. Group posts get an extra note: Facebook's embed widget can't
+  // show group content at all (public or private group), so a visitor
+  // needs to already be signed in and a member to see the real post via
+  // the "View Post" link -- worth saying plainly rather than leaving
+  // them wondering why only a quote is shown here.
+  function excerptMarkup(item) {
+    var html = item.excerpt
+      ? '<p class="social-post-excerpt">&ldquo;' + escapeHtml(item.excerpt) + '&rdquo;</p>'
+      : '<p class="social-post-excerpt" style="color:var(--muted);font-style:italic;">This post couldn&rsquo;t be shown here directly.</p>';
+    if (item.isGroup) {
+      html += '<p class="social-post-excerpt" style="color:var(--muted);font-size:0.85rem;font-style:italic;">' +
+        'This post is in a Facebook group &mdash; you&rsquo;ll need to be signed in to Facebook and a member of that group to view it.</p>';
+    }
+    return html;
+  }
+
   function fallbackToLink(container, item) {
     ensureTopBadge(container, item);
     container.classList.remove('social-post-embed');
-    container.innerHTML = item.excerpt
-      ? '<p class="social-post-excerpt">&ldquo;' + escapeHtml(item.excerpt) + '&rdquo;</p>'
-      : '<p class="social-post-excerpt" style="color:var(--muted);font-style:italic;">This post couldn&rsquo;t be shown here directly.</p>';
+    container.innerHTML = excerptMarkup(item);
   }
 
   function verifyEmbedRendered(container, item, delayMs) {
@@ -564,7 +581,7 @@ fetch('assets/data/meetings.json')
     card.innerHTML =
       (canEmbed ? '' : top) +
       (canEmbed ? '<div class="social-post-embed"></div>' :
-        (item.excerpt ? '<p class="social-post-excerpt">&ldquo;' + escapeHtml(item.excerpt) + '&rdquo;</p>' : '')) +
+        (item.excerpt || item.isGroup ? excerptMarkup(item) : '')) +
       (item.url ? '<a class="download" href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">View Post &rarr;</a>' : '');
 
     return card;
