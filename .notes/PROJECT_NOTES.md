@@ -1570,3 +1570,86 @@ badge style per the diff at the time) is untouched and will commit
 cleanly on top, it'll just show as a second small style.css commit
 rather than one clean one. Flagging so nobody's surprised by an
 interim-looking `.home-next-meeting` diff in `c6d0da8`'s history.
+
+## Social tracker: platform hardcoded to Facebook, not read from the sheet (Sept 2026)
+
+Russ pointed out that posts are virtually always going to be Facebook, so
+depending on a `Platform`/`Headline` column at all was unnecessary
+fragility (it's what caused the "Platform" column bug two entries up).
+Simplified: `doGet()` no longer reads a platform column -- every item
+just gets `platform: 'Facebook'` hardcoded. `resolveCanonicalUrl` and the
+Group-post detection are unchanged. If a non-Facebook platform (X,
+Instagram) ever gets added to the tracker, this line is the one to
+revisit -- `index.html`'s `embedKindFor()` already knows how to handle
+`'Twitter'`/`'Instagram'` values, so it'd just be a matter of setting the
+right string per row again (a real `Platform` column, or a per-row
+override) rather than the blanket hardcode.
+
+Current full `doGet()`/`resolveCanonicalUrl()` (replaces the version
+documented above -- this is the one to paste into Apps Script):
+
+```javascript
+function doGet(e) {
+  var SHEET_NAME = 'Sheet1'; // change if your tab is named differently
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  function col(name) { return headers.indexOf(name); }
+
+  var idxStatus = col('Status');
+  var idxUrl = col('Post URL');
+  var idxExcerpt = col('What it says (brief summary or excerpt)');
+  var idxDate = col('Date added');
+
+  var items = [];
+  for (var i = 1; i < data.length; i++) {
+    var row = data[i];
+    if (String(row[idxStatus]).trim() !== 'Published') continue;
+    if (!row[idxUrl]) continue;
+
+    var dateStr = '';
+    if (idxDate !== -1 && row[idxDate]) {
+      var d = new Date(row[idxDate]);
+      dateStr = !isNaN(d.getTime())
+        ? Utilities.formatDate(d, Session.getScriptTimeZone(), 'MMM d, yyyy')
+        : String(row[idxDate]);
+    }
+
+    var excerptText = String(row[idxExcerpt] || '').trim();
+    var resolved = resolveCanonicalUrl(String(row[idxUrl] || '').trim());
+    var isGroup = resolved.isGroup || /\(in a group\)/i.test(excerptText);
+
+    items.push({
+      platform: 'Facebook', // hardcoded -- see note above if that changes
+      url: resolved.url,
+      excerpt: excerptText,
+      date: dateStr,
+      isGroup: isGroup
+    });
+  }
+  items.reverse();
+
+  var out = { items: items, totalPublished: items.length };
+  return ContentService.createTextOutput(JSON.stringify(out))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function resolveCanonicalUrl(url) {
+  if (!url) return { url: url, isGroup: false };
+  var isGroup = url.indexOf('/groups/') !== -1;
+  if (url.indexOf('facebook.com/share') === -1) {
+    return { url: url, isGroup: isGroup };
+  }
+  try {
+    var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, followRedirects: true });
+    var html = res.getContentText();
+    var match = html.match(/<meta property="og:url" content="([^"]+)"/);
+    var finalUrl = (match && match[1]) ? match[1] : url;
+    if (finalUrl.indexOf('/groups/') !== -1) isGroup = true;
+    return { url: finalUrl, isGroup: isGroup };
+  } catch (err) {
+    return { url: url, isGroup: isGroup };
+  }
+}
+```
