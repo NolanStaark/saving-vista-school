@@ -1692,3 +1692,54 @@ pending, ready to commit whenever you're done. (I did briefly overwrite
 catching it and restoring the topics work from the diff still visible
 earlier in my own transcript -- worth double-checking your topics/topic-tag
 work still looks right before you commit, as a sanity check.)
+
+## Real root cause of "nav button unreachable": a JS crash killed the whole carousel init, not a layout/scroll issue (Sept 2026)
+
+Russ reported that when a post's embed area is tall, the next/prev
+button can't be reached by scrolling. Investigated by reading the
+committed carousel JS closely rather than just the CSS: `ensureSdk()`
+only pre-initialized `sdkQueue[id]` as an array when a `whenReady`
+callback was passed to it -- but `renderEmbed()`'s facebook/twitter/
+instagram branches each push their *own* callback onto `sdkQueue[id]`
+directly (`sdkQueue['fb-sdk'].push(...)`) without going through that
+parameter. On the very first embed attempt for a given platform (before
+its SDK script has loaded), `sdkQueue[id]` was still `undefined`, so
+that `.push()` threw `TypeError: Cannot read properties of undefined
+(reading 'push')`.
+
+That exception was synchronous and propagated straight up through
+`renderCurrentEmbed()` and the `fetch().then()` chain into `.catch()` --
+which is also why the sidebar was showing "Posts couldn't be loaded
+right now" stacked underneath an already-rendered card (the cards had
+already been built and inserted into the DOM before the crash; only the
+*embed* step failed). Critically, `buildNav()` and `startAutoplay()` are
+called *after* the embed step in that same `.then()`, so they never ran
+at all -- the prev/next buttons and dot indicators were never created,
+not merely pushed below the fold. This explains the reported symptom
+better than a scroll/overflow theory does, and matches the screenshot
+exactly (one card, no nav, an orphaned error message below it).
+
+**Fixed (`4b0ebbc`)**: `sdkQueue[id]` is now always initialized inside
+`ensureSdk()`, and `renderCurrentEmbed()` wraps the embed attempt in
+try/catch so a future embed failure (this bug, or any third-party
+script hiccup) falls back to that single card's link treatment instead
+of aborting carousel setup entirely.
+
+This was a pre-existing bug in the carousel from the day it was built,
+independent of the Platform/Headline column bug documented above --
+both had to be true at once to fully explain what Russ was seeing (no
+embed even attempted, AND no way to navigate past the one card that did
+show). Fixing just one wouldn't have fully resolved it.
+
+**Not yet addressed (low priority, flagging for whoever touches
+style.css next)**: `.home-sidebar` is `position: sticky` on desktop
+(>900px) with no `max-height`/`overflow-y`. If a *real* embedded post
+ends up taller than the viewport, the sticky sidebar's overflow past the
+viewport bottom is unreachable by page-scroll (a stuck element doesn't
+reveal its own overflow via outer scroll). A `max-height: calc(100vh -
+48px); overflow-y: auto;` on `.home-sidebar` would fix that, but
+`style.css` had another chat's uncommitted work in progress when this
+was found, so it wasn't touched here to avoid another cross-chat
+collision (see the "FLAG FOR OTHER CHATS" note above re: `c6d0da8`).
+Mobile (<=900px) already avoids this since `.home-sidebar` is `position:
+static` there.
