@@ -1420,3 +1420,153 @@ nav link with this across all 10 pages (5 English + 5 Spanish):
   before (transform built against HEAD, staged as a blob, working tree
   left untouched) so their WIP isn't disturbed. See the "FLAG FOR OTHER
   CHATS" note above, which still applies -- now doubly so for style.css.
+
+## Social tracker root cause found: Apps Script never sees "Platform" (Sept 2026)
+
+Diagnosed why the sidebar was still falling back to link-only for every
+post even after Russ pasted a correct canonical URL: the deployed
+`doGet()` looks up a sheet column named `Platform`, but the actual sheet
+header is `Headline` (which happens to contain the literal text
+"Facebook" for filled-in rows). `headers.indexOf('Platform')` returns
+`-1`, so every item's `platform` field came back as an empty string in
+the JSON feed -- confirmed directly via `fetch()` against the live
+`/exec` URL from the deployed site. With `platform` always `''`,
+`embedKindFor()` always returned `null` for every post, so the front end
+never even attempted an embed for any row -- it went straight to the
+excerpt+link fallback every time, regardless of URL. This is a separate,
+more fundamental bug than the share-link-vs-permalink issue found
+earlier (that one's still real and worth fixing, but wasn't the only
+thing blocking the embed).
+
+Also confirmed from the live feed: several published rows are Facebook
+Group posts (excerpts manually annotated "(In a Group)" by whoever fills
+in the sheet -- e.g. "Racism (In a Group)", "Academics (In a Group)",
+"GWA vs Vista (In a Group)"), vs. two "(Public)" ones. Facebook's
+`fb-post` embed widget can't render Group posts for a logged-out visitor
+even when the group itself is public (viewing requires being signed in
+as a member), so these can never show as a real embed -- link-only is
+the correct, permanent treatment for them, not a bug to keep chasing.
+
+**Client-side fix (committed, `c6d0da8`)**: `embedKindFor()` in
+`index.html` now checks a new `item.isGroup` flag and returns `null`
+(routing straight to the fallback) instead of attempting and always
+failing an embed for Group posts.
+
+**Server-side fix (NOT yet deployed -- Russ needs to paste + redeploy)**:
+updated Apps Script below. Changes from the version currently live:
+1. Falls back to the `Headline` column if `Platform` isn't found, so the
+   Facebook/Twitter/Instagram detection actually works.
+2. Resolves `facebook.com/share/...` links to their real canonical
+   permalink server-side (via `og:url`), so a pasted share link works
+   without anyone having to manually "unshorten" it first.
+3. Flags `isGroup: true` when the resolved URL contains `/groups/`, OR
+   when the excerpt/headline text contains "(in a group)" (the existing
+   manual-annotation convention in the sheet) -- belt and suspenders,
+   since Facebook sometimes won't reveal a group permalink's `og:url` to
+   an unauthenticated fetch.
+
+```javascript
+function doGet(e) {
+  var SHEET_NAME = 'Sheet1'; // change if your tab is named differently
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(SHEET_NAME) || ss.getSheets()[0];
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0];
+  function col(name) { return headers.indexOf(name); }
+
+  var idxStatus = col('Status');
+  var idxPlatform = col('Platform');
+  if (idxPlatform === -1) idxPlatform = col('Headline'); // sheet's actual header today
+  var idxUrl = col('Post URL');
+  var idxExcerpt = col('What it says (brief summary or excerpt)');
+  var idxDate = col('Date added');
+
+  var items = [];
+  for (var i = 1; i < data.length; i++) {
+    var row = data[i];
+    if (String(row[idxStatus]).trim() !== 'Published') continue;
+    if (!row[idxUrl]) continue;
+
+    var dateStr = '';
+    if (idxDate !== -1 && row[idxDate]) {
+      var d = new Date(row[idxDate]);
+      dateStr = !isNaN(d.getTime())
+        ? Utilities.formatDate(d, Session.getScriptTimeZone(), 'MMM d, yyyy')
+        : String(row[idxDate]);
+    }
+
+    var excerptText = String(row[idxExcerpt] || '').trim();
+    var resolved = resolveCanonicalUrl(String(row[idxUrl] || '').trim());
+    var isGroup = resolved.isGroup || /\(in a group\)/i.test(excerptText);
+
+    items.push({
+      platform: idxPlatform !== -1 ? String(row[idxPlatform] || '').trim() : '',
+      url: resolved.url,
+      excerpt: excerptText,
+      date: dateStr,
+      isGroup: isGroup
+    });
+  }
+  items.reverse();
+
+  var out = { items: items, totalPublished: items.length };
+  return ContentService.createTextOutput(JSON.stringify(out))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+// Resolves a facebook.com/share/... link to its real permalink (needed
+// for embedding) by reading the og:url meta tag off the share page, and
+// flags whether the resolved URL looks like a Group post.
+function resolveCanonicalUrl(url) {
+  if (!url) return { url: url, isGroup: false };
+  var isGroup = url.indexOf('/groups/') !== -1;
+  if (url.indexOf('facebook.com/share') === -1) {
+    return { url: url, isGroup: isGroup };
+  }
+  try {
+    var res = UrlFetchApp.fetch(url, { muteHttpExceptions: true, followRedirects: true });
+    var html = res.getContentText();
+    var match = html.match(/<meta property="og:url" content="([^"]+)"/);
+    var finalUrl = (match && match[1]) ? match[1] : url;
+    if (finalUrl.indexOf('/groups/') !== -1) isGroup = true;
+    return { url: finalUrl, isGroup: isGroup };
+  } catch (err) {
+    return { url: url, isGroup: isGroup };
+  }
+}
+```
+
+Redeploy note (same as before): in the Apps Script editor, paste this
+over the existing `doGet`/`resolveCanonicalUrl`, then **Deploy > Manage
+deployments > (pencil/edit icon on the existing deployment) > Version:
+New version > Deploy**. That updates the *same* `.../exec` URL already
+wired into `index.html`, so no HTML change is needed after redeploying.
+Using "New deployment" instead would generate a different URL and break
+the existing wiring.
+
+One more thing worth Russ's attention, not fixed here since it's a
+content/authoring call, not a code bug: the sheet's excerpt column is
+currently being used for short internal labels like "Read Comments
+(Public)" or "GWA vs Vista (In a Group)" rather than an actual quoted
+excerpt from the post. Those labels get rendered verbatim inside curly
+quotes on the public site (e.g. literally showing `"Racism (In a
+Group)"` as if it were quoted post text) for any post that falls back to
+link-only. Might be worth switching to a real short excerpt/quote from
+the post for anything meant to show publicly, or stripping the
+"(Public)"/"(In a Group)" tag before it reaches the feed -- flagging for
+Russ to decide rather than rewriting sheet content unasked.
+
+## FLAG FOR OTHER CHATS: style.css got an unintended interim commit (Sept 2026)
+
+While committing an unrelated home-page fix (`c6d0da8`, social-tracker
+Group-post handling), `style.css` had a staged-but-not-yet-committed
+hunk sitting in the index from another chat's in-progress work (the
+`.home-next-meeting` badge, changed from a translucent style to a solid
+gold one). `git add index.html` + `git commit` (no pathspec) picked up
+whatever was already staged for style.css too -- this chat did not
+intentionally `git add` style.css. No content was lost: that other
+chat's unstaged working-tree copy (further along, back to a translucent
+badge style per the diff at the time) is untouched and will commit
+cleanly on top, it'll just show as a second small style.css commit
+rather than one clean one. Flagging so nobody's surprised by an
+interim-looking `.home-next-meeting` diff in `c6d0da8`'s history.
