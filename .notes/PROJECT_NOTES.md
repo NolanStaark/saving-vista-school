@@ -1839,3 +1839,15 @@ function resolveCanonicalUrl(url) {
 Same redeploy steps as always: paste over the existing `doGet`/
 `resolveCanonicalUrl`, Deploy -> Manage deployments -> edit -> Version:
 New version -> Deploy. Same `/exec` URL, no HTML change needed after.
+
+## "Get Involved" closing CTA added to all pages (Sept 2026)
+
+Russ asked for the home page's closing "Get Involved" section (heading +
+blurb + "Submit a Letter of Concern" / "Contact Us" buttons, right before
+the footer) to appear on every page, not just the home page. Added the
+identical `<section class="alt">` block (already-existing CSS classes,
+no style.css changes needed) right before `<footer>` on about.html,
+meetings.html, policies.html, letters.html, and all four es/ counterparts
+(using the Spanish copy already written for es/index.html's "Participe"
+section). letters.html was done via blob-surgery again (another chat's
+topics-refactor WIP is still pending there).
