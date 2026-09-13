@@ -1168,16 +1168,19 @@ footer.site-footer a {
   align-items: center;
   gap: 6px;
   margin-top: 22px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: #eef2f6;
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  color: var(--navy-dark);
   font-size: 0.9rem;
+  font-weight: 600;
   padding: 10px 18px;
   border-radius: 999px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 .home-next-meeting a {
-  color: var(--gold);
-  font-weight: 600;
+  color: var(--navy-dark);
+  font-weight: 700;
+  text-decoration: underline;
 }
 
 /* Home page: "A Closer Look at Vista's Leadership" evidence/exhibit cards */

@@ -455,6 +455,12 @@ fetch('assets/data/meetings.json')
   function embedKindFor(item) {
     var platform = (item.platform || '').toLowerCase();
     if (!item.url) return null;
+    // Facebook Group posts require group membership to view, even for
+    // "public" groups -- Facebook's embed widget can't render them for a
+    // logged-out visitor, so treat them as un-embeddable up front rather
+    // than attempting (and always failing) the embed and making a visitor
+    // wait out the fallback timeout. The feed marks these via `isGroup`.
+    if (item.isGroup) return null;
     if (platform.indexOf('facebook') !== -1) return 'facebook';
     if (platform.indexOf('twitter') !== -1 || platform === 'x' || platform.indexOf('x.com') !== -1) return 'twitter';
     if (platform.indexOf('instagram') !== -1) return 'instagram';
