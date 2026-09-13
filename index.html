@@ -430,11 +430,15 @@ fetch('assets/data/meetings.json')
 
   // Ensures the SDK script with this id is loading/loaded exactly once.
   // Returns true if it's already ready (caller can act immediately);
-  // otherwise queues `whenReady` (if given) and returns false.
+  // otherwise queues `whenReady` (if given) and returns false. sdkQueue[id]
+  // is always initialized here (not just when a whenReady is passed) --
+  // callers that queue their own callback into sdkQueue[id] directly
+  // (see renderEmbed below) need it to already be an array on the very
+  // first call for a given SDK, or that push throws.
   function ensureSdk(id, src, onFirstLoad, whenReady) {
+    sdkQueue[id] = sdkQueue[id] || [];
     if (sdkState[id] === 'ready') return true;
     if (whenReady) {
-      sdkQueue[id] = sdkQueue[id] || [];
       sdkQueue[id].push(whenReady);
     }
     if (sdkState[id] === 'loading') return false;
@@ -570,7 +574,18 @@ fetch('assets/data/meetings.json')
   function renderCurrentEmbed() {
     if (embedded[current]) return;
     var embedEl = cards[current].querySelector('.social-post-embed');
-    if (embedEl) renderEmbed(embedEl, items[current]);
+    // A third-party embed script misbehaving (a change on Facebook's/
+    // Twitter's/Instagram's end, a blocked script, etc.) shouldn't be
+    // able to throw out of here and abort the whole carousel -- that
+    // silently killed the nav buttons/autoplay for every post, not just
+    // the one that failed. Fall back to the link treatment for just this
+    // post instead.
+    try {
+      if (embedEl) renderEmbed(embedEl, items[current]);
+    } catch (err) {
+      console.warn('Social post embed failed:', err);
+      if (embedEl) fallbackToLink(embedEl, items[current]);
+    }
     embedded[current] = true;
   }
 
