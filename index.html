@@ -508,8 +508,15 @@ fetch('assets/data/meetings.json')
       ? '<p class="social-post-excerpt">&ldquo;' + escapeHtml(item.excerpt) + '&rdquo;</p>'
       : '<p class="social-post-excerpt" style="color:var(--muted);font-style:italic;">This post couldn&rsquo;t be shown here directly.</p>';
     if (item.isGroup) {
-      html += '<p class="social-post-excerpt" style="color:var(--muted);font-size:0.85rem;font-style:italic;">' +
-        'This post is in a private Facebook group &mdash; you&rsquo;ll need to be signed in to Facebook and a member of that group to view it.</p>';
+      // The feed's `groupType` ('public'/'private', from the sheet's
+      // "Group Type" column) picks the exact wording -- defaults to the
+      // more restrictive "private" phrasing when it isn't set, since
+      // that's what's actually been true for every group post confirmed
+      // so far and it's the safer assumption either way.
+      var note = item.groupType === 'public'
+        ? 'This post is in a public Facebook group &mdash; you may still need to be signed in to Facebook to view it.'
+        : 'This post is in a private Facebook group &mdash; you&rsquo;ll need to be signed in to Facebook and a member of that group to view it.';
+      html += '<p class="social-post-excerpt" style="color:var(--muted);font-size:0.85rem;font-style:italic;">' + note + '</p>';
     }
     return html;
   }
