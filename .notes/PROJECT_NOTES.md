@@ -1906,3 +1906,89 @@ site.
   rather than finding it in the repo.
 - Committed changes above have NOT been pushed to origin/main yet -- Russ
   needs to `git push` before any of this goes live.
+
+
+## policies.html: tabs finalized, Code of Conduct card + "Worth a closer look" carousel (Sept 2026)
+
+Continuing the tabs/simplification rework from earlier this session:
+
+- Confirmed the tabs ARE real tabs now (role="tablist"/"tab"/"tabpanel",
+  aria-selected kept in sync) with a flat underline strip style
+  (`.policy-tabs`/`.tab-btn` in style.css) instead of reusing the
+  `.filter-bar`/`.tag` pill-chip component -- Russ's specific ask was that
+  the old version still looked/read like filter chips, not tabs.
+- Header scales-of-justice icon (`.page-header-graphic`): after two
+  iterations, settled on ONE line per pan at the string-junction point
+  (not a hatch pattern) -- see the `<clipPath>`s in the SVG if this needs
+  adjusting again.
+- New card under "Vista's Own Documents": **"Who counts as staff under
+  Vista's Code of Conduct?"** -- Vista's board-adopted Code of Conduct and
+  Professional Boundaries Policy (Aug 2026) defines "Staff Member" as
+  "any individual employed by, contracted by, or volunteering for the
+  LEA" (no unsupervised-access qualifier, despite the policy's own Scope
+  section limiting itself to "volunteers who have unsupervised access to
+  students"). Its off-campus section requires written administrative +
+  parental authorization before a "staff member" can host a student at a
+  personal residence or transport one in a personal vehicle. Cross-
+  referenced against Vista's separate Volunteer Policy (marked "DRAFT" in
+  the file itself despite a July 2026 board-approval date inside it --
+  flagged as such in the card's source link), which distinguishes
+  background-checked "Covered" volunteers from occasional "Limited
+  Supervised" ones. Framed as a "worth asking which definition governs"
+  question, not an assertion that Vista is doing anything improper --
+  consistent with the "most defensible framing" standing instruction.
+- Found and linked Vista's own official policy index:
+  https://www.vistautah.com/policies-forms -- added to the intro box and
+  to the dress-code card (which previously said "we can only link what's
+  publicly posted," no longer accurate now that this index is known).
+  Source PDFs used this round:
+  - Code of Conduct and Professional Boundaries Policy (Google Drive,
+    file id 1D9rW_x_bPZ5TfMvn7Ofz-uMwP1o2nq9F) -- readable via
+    mcp__Google_Drive__read_file_content even though it's not in our own
+    Drive folder, since it's a public share link.
+  - Civility Policy: vistautah.com/uploads/2023/10/Civility.pdf
+  - Volunteer Policy (Drive, file id 1Fr3sc2YkgfVq2AfMljaOVqhTGFM4evQi,
+    marked DRAFT)
+  - Classroom Visitation and Observation Policy (Drive, file id
+    1AjkT9cfL-8GC7D0RqhdoknL1Td4rxdg3) and the Bullying/Cyber-
+    Bullying/Hazing/Retaliation/Abusive Conduct Policy (Drive, file id
+    1ZJ68NGAzq_OVME3OeJ-JVtMIsCL24XwA) were also pulled and read in full
+    while auditing for "administration overreach" per Russ's request, but
+    NOT yet added to the page -- see two candidate findings flagged back
+    to Russ in-chat, pending his go-ahead:
+    1. The Classroom Visitation policy bars a parent from photographing/
+       recording their own child's classroom observation without prior
+       administrator authorization (Sec. IX.A).
+    2. The Bullying/Retaliation policy's "abusive conduct" definition
+       explicitly covers conduct by a *parent* (not just students) toward
+       a school employee, judged by a "reasonable person" standard --
+       potentially chilling for a parent who forcefully advocates or
+       criticizes administration. (Note: this same policy has fairly
+       strong explicit anti-retaliation and appeal protections for
+       *employees* who report; there's no equivalent explicit protection
+       spelled out for parents accused of "abusive conduct.")
+    Whichever chat picks this up next should get Russ's answer before
+    adding either.
+  - vistautah.com and Drive share links ARE reachable from the Claude
+    Browser tool (`mcp__remote-devices__Claude_Browser__navigate` +
+    `get_page_text`/`javascript_tool`) and from `mcp__Google_Drive__
+    read_file_content` even for files outside our own Drive folder, when
+    they're public share links -- neither is reachable from cloud `Bash`
+    or `device_bash` (egress-blocked), consistent with the existing note
+    above about vistautah.com.
+- Replaced the per-card right-hand "why this matters / worth asking"
+  notes (an interim layout Russ asked for, then superseded) with a single
+  page-level **carousel** ("Worth a closer look", right after the intro
+  box, before search) -- title + blurb, one at a time, prev/next + dots,
+  same visual pattern as the home page's social-post carousel
+  (`.policy-flag-*` classes in style.css, separate IIFE script block in
+  policies.html). Clicking a flagged title switches to that card's tab
+  and scrolls to it (cards got stable ids: `policy-truancy`,
+  `policy-dress-code`, `policy-code-of-conduct`). Adding a 4th flagged
+  item just means adding one more object to the `FLAGS` array in that
+  script and giving the target card a matching id -- no other layout
+  code needs to change.
+- `es/policies.html` (Spanish translation) was NOT updated with any of
+  this session's changes (tabs rework, new card, carousel) -- now
+  meaningfully out of sync with the English version. Flag to Russ /
+  whoever picks up the Spanish pages next.
