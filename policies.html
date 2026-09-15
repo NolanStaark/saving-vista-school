@@ -112,17 +112,97 @@
       <p style="margin:10px 0 0;font-size:0.85rem;color:var(--muted);">Compiled September 2026 from publicly available state and charter-authorizer sources.</p>
     </div>
 
-    <div class="policy-flags">
-      <h2 class="policy-flags-heading">Worth a closer look</h2>
-      <p class="policy-flags-subhead">A few specific policies raise questions we think are fair to ask Vista directly.</p>
-      <div class="policy-flag-card">
-        <h3><a href="#" id="policy-flag-title" class="policy-flag-link"></a></h3>
-        <p class="policy-flag-blurb" id="policy-flag-blurb"></p>
+    <div class="policy-alerts">
+      <div class="policy-alerts-heading-row">
+        <svg class="policy-alerts-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        <h2 class="policy-alerts-heading">Worth a closer look</h2>
       </div>
-      <div class="policy-flag-nav">
-        <button type="button" class="policy-flag-nav-btn" id="policy-flag-prev" aria-label="Previous flagged policy">&larr;</button>
-        <div class="policy-flag-dots" id="policy-flag-dots"></div>
-        <button type="button" class="policy-flag-nav-btn" id="policy-flag-next" aria-label="Next flagged policy">&rarr;</button>
+      <p class="policy-alerts-subhead">Five specific Vista policies raise questions we think are fair to ask directly &mdash; shown here in full, with sourcing.</p>
+
+      <div class="policy-alert-viewport">
+
+        <article class="policy-alert-card" id="alert-policy-truancy" data-index="0">
+          <h3>Compulsory education &amp; truancy</h3>
+          <p>Utah law (&sect;53G-6-202, &sect;53G-6-203) covers school-age children &mdash; useful to know if an attendance issue comes up.</p>
+          <a class="policy-source" href="https://schools.utah.gov/parent/parentrights" target="_blank" rel="noopener">Source: USBE &mdash; Parent Rights in Education &rarr;</a>
+          <div class="policy-card-image">
+            <div class="policy-card-image-row">
+              <figure>
+                <img src="assets/policies/absence-confirm-mockup.png" alt="A recreation of Vista's parent-portal absence-confirmation screen, with a placeholder student name and date, showing &quot;I confirm,&quot; &quot;I do not confirm,&quot; and &quot;My student was not absent&quot; buttons." loading="lazy">
+                <figcaption class="exhibit-caption">Page 1 &mdash; the absence-confirmation screen. Recreated with a placeholder name: the original screenshot named a specific student, so we rebuilt the screen instead of publishing it (see the never-publish note in our working notes).</figcaption>
+              </figure>
+              <figure>
+                <img src="assets/policies/absence-reason-options.jpg" alt="A screenshot of Vista's parent-portal app showing the excused-absence reason options, including Illness, Medical/Dental Appointment, Mental or Behavioral Health, and Permitted by IEP or 504 Plan." loading="lazy">
+                <figcaption class="exhibit-caption">Page 2 &mdash; the reason list shown after tapping &quot;I confirm.&quot;</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="policy-alert-why">
+            <p><strong>Why this matters:</strong> Utah's Student Data Protection Act (Utah Code &sect;53E-9) directs schools to limit the student data they collect to what a stated purpose actually requires. Utah's truancy law only needs an absence marked excused or unexcused (&sect;53G-6-202, &sect;53G-6-203) &mdash; so it's a fair question whether prompting parents to pick a specific health category, rather than just &quot;medical/excused,&quot; collects more health detail than that purpose calls for.</p>
+          </div>
+        </article>
+
+        <article class="policy-alert-card" id="alert-policy-dress-code" data-index="1" hidden>
+          <h3>Vista's own board-adopted policies</h3>
+          <p>Vista posts a growing index of its board-adopted policies directly on its own site, alphabetized by title. Board packets are on Utah's Public Notice Website; every version of Vista's charter agreement is on the SCSB dashboard above.</p>
+          <p style="margin-top:10px;">
+            <a class="policy-source" href="https://www.vistautah.com/policies-forms" target="_blank" rel="noopener">Vista School &mdash; Policies &amp; Forms (official index) &rarr;</a><br>
+            <a class="policy-source" href="https://www.vistautah.com/uploads/2019/01/Student-Laptop-Policy.pdf" target="_blank" rel="noopener">Vista School &mdash; Student Laptop / Device Policy (PDF) &rarr;</a><br>
+            <a class="policy-source" href="https://www.utah.gov/pmn/index.html" target="_blank" rel="noopener">Utah Public Notice Website &mdash; search for Vista School board meetings &rarr;</a>
+          </p>
+          <div class="policy-card-image">
+            <img src="assets/policies/dress-code-bottoms.jpg" alt="A screenshot of Vista's dress code policy, &quot;Bottoms&quot; section, with the &quot;rear pockets&quot; requirement highlighted." loading="lazy">
+            <p class="exhibit-caption">Vista's own dress-code policy (&quot;Bottoms&quot; section), as published to parents &mdash; highlight added by a parent to flag the rear-pockets requirement.</p>
+          </div>
+          <div class="policy-alert-why">
+            <p><strong>Why this matters:</strong> A rule like the dress code is enforceable at school &mdash; Vista can act on it the same as any other policy. But unlike the state and charter rules on this page, Vista's own internal policies aren't collected anywhere in one place for parents to review, so it's easy not to know a rule exists, or exactly what it says, until it affects your child.</p>
+          </div>
+        </article>
+
+        <article class="policy-alert-card" id="alert-policy-code-of-conduct" data-index="2" hidden>
+          <h3>Who counts as &quot;staff&quot; under Vista's Code of Conduct?</h3>
+          <p>Vista's board-adopted <strong>Code of Conduct and Professional Boundaries Policy</strong> (August 2026) says its scope covers &quot;volunteers who have unsupervised access to students,&quot; but its own definitions section defines a &quot;Staff Member&quot; more broadly &mdash; &quot;any individual employed by, contracted by, or volunteering for the LEA&quot; &mdash; with no unsupervised-access qualifier. That gap matters because the policy's off-campus rules are written for &quot;staff members&quot;: one bars them from inviting a student into their personal home &quot;unless explicitly authorized as part of an official, school-sanctioned event with prior administrative and parental consent,&quot; and another requires written authorization before transporting a student in a personal vehicle.</p>
+          <p style="margin-top:10px;">
+            <a class="policy-source" href="https://drive.google.com/file/d/1D9rW_x_bPZ5TfMvn7Ofz-uMwP1o2nq9F/view?usp=drive_link" target="_blank" rel="noopener">Vista School &mdash; Code of Conduct and Professional Boundaries Policy (PDF) &rarr;</a><br>
+            <a class="policy-source" href="https://www.vistautah.com/uploads/2023/10/Civility.pdf" target="_blank" rel="noopener">Vista School &mdash; Civility Policy (PDF) &rarr;</a><br>
+            <a class="policy-source" href="https://drive.google.com/file/d/1Fr3sc2YkgfVq2AfMljaOVqhTGFM4evQi/view?usp=sharing" target="_blank" rel="noopener">Vista School &mdash; Volunteer Policy (PDF, marked draft) &rarr;</a>
+          </p>
+          <div class="policy-alert-why">
+            <p><strong>Why this matters:</strong> Vista's separate Volunteer Policy distinguishes background-checked &quot;Covered&quot; volunteers from occasional &quot;Limited Supervised&quot; volunteers helping at things like a classroom party &mdash; most active parent-volunteers are the latter. If the Code of Conduct's broader &quot;Staff Member&quot; definition reaches Limited Supervised volunteers too, read literally it would mean a routine birthday party at home, with a child's Vista classmates invited, needs the school's and every other parent's written sign-off first. Worth asking Vista directly which definition governs, and how consistently it's enforced.</p>
+          </div>
+        </article>
+
+        <article class="policy-alert-card" id="alert-policy-classroom-recording" data-index="3" hidden>
+          <h3>Visiting your child's classroom &mdash; and the no-recording rule</h3>
+          <p>Vista's Parent/Guardian Classroom Visitation and Observation Policy (August 2026) implements Utah's parental classroom-observation right (Utah Code &sect;53G-6-803): request a visit, and the school must reasonably accommodate it, subject to scheduling, safety, and privacy conditions. The same policy also says a parent or guardian &quot;may not photograph, audio record, video record, livestream, or otherwise electronically record a classroom observation without prior authorization from school administration.&quot;</p>
+          <p style="margin-top:10px;">
+            <a class="policy-source" href="https://drive.google.com/file/d/1AjkT9cfL-8GC7D0RqhdoknL1Td4rxdg3/view?usp=drive_link" target="_blank" rel="noopener">Vista School &mdash; Classroom Visitation and Observation Policy (PDF) &rarr;</a><br>
+            <a class="policy-source" href="https://schools.utah.gov/parent/parentrights" target="_blank" rel="noopener">Source: Utah Code &sect;53G-6-803 &mdash; Parental Right to Academic Accommodations &rarr;</a>
+          </p>
+          <div class="policy-alert-why">
+            <p><strong>Why this matters:</strong> State law guarantees the classroom visit itself, but nothing in that law requires a parent to get the administration's permission before documenting what they see in their own child's classroom. Since documentation is often what makes a concern easy to raise and act on later, it's fair to ask why that specific step requires administrative sign-off.</p>
+          </div>
+        </article>
+
+        <article class="policy-alert-card" id="alert-policy-abusive-conduct" data-index="4" hidden>
+          <h3>Vista's &quot;abusive conduct&quot; rule applies to parents, not just students</h3>
+          <p>Vista's Bullying, Cyber-Bullying, Hazing, Retaliation, and Abusive Conduct Policy (July 2026) defines &quot;abusive conduct&quot; as verbal, nonverbal, or physical conduct of <strong>a parent or student</strong> directed toward a school employee that, based on its severity, nature, and frequency, &quot;a reasonable person would determine is intended to cause intimidation, humiliation, or unwarranted distress&quot; &mdash; and separately prohibits a parent from engaging in it. The same policy spells out detailed anti-retaliation protections and a formal appeal process for <strong>employees</strong> who report misconduct; it doesn't spell out an equivalent notice-and-appeal process for a parent accused of &quot;abusive conduct.&quot;</p>
+          <p style="margin-top:10px;">
+            <a class="policy-source" href="https://drive.google.com/file/d/1ZJ68NGAzq_OVME3OeJ-JVtMIsCL24XwA/view?usp=sharing" target="_blank" rel="noopener">Vista School &mdash; Bullying, Cyber-Bullying, Hazing, Retaliation, and Abusive Conduct Policy (PDF) &rarr;</a><br>
+            <a class="policy-source" href="https://www.vistautah.com/uploads/2023/10/Civility.pdf" target="_blank" rel="noopener">Vista School &mdash; Civility Policy (PDF) &rarr;</a>
+          </p>
+          <div class="policy-alert-why">
+            <p><strong>Why this matters:</strong> &quot;Unwarranted distress,&quot; judged by a &quot;reasonable person,&quot; is a subjective bar applied by the same administration a parent might be criticizing. It's fair to ask how Vista distinguishes forceful advocacy for your child from &quot;abusive conduct&quot; in practice, and whether a parent accused under this policy gets the same notice-and-appeal rights an employee has under the same document.</p>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="policy-alert-nav">
+        <button type="button" class="policy-alert-nav-btn" id="policy-alert-prev" aria-label="Previous flagged policy">&larr;</button>
+        <div class="policy-alert-dots" id="policy-alert-dots"></div>
+        <button type="button" class="policy-alert-nav-btn" id="policy-alert-next" aria-label="Next flagged policy">&rarr;</button>
+        <span class="policy-alert-counter" id="policy-alert-counter"></span>
       </div>
     </div>
 
@@ -284,76 +364,6 @@
         <a class="policy-source" href="https://schools.utah.gov/parent/parentrights" target="_blank" rel="noopener">Source: USBE &mdash; Parent Rights in Education &rarr;</a>
       </div>
 
-      <div class="policy-card" data-category="engagement" id="policy-truancy">
-        <span class="category-badge"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Family Engagement</span>
-        <h3>Compulsory education &amp; truancy</h3>
-        <p class="card-tldr">Utah law requires attendance and spells out the steps for excessive absences.</p>
-        <p>Utah law (&sect;53G-6-202, &sect;53G-6-203) covers school-age children &mdash; useful to know if an attendance issue comes up.</p>
-        <a class="policy-source" href="https://schools.utah.gov/parent/parentrights" target="_blank" rel="noopener">Source: USBE &mdash; Parent Rights in Education &rarr;</a>
-        <div class="policy-card-image">
-          <div class="policy-card-image-row">
-            <figure>
-              <img src="assets/policies/absence-confirm-mockup.png" alt="A recreation of Vista's parent-portal absence-confirmation screen, with a placeholder student name and date, showing &quot;I confirm,&quot; &quot;I do not confirm,&quot; and &quot;My student was not absent&quot; buttons." loading="lazy">
-              <figcaption class="exhibit-caption">Page 1 &mdash; the absence-confirmation screen. Recreated with a placeholder name: the original screenshot named a specific student, so we rebuilt the screen instead of publishing it (see the never-publish note in our working notes).</figcaption>
-            </figure>
-            <figure>
-              <img src="assets/policies/absence-reason-options.jpg" alt="A screenshot of Vista's parent-portal app showing the excused-absence reason options, including Illness, Medical/Dental Appointment, Mental or Behavioral Health, and Permitted by IEP or 504 Plan." loading="lazy">
-              <figcaption class="exhibit-caption">Page 2 &mdash; the reason list shown after tapping &quot;I confirm.&quot;</figcaption>
-            </figure>
-          </div>
-        </div>
-      </div>
-
-      <div class="policy-card" data-category="engagement" id="policy-classroom-recording">
-        <span class="category-badge"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Family Engagement</span>
-        <h3>Visiting your child's classroom &mdash; and the no-recording rule</h3>
-        <p class="card-tldr">Utah law gives you the right to reasonably observe your child's class &mdash; but Vista requires administration's OK before you can photograph or record what you see.</p>
-        <p>Vista's Parent/Guardian Classroom Visitation and Observation Policy (August 2026) implements Utah's parental classroom-observation right (Utah Code &sect;53G-6-803): request a visit, and the school must reasonably accommodate it, subject to scheduling, safety, and privacy conditions. The same policy also says a parent or guardian &quot;may not photograph, audio record, video record, livestream, or otherwise electronically record a classroom observation without prior authorization from school administration.&quot;</p>
-        <p style="margin-top:10px;">
-          <a class="policy-source" href="https://drive.google.com/file/d/1AjkT9cfL-8GC7D0RqhdoknL1Td4rxdg3/view?usp=drive_link" target="_blank" rel="noopener">Vista School &mdash; Classroom Visitation and Observation Policy (PDF) &rarr;</a><br>
-          <a class="policy-source" href="https://schools.utah.gov/parent/parentrights" target="_blank" rel="noopener">Source: Utah Code &sect;53G-6-803 &mdash; Parental Right to Academic Accommodations &rarr;</a>
-        </p>
-      </div>
-
-      <div class="policy-card" data-category="vista" id="policy-dress-code">
-        <span class="category-badge"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Vista's Own Documents</span>
-        <h3>Vista's own board-adopted policies</h3>
-        <p class="card-tldr">Vista's own internal rules &mdash; dress code, device policy, discipline &mdash; beyond what state law requires.</p>
-        <p>Vista posts a growing index of its board-adopted policies directly on its own site, alphabetized by title. Board packets are on Utah's Public Notice Website; every version of Vista's charter agreement is on the SCSB dashboard above.</p>
-        <p style="margin-top:10px;">
-          <a class="policy-source" href="https://www.vistautah.com/policies-forms" target="_blank" rel="noopener">Vista School &mdash; Policies &amp; Forms (official index) &rarr;</a><br>
-          <a class="policy-source" href="https://www.vistautah.com/uploads/2019/01/Student-Laptop-Policy.pdf" target="_blank" rel="noopener">Vista School &mdash; Student Laptop / Device Policy (PDF) &rarr;</a><br>
-          <a class="policy-source" href="https://www.utah.gov/pmn/index.html" target="_blank" rel="noopener">Utah Public Notice Website &mdash; search for Vista School board meetings &rarr;</a>
-        </p>
-        <div class="policy-card-image">
-          <img src="assets/policies/dress-code-bottoms.jpg" alt="A screenshot of Vista's dress code policy, &quot;Bottoms&quot; section, with the &quot;rear pockets&quot; requirement highlighted." loading="lazy">
-          <p class="exhibit-caption">Vista's own dress-code policy (&quot;Bottoms&quot; section), as published to parents &mdash; highlight added by a parent to flag the rear-pockets requirement.</p>
-        </div>
-      </div>
-
-      <div class="policy-card" data-category="vista" id="policy-code-of-conduct">
-        <span class="category-badge"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Vista's Own Documents</span>
-        <h3>Who counts as &quot;staff&quot; under Vista's Code of Conduct?</h3>
-        <p class="card-tldr">Vista's Code of Conduct defines &quot;staff&quot; to include volunteers &mdash; and its off-campus rules, written for &quot;staff members,&quot; may reach further than most parent-volunteers expect.</p>
-        <p>Vista's board-adopted <strong>Code of Conduct and Professional Boundaries Policy</strong> (August 2026) says its scope covers &quot;volunteers who have unsupervised access to students,&quot; but its own definitions section defines a &quot;Staff Member&quot; more broadly &mdash; &quot;any individual employed by, contracted by, or volunteering for the LEA&quot; &mdash; with no unsupervised-access qualifier. That gap matters because the policy's off-campus rules are written for &quot;staff members&quot;: one bars them from inviting a student into their personal home &quot;unless explicitly authorized as part of an official, school-sanctioned event with prior administrative and parental consent,&quot; and another requires written authorization before transporting a student in a personal vehicle.</p>
-        <p style="margin-top:10px;">
-          <a class="policy-source" href="https://drive.google.com/file/d/1D9rW_x_bPZ5TfMvn7Ofz-uMwP1o2nq9F/view?usp=drive_link" target="_blank" rel="noopener">Vista School &mdash; Code of Conduct and Professional Boundaries Policy (PDF) &rarr;</a><br>
-          <a class="policy-source" href="https://www.vistautah.com/uploads/2023/10/Civility.pdf" target="_blank" rel="noopener">Vista School &mdash; Civility Policy (PDF) &rarr;</a><br>
-          <a class="policy-source" href="https://drive.google.com/file/d/1Fr3sc2YkgfVq2AfMljaOVqhTGFM4evQi/view?usp=sharing" target="_blank" rel="noopener">Vista School &mdash; Volunteer Policy (PDF, marked draft) &rarr;</a>
-        </p>
-      </div>
-
-      <div class="policy-card" data-category="vista" id="policy-abusive-conduct">
-        <span class="category-badge"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Vista's Own Documents</span>
-        <h3>Vista's &quot;abusive conduct&quot; rule applies to parents, not just students</h3>
-        <p class="card-tldr">A parent's communication with staff can be labeled &quot;abusive conduct&quot; under a subjective, reasonable-person standard &mdash; the same policy that separately protects employees from retaliation.</p>
-        <p>Vista's Bullying, Cyber-Bullying, Hazing, Retaliation, and Abusive Conduct Policy (July 2026) defines &quot;abusive conduct&quot; as verbal, nonverbal, or physical conduct of <strong>a parent or student</strong> directed toward a school employee that, based on its severity, nature, and frequency, &quot;a reasonable person would determine is intended to cause intimidation, humiliation, or unwarranted distress&quot; &mdash; and separately prohibits a parent from engaging in it. The same policy spells out detailed anti-retaliation protections and a formal appeal process for <strong>employees</strong> who report misconduct; it doesn't spell out an equivalent notice-and-appeal process for a parent accused of &quot;abusive conduct.&quot;</p>
-        <p style="margin-top:10px;">
-          <a class="policy-source" href="https://drive.google.com/file/d/1ZJ68NGAzq_OVME3OeJ-JVtMIsCL24XwA/view?usp=sharing" target="_blank" rel="noopener">Vista School &mdash; Bullying, Cyber-Bullying, Hazing, Retaliation, and Abusive Conduct Policy (PDF) &rarr;</a><br>
-          <a class="policy-source" href="https://www.vistautah.com/uploads/2023/10/Civility.pdf" target="_blank" rel="noopener">Vista School &mdash; Civility Policy (PDF) &rarr;</a>
-        </p>
-      </div>
-
       <div class="policy-card" data-category="vista">
         <span class="category-badge"><svg class="cat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>Vista's Own Documents</span>
         <h3>Vista's contact info &amp; leadership</h3>
@@ -462,81 +472,39 @@
 
 <script>
 (function () {
-  var FLAGS = [
-    {
-      id: 'policy-truancy',
-      title: 'Compulsory education & truancy',
-      blurb: 'Utah\u2019s Student Data Protection Act (Utah Code \u00a753E-9) directs schools to limit the student data they collect to what a stated purpose actually requires. Utah\u2019s truancy law only needs an absence marked excused or unexcused (\u00a753G-6-202, \u00a753G-6-203) \u2014 so it\u2019s a fair question whether prompting parents to pick a specific health category, rather than just \u201cmedical/excused,\u201d collects more health detail than that purpose calls for.'
-    },
-    {
-      id: 'policy-dress-code',
-      title: 'Vista\u2019s own board-adopted policies',
-      blurb: 'A rule like the dress code is enforceable at school \u2014 Vista can act on it the same as any other policy. But unlike the state and charter rules on this page, Vista\u2019s own internal policies aren\u2019t collected anywhere in one place for parents to review, so it\u2019s easy not to know a rule exists, or exactly what it says, until it affects your child.'
-    },
-    {
-      id: 'policy-code-of-conduct',
-      title: 'Who counts as "staff" under Vista\u2019s Code of Conduct?',
-      blurb: 'Vista\u2019s separate Volunteer Policy distinguishes background-checked "Covered" volunteers from occasional "Limited Supervised" volunteers helping at things like a classroom party \u2014 most active parent-volunteers are the latter. If the Code of Conduct\u2019s broader "Staff Member" definition reaches Limited Supervised volunteers too, read literally it would mean a routine birthday party at home, with a child\u2019s Vista classmates invited, needs the school\u2019s and every other parent\u2019s written sign-off first. Worth asking Vista directly which definition governs, and how consistently it\u2019s enforced.'
-    },
-    {
-      id: 'policy-classroom-recording',
-      title: 'Visiting your child\u2019s classroom \u2014 and the no-recording rule',
-      blurb: 'State law guarantees the classroom visit itself, but nothing in that law requires a parent to get the administration\u2019s permission before documenting what they see in their own child\u2019s classroom. Since documentation is often what makes a concern easy to raise and act on later, it\u2019s fair to ask why that specific step requires administrative sign-off.'
-    },
-    {
-      id: 'policy-abusive-conduct',
-      title: 'Vista\u2019s "abusive conduct" rule applies to parents, not just students',
-      blurb: '"Unwarranted distress," judged by a "reasonable person," is a subjective bar applied by the same administration a parent might be criticizing. It\u2019s fair to ask how Vista distinguishes forceful advocacy for your child from "abusive conduct" in practice, and whether a parent accused under this policy gets the same notice-and-appeal rights an employee has under the same document.'
-    }
-  ];
-
   function init() {
-    var titleLink = document.getElementById('policy-flag-title');
-    var blurbEl = document.getElementById('policy-flag-blurb');
-    var dotsEl = document.getElementById('policy-flag-dots');
-    var prevBtn = document.getElementById('policy-flag-prev');
-    var nextBtn = document.getElementById('policy-flag-next');
-    if (!titleLink || !blurbEl || !dotsEl) return;
+    var cards = document.querySelectorAll('.policy-alert-card');
+    var dotsEl = document.getElementById('policy-alert-dots');
+    var prevBtn = document.getElementById('policy-alert-prev');
+    var nextBtn = document.getElementById('policy-alert-next');
+    var counterEl = document.getElementById('policy-alert-counter');
+    if (!cards.length || !dotsEl) return;
 
     var index = 0;
 
-    FLAGS.forEach(function (flag, i) {
+    cards.forEach(function (card, i) {
       var dot = document.createElement('button');
       dot.type = 'button';
-      dot.className = 'policy-flag-dot';
-      dot.setAttribute('aria-label', 'Show flag ' + (i + 1) + ' of ' + FLAGS.length);
+      dot.className = 'policy-alert-dot';
+      dot.setAttribute('aria-label', 'Show flagged policy ' + (i + 1) + ' of ' + cards.length);
       dot.addEventListener('click', function () { show(i); });
       dotsEl.appendChild(dot);
     });
-    var dots = dotsEl.querySelectorAll('.policy-flag-dot');
+    var dots = dotsEl.querySelectorAll('.policy-alert-dot');
 
     function show(i) {
-      index = (i + FLAGS.length) % FLAGS.length;
-      var flag = FLAGS[index];
-      titleLink.textContent = flag.title;
-      titleLink.setAttribute('href', '#' + flag.id);
-      titleLink.setAttribute('data-target', flag.id);
-      blurbEl.textContent = flag.blurb;
-      for (var d = 0; d < dots.length; d++) {
-        dots[d].classList.toggle('is-active', d === index);
-      }
+      index = (i + cards.length) % cards.length;
+      cards.forEach(function (card, c) {
+        card.hidden = c !== index;
+      });
+      dots.forEach(function (dot, d) {
+        dot.classList.toggle('is-active', d === index);
+      });
+      if (counterEl) counterEl.textContent = (index + 1) + ' of ' + cards.length;
     }
 
     if (prevBtn) prevBtn.addEventListener('click', function () { show(index - 1); });
     if (nextBtn) nextBtn.addEventListener('click', function () { show(index + 1); });
-
-    titleLink.addEventListener('click', function (e) {
-      e.preventDefault();
-      var targetId = titleLink.getAttribute('data-target');
-      var target = document.getElementById(targetId);
-      if (!target) return;
-      var category = target.getAttribute('data-category');
-      var tabBtn = category ? document.getElementById('tab-' + category) : null;
-      if (tabBtn) tabBtn.click();
-      setTimeout(function () {
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 50);
-    });
 
     show(0);
   }

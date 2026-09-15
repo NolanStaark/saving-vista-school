@@ -11,6 +11,8 @@
   --maroon: #9e1b21;
   --maroon-dark: #7a1519;
   --gold: #eca73a;
+  --amber: #c2410c;
+  --amber-bg: #fff7ed;
   --sage: #77a685;
   --cream: #f5f7f8;
   --text: #212121;
@@ -1322,63 +1324,91 @@ footer.site-footer a {
 
 .policy-card-note strong { color: var(--navy); }
 
-/* Policies page: "Worth a closer look" carousel -- same one-at-a-time
-   card + prev/next + dots pattern as the home page's social-post
-   carousel, reused here for flagged-policy blurbs. */
-.policy-flags {
-  margin: 24px 0 0;
+/* Policies page: "Worth a closer look" callout -- pulled entirely out of
+   the tabbed grid so these five flagged policies get their own dedicated,
+   warning-toned home instead of sitting alongside neutral reference
+   cards. Still a one-at-a-time carousel (prev/next + dots), like the
+   home page's social-post carousel, but each slide carries full content
+   (facts, sourcing, images, and a "why this matters" note) rather than a
+   title + teaser, so slides are static markup toggled with the hidden
+   attribute instead of templated text swaps. */
+.policy-alerts {
+  margin: 28px 0 0;
+  padding: 20px 22px 22px;
+  background: var(--amber-bg);
+  border: 1px solid #f3d4b0;
+  border-top: 4px solid var(--amber);
+  border-radius: var(--radius);
 }
 
-.policy-flags-heading {
+.policy-alerts-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin: 0 0 4px;
-  color: var(--navy);
+}
+
+.policy-alerts-icon {
+  color: var(--maroon-dark);
+  flex-shrink: 0;
+}
+
+.policy-alerts-heading {
+  margin: 0;
+  color: var(--maroon-dark);
   font-size: 1.15rem;
 }
 
-.policy-flags-subhead {
-  margin: 0 0 14px;
+.policy-alerts-subhead {
+  margin: 0 0 16px;
   color: var(--muted);
   font-size: 0.92rem;
 }
 
-.policy-flag-card {
+.policy-alert-viewport {
   background: #fff;
   border: 1px solid var(--border);
-  border-left: 4px solid var(--gold);
   border-radius: var(--radius);
-  padding: 18px 20px;
+  padding: 20px 22px;
 }
 
-.policy-flag-card h3 {
-  margin: 0 0 8px;
+.policy-alert-card h3 {
+  margin: 0 0 10px;
+  color: var(--navy);
   font-size: 1.05rem;
 }
 
-.policy-flag-link {
-  color: var(--navy);
-  text-decoration: none;
-}
-
-.policy-flag-link:hover {
-  text-decoration: underline;
-}
-
-.policy-flag-blurb {
-  margin: 0;
-  color: var(--text);
-  font-size: 0.95rem;
+.policy-alert-card p {
+  margin: 0 0 4px;
   line-height: 1.55;
 }
 
-.policy-flag-nav {
+.policy-alert-why {
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: var(--amber-bg);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+}
+
+.policy-alert-why p {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.policy-alert-why strong { color: var(--maroon-dark); }
+
+.policy-alert-nav {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 14px;
-  margin-top: 14px;
+  margin-top: 16px;
 }
 
-.policy-flag-nav-btn {
+.policy-alert-nav-btn {
   background: #fff;
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -1389,22 +1419,22 @@ footer.site-footer a {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--navy);
+  color: var(--maroon-dark);
   font-size: 1rem;
   line-height: 1;
 }
 
-.policy-flag-nav-btn:hover {
-  background: #eef2f6;
+.policy-alert-nav-btn:hover {
+  background: var(--amber-bg);
 }
 
-.policy-flag-dots {
+.policy-alert-dots {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.policy-flag-dot {
+.policy-alert-dot {
   width: 7px;
   height: 7px;
   padding: 0;
@@ -1414,10 +1444,16 @@ footer.site-footer a {
   cursor: pointer;
 }
 
-.policy-flag-dot.is-active {
-  background: var(--navy);
+.policy-alert-dot.is-active {
+  background: var(--amber);
   width: 18px;
   border-radius: 4px;
+}
+
+.policy-alert-counter {
+  margin-left: 4px;
+  color: var(--muted);
+  font-size: 0.82rem;
 }
 
 
