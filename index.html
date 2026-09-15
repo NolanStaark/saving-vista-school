@@ -512,10 +512,17 @@ fetch('assets/data/meetings.json')
   // needs to already be signed in and a member to see the real post via
   // the "View Post" link -- worth saying plainly rather than leaving
   // them wondering why only a quote is shown here.
+  // Just the quoted title/excerpt line, when there is one -- used on its
+  // own above a live embed (so a visitor can tell what a post is about
+  // without reading the whole embedded post first) as well as inside
+  // excerptMarkup() below for cards with no embed at all.
+  function excerptQuote(item) {
+    return item.excerpt ? '<p class="social-post-excerpt">&ldquo;' + escapeHtml(item.excerpt) + '&rdquo;</p>' : '';
+  }
+
   function excerptMarkup(item) {
-    var html = item.excerpt
-      ? '<p class="social-post-excerpt">&ldquo;' + escapeHtml(item.excerpt) + '&rdquo;</p>'
-      : '<p class="social-post-excerpt" style="color:var(--muted);font-style:italic;">This post couldn&rsquo;t be shown here directly.</p>';
+    var html = excerptQuote(item) ||
+      '<p class="social-post-excerpt" style="color:var(--muted);font-style:italic;">This post couldn&rsquo;t be shown here directly.</p>';
     if (item.isGroup) {
       // The feed's `groupType` ('public'/'private', from the sheet's
       // "Group Type" column) picks the exact wording -- defaults to the
@@ -596,6 +603,10 @@ fetch('assets/data/meetings.json')
 
     card.innerHTML =
       (canEmbed ? '' : top) +
+      // The title/excerpt line always shows, embed or not, so a visitor
+      // scrolling through can tell what each post is about at a glance
+      // rather than having to read into (or wait for) the full embed.
+      (canEmbed ? excerptQuote(item) : '') +
       (canEmbed ? '<div class="social-post-embed"></div>' :
         (item.excerpt || item.isGroup ? excerptMarkup(item) : '')) +
       (item.url ? '<a class="download" href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">View Post &rarr;</a>' : '');
