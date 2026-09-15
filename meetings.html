@@ -224,11 +224,12 @@
         '</div>'
       );
     }
+    // Minutes/Recording can never exist for the upcoming meeting before it
+    // happens, so this card only ever shows the Agenda -- Minutes/Recording
+    // still show for past meetings in the archive table below.
     var docsHtml = meeting.type === 'board'
       ? ('<div class="meeting-docs">' +
           docLink(meeting.agenda_url, 'Agenda') +
-          docLink(meeting.minutes_url, 'Minutes') +
-          docLink(meeting.recording_url, 'Recording') +
         '</div>')
       : '';
     return (
