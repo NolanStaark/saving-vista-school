@@ -2047,3 +2047,45 @@ policies to parents."
   `origin/main` and has NOT been pushed -- Russ needs to `git push`
   before any of this (this change and the earlier commits in this
   session) goes live.
+
+
+## policies.html: "Worth a closer look" moved into a right-hand sidebar (Sept 2026, cont'd again)
+
+One more follow-up to the two sections above. Russ's feedback on seeing
+the full-width callout: he wanted it as an actual right-hand sidebar
+(two-column layout), not a full-width block between the intro and the
+tabs.
+
+- New two-column layout scoped to this page's content section:
+  `.container container--wide` (reuses the existing 1320px-wide
+  container class from the home page) wraps `.policy-main-layout`
+  (CSS grid, `2fr 1fr`, 40px gap), which holds `.policy-main-column`
+  (intro note, search, tabs, letter-count, grid, no-results -- i.e.
+  everything that was already there) and `<aside class="policy-sidebar">`
+  (sticky, `top: 24px`, wraps the unchanged `.policy-alerts` block).
+  Mirrors the home page's `.home-main-layout`/`.home-sidebar` pattern
+  exactly (same grid shape, same 900px collapse breakpoint where the
+  sidebar goes static and stacks below the main column) -- see that
+  pattern's own comment in style.css (search `.home-main-layout`) for
+  the original rationale.
+- `.policy-alerts`'s own top margin (`28px 0 0`) was dropped (now `0`)
+  since it's exclusively inside the sidebar now, where that margin would
+  misalign it against the top of the main column instead of the old
+  full-width stacking.
+- Hit and fixed a real CSS Grid overflow bug while QA'ing narrow
+  screens: grid items get a content-based automatic minimum width by
+  default, so a paragraph's un-wrapped ("max-content") width was
+  forcing the whole column -- and, once the layout collapsed to one
+  column below 900px, *everything sharing that track including the
+  sidebar* -- wider than the viewport (measured ~1906px on a 400px-wide
+  screen, with every child of `.policy-main-column`/`.policy-sidebar`
+  reporting the same blown-out width). Fixed with `min-width: 0;` on
+  both `.policy-main-column` and `.policy-sidebar`. Worth checking
+  whether the home page's `.home-main-column`/`.home-sidebar` has the
+  same latent issue at narrow widths -- it was never given an explicit
+  `min-width: 0` either, so it may just not have hit content wide enough
+  to expose it yet.
+- Committed as `7e914f0` ("Policies page: run the 'Worth a closer look'
+  callout as a right sidebar"). Still not pushed -- branch keeps growing
+  ahead of `origin/main`; Russ needs to `git push` to make any of this
+  session's policies.html work (this commit plus the two above it) live.
