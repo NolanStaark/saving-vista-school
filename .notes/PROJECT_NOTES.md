@@ -957,19 +957,35 @@ new uploads go in).
 gaps, cross-checked against Vista's own published board-meeting dates in
 `assets/data/meetings.json` where possible -- only Board dates have an
 official record to confirm against):
-- Jun 15, 2026 -> Townhall (3 files) -- NOT officially confirmed
-- Jul 29, 2026 -> Board (4 files) -- confirmed vs. official record
-- Jul 30, 2026 -> Townhall (4 files) -- NOT officially confirmed
+- Jun 15, 2026 -> Board (3 files) -- confirmed via transcript (committee
+  reports, a board-member appointment vote, budget/fee votes, closed
+  session); originally mislabeled Townhall, since corrected (files renamed,
+  title cards re-rendered, `UPLOAD_CHECKLIST.md` updated)
+- Jul 29, 2026 -> Board (5 files) -- confirmed vs. official record and via
+  transcript
+- Jul 30, 2026 -> Townhall (4 files) -- confirmed via transcript (a speaker
+  states "this is the first town hall of the 26-27 school year")
 - Aug 24, 2026 -> Board (2 files) -- confirmed vs. official record
-- Aug 31, 2026 -> Townhall (1 file) -- NOT officially confirmed
+- Aug 31, 2026 -> Townhall (1 file) -- confirmed via transcript (and the
+  file's own name in Otter)
 
-Two files didn't fit any meeting's pattern and were flagged to Russ rather
-than assumed: `Note__20260729_2132_otter.ai.mp3` (9:32pm, ~2.5 min, >2hrs
-after the July 29 chunks end) and `Note__20260824_1008_otter.ai.mp3`
-(10:08am, ~48 min, doesn't match the evening board-meeting time). Both
-were still rendered to video (suffixed `-UNCONFIRMED-extra`) so nothing
-was silently dropped, but Russ needs to confirm what they actually are
-before uploading them.
+**Update (later in Sept 2026):** Russ supplied the actual Otter.ai .txt
+transcripts for all 16 source recordings, which resolved every open item
+above:
+- `Note__20260729_2132_otter.ai.mp3` (9:32pm, ~2.5 min, >2hrs after the
+  July 29 chunks end) is confirmed to be the board reconvening after
+  closed session to vote on the land purchase and budget amendment (both
+  items come up again, already decided, in the Aug 24 meeting). Renamed
+  from `-UNCONFIRMED-extra` to pt5 of 5 and folded into the July 29 set.
+- `Note__20260824_1008_otter.ai.mp3` (10:08am, ~48 min) is confirmed
+  unrelated to the school meetings (wasn't sent as one of the transcripts,
+  doesn't fit any meeting's pattern) and was dropped from the upload set
+  entirely -- not part of the 15 videos now queued for upload.
+- June 15 was reclassified from Townhall to Board (see above) -- this
+  required renaming the 3 video files (both the originals and the
+  enhanced versions) and regenerating their baked-in title-card frames
+  (the on-screen "Vista Townhall Meeting" text), since the title card is
+  a static image composited into the video, not just a filename.
 
 Per Russ's preference, chunked recordings were kept as separate numbered
 parts (pt1, pt2, ...) rather than concatenated into one file per meeting.
