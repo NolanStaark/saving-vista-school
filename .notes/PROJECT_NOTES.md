@@ -1851,3 +1851,58 @@ meetings.html, policies.html, letters.html, and all four es/ counterparts
 (using the Spanish copy already written for es/index.html's "Participe"
 section). letters.html was done via blob-surgery again (another chat's
 topics-refactor WIP is still pending there).
+
+## "Play nice with the Board" wording pass + salary chart refresh (Sept 2026, in progress)
+
+Russ asked for three things in one request: (1) update the admin salary
+chart with fresh Transparent Utah numbers, (2) publish the new Hurst
+letter, (3) soften/remove mentions of the Board's own decisions on the
+site.
+
+**Done:**
+- Hurst letter (Ezra & Elise Hurst, "Grievance on Staff Turnover,
+  Communication, and School Culture") -- Russ published it himself by
+  flipping Status in the "Submit a Letter of Concern" sheet; no site-code
+  change needed. Screened it against the defamation checklist first: it's
+  mostly the family's own direct experience, explicitly flags hearsay as
+  unverified, and the only named staff member (Blasko) is described re:
+  his own official decisions -- no red flags found.
+- `index.html` + `es/index.html` "Why This Site Exists" paragraph: removed
+  "by the Vista School Board and" / "de la Junta Directiva de Vista School
+  y" so it now reads as administration decisions deserving scrutiny, not
+  Board decisions -- matches the framing already used in about.html's
+  Mission section. Exact wording was Russ's. Committed (39d3896... commit,
+  not yet pushed as of this note).
+- Left a second Board-critical line untouched (index.html, Blasko-hiring
+  paragraph: "...parents raised concerns both about this background and
+  about the Board's lack of communication around the decision.") --
+  Russ didn't ask for this one to change, and it's explicitly attributed to
+  St. George News' reporting rather than stated as the site's own claim,
+  so it's lower-risk as-is. Flagged to Russ; revisit if he wants it
+  softened too.
+
+**Not done / blocked:**
+- Salary chart (`assets/leadership/salary-comparison-chart.png`,
+  referenced from `index.html` and `es/index.html`): confirmed fresh
+  Transparent Utah numbers for two of the three bars via the live site
+  (Blasko/Director: $189,771.60 wages / $223,353.09 total for FY2026, vs
+  $180,745.56/$216,232.28 in the current FY2025 chart; Bradshaw, now
+  titled Chief Operating Officer -- was "Finance and IT Director" --
+  $150,663.96 wages / $177,904.88 total FY2026 vs $141,924.25/$156,203.52
+  FY2025). Per Russ's call, the 3rd bar ("Asst. Principal/Comparable
+  Role") stays at its last clean FY2025 figures (Vista $93,938 / GWA
+  $103,810) rather than using FY2026, because that role changed hands
+  mid-year (Christine Giles moved from GWA Assistant Director to Vista
+  Deputy Director) and neither side has a clean full FY2026 number for it.
+  STILL NEEDED before the chart can be regenerated: George Washington
+  Academy's FY2026 Director and COO-equivalent figures (Vista's own FY2026
+  numbers are confirmed above, but I could not reliably browse GWA's admin
+  roster on transparent.utah.gov's employee-search UI without already
+  knowing the employee's name -- the entity/title filters only populate
+  from an existing name-search result set). Chart itself was built with a
+  matplotlib script (`make_charts.py`) that lived only in a previous
+  session's cloud scratchpad, not committed to this repo -- whoever
+  regenerates it will need to rebuild that script from the numbers above
+  rather than finding it in the repo.
+- Committed changes above have NOT been pushed to origin/main yet -- Russ
+  needs to `git push` before any of this goes live.
