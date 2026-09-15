@@ -559,6 +559,28 @@ h2 {
 
 .category-badge .cat-icon { flex-shrink: 0; }
 
+/* Letters page: short subject-matter tags (what the letter is mainly
+   about), which replaced the old single "addressed to" badge. Deliberately
+   separate from .category-badge above -- that class is still used by
+   policies.html's cards, so it's left alone. */
+.topic-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.topic-tag {
+  display: inline-block;
+  background: #eef2f6;
+  color: var(--navy);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
 .letter-card a.download {
   font-weight: 600;
   text-decoration: none;
@@ -1299,6 +1321,105 @@ footer.site-footer a {
 }
 
 .policy-card-note strong { color: var(--navy); }
+
+/* Policies page: "Worth a closer look" carousel -- same one-at-a-time
+   card + prev/next + dots pattern as the home page's social-post
+   carousel, reused here for flagged-policy blurbs. */
+.policy-flags {
+  margin: 24px 0 0;
+}
+
+.policy-flags-heading {
+  margin: 0 0 4px;
+  color: var(--navy);
+  font-size: 1.15rem;
+}
+
+.policy-flags-subhead {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.policy-flag-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+
+.policy-flag-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+
+.policy-flag-link {
+  color: var(--navy);
+  text-decoration: none;
+}
+
+.policy-flag-link:hover {
+  text-decoration: underline;
+}
+
+.policy-flag-blurb {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.policy-flag-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.policy-flag-nav-btn {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--navy);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.policy-flag-nav-btn:hover {
+  background: #eef2f6;
+}
+
+.policy-flag-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.policy-flag-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+}
+
+.policy-flag-dot.is-active {
+  background: var(--navy);
+  width: 18px;
+  border-radius: 4px;
+}
+
 
 /* Home hero: positioning context for the reaching-figure-and-star
    watermark icon (same treatment/markup as .page-header-graphic on the
