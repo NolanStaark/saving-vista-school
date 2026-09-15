@@ -1992,3 +1992,58 @@ Continuing the tabs/simplification rework from earlier this session:
   this session's changes (tabs rework, new card, carousel) -- now
   meaningfully out of sync with the English version. Flag to Russ /
   whoever picks up the Spanish pages next.
+
+
+## policies.html: "Worth a closer look" rebuilt as a full-content warning callout (Sept 2026, cont'd)
+
+Follow-up to the carousel work in the section above. Russ's feedback: the
+five flagged cards sitting inside the same tab-filterable grid as neutral
+reference cards, with the carousel just teasing/linking into them, wasn't
+enough separation -- "those concerning policies need their own special
+callout, the rest are for direct research and an aggregate of relevant
+policies to parents."
+
+- All five flagged cards (`policy-truancy`, `policy-dress-code`,
+  `policy-code-of-conduct`, `policy-classroom-recording`,
+  `policy-abusive-conduct`) were removed from `.policy-list` entirely.
+  The tabbed grid is now purely neutral reference material: 15 cards
+  (was 20), no `data-category="vista"`/`"engagement"` cards carry
+  flagged content anymore.
+- The old `.policy-flags`/`.policy-flag-*` carousel (title + blurb
+  teaser, gold left-border, click-through to the grid card) is gone --
+  fully replaced, not kept alongside the new section. If you see
+  `.policy-flag-` anywhere it's stale.
+- New section, `.policy-alerts` (`policy-alerts*`/`policy-alert-*`
+  classes in style.css): a warning-toned callout -- amber top border,
+  amber-tinted background, a flag SVG icon next to the "Worth a closer
+  look" heading, using two new root CSS variables (`--amber: #c2410c`,
+  `--amber-bg: #fff7ed`) added alongside the existing palette. Visually
+  distinct on purpose from the site's normal gold-note style used
+  elsewhere (e.g. `.policy-card-note`, now unused dead CSS).
+- Still a one-at-a-time carousel (prev/next + dots + a "N of 5" counter),
+  same interaction pattern as the home page's social-post carousel and
+  the old flags carousel -- but each of the 5 slides is now a static
+  `<article class="policy-alert-card">` with the FULL original card
+  content (heading, factual paragraph(s), source links, and images for
+  the truancy and dress-code cards) plus a `.policy-alert-why` box
+  ("Why this matters: ...", merged from the old teaser-blurb text).
+  Slides are toggled with the `hidden` attribute rather than the
+  previous templated-text-swap approach, since rich content (images,
+  multiple links) doesn't fit cleanly into JS string templates. The JS
+  is a plain script block that queries `.policy-alert-card` elements
+  directly -- adding a 6th flagged policy means adding one more
+  `<article>` in the same markup pattern; no JS changes needed.
+- The old "click title -> switch tab -> scroll to grid card" behavior
+  was removed along with it, since the flagged cards no longer exist in
+  the grid to jump to. Each alert card's own source links are the way to
+  reach the primary documents now.
+- `es/policies.html` is now further out of sync with the English page
+  (this redesign was not applied there, on top of the earlier tabs/
+  carousel work already flagged as missing). Still not something Russ
+  has asked for in this chat -- flagging again for whoever picks up the
+  Spanish pages next.
+- Committed as `9cdaf05` ("Policies page: pull flagged concerns into
+  their own warning-toned callout"). Branch is still ahead of
+  `origin/main` and has NOT been pushed -- Russ needs to `git push`
+  before any of this (this change and the earlier commits in this
+  session) goes live.
