@@ -1333,7 +1333,7 @@ footer.site-footer a {
    title + teaser, so slides are static markup toggled with the hidden
    attribute instead of templated text swaps. */
 .policy-alerts {
-  margin: 28px 0 0;
+  margin: 0;
   padding: 20px 22px 22px;
   background: var(--amber-bg);
   border: 1px solid #f3d4b0;
@@ -1454,6 +1454,45 @@ footer.site-footer a {
   margin-left: 4px;
   color: var(--muted);
   font-size: 0.82rem;
+}
+
+/* Policies page: two-column layout so "Worth a closer look" runs as a
+   real right-hand sidebar alongside the main policy content, instead of
+   sitting in its own full-width section between the intro and the tabs.
+   Same grid + sticky-sidebar shape as the home page's
+   .home-main-layout/.home-sidebar pattern, scoped to this page since
+   .policy-alerts supplies its own card styling (the sidebar itself is
+   just a positioning wrapper, no box of its own). Collapses to a single
+   stacked column -- sidebar second, below the main content -- on
+   narrower screens, same breakpoint as the home page version. */
+.policy-main-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* Grid items default to a content-based automatic minimum width, which
+   lets a paragraph's un-wrapped ("max-content") width force the whole
+   column wider than the viewport on narrow screens. min-width: 0 lets
+   both columns shrink and wrap normally instead. */
+.policy-main-column {
+  min-width: 0;
+}
+
+.policy-sidebar {
+  position: sticky;
+  top: 24px;
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .policy-main-layout {
+    grid-template-columns: 1fr;
+  }
+  .policy-sidebar {
+    position: static;
+  }
 }
 
 
