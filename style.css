@@ -549,16 +549,16 @@ h2 {
    color on the navy banner background -- that under-specificity was why
    this previously rendered almost invisibly dark-on-navy. */
 .count-banner-cta a.count-note-flag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  /* Plain inline (not flex) -- this link's text wraps across multiple
+     lines in the narrow banner column, and inline-flex was breaking that
+     wrap into a word-per-line staircase instead of normal text flow. */
+  display: inline;
   color: var(--gold);
   font-weight: 700;
   font-size: 0.85rem;
   text-decoration: underline;
   text-decoration-color: var(--gold);
   text-underline-offset: 3px;
-  align-self: flex-start;
 }
 
 .count-banner-cta a.count-note-flag:hover,
@@ -572,8 +572,14 @@ h2 {
    users and anyone with hover unavailable), the tooltip is just a faster
    answer for a mouse user who hovers instead of clicking. */
 .count-note-wrap {
+  /* Block, not inline -- an inline positioning context that wraps across
+     multiple lines (this link's text does) has no single well-defined box
+     for an absolutely-positioned child to anchor to, and browsers place it
+     inconsistently. Block gives it one unambiguous box; it was already
+     effectively its own row in this flex column, so nothing visually
+     changes except the tooltip now anchors predictably. */
   position: relative;
-  display: inline-flex;
+  display: block;
 }
 
 .count-note-tooltip {
