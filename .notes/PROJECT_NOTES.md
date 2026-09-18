@@ -2123,3 +2123,59 @@ tabs.
   callout as a right sidebar"). Still not pushed -- branch keeps growing
   ahead of `origin/main`; Russ needs to `git push` to make any of this
   session's policies.html work (this commit plus the two above it) live.
+
+## Accessibility pass: <main> landmark, touch targets, contrast, heading order (Sept 2026)
+
+Russ ran Chrome DevTools' Lighthouse accessibility audit page-by-page and
+shared screenshots of the failures as he went. To pin down the exact
+elements (screenshots only show titles, not selectors), copied the
+site's static files into a scratch dir in the cloud sandbox, served them
+with `python3 -m http.server`, and ran the CLI `lighthouse` (same
+version DevTools reported, 13.4.1) against `localhost` with a custom
+screen-emulation config matching Russ's DevTools viewport (878x830,
+desktop form factor) -- the live site itself isn't reachable from the
+cloud sandbox's egress proxy (403), so this local-server approach is the
+way to reproduce a Lighthouse run against this site from Claude without
+staging everything through the device bridge repeatedly. Config used is
+disposable/not committed; recreate if this comes up again (a
+`lighthouse:default`-extending config with `formFactor: "desktop"` and
+an explicit `screenEmulation` block matching whatever viewport is in the
+screenshot -- the audits actually shown depend on viewport width because
+of this site's own responsive breakpoints, e.g. the mobile hamburger nav
+kicks in under 1099px).
+
+Two commits so far, both verified by rerunning the local Lighthouse
+against the fixed files before committing:
+
+- `4a80e21` -- every page (English + es/) was missing a `<main>`
+  landmark entirely; wrapped each page's real content (between the
+  disclaimer-bar and the footer) in `<main>`. Also fixed the homepage's
+  "Next Board Meeting ... details ->" pill link, which was only ~23px
+  tall (under the 24x24px touch-target minimum) -- gave it padding +
+  matching negative margin so the clickable area grew without changing
+  its visual size.
+- `cb24767` -- policies.html (+ es/) specifically: (1) headings skipped
+  from h1 straight to h3 for the topic cards, no h2 in between -- added
+  a visually-hidden `<h2>` (new `.sr-only` utility class in style.css)
+  ahead of the tab/card list; (2) the inactive tab-count/tag-count
+  badges used `var(--muted)` at reduced opacity, which fails contrast
+  (~2.7-3:1 vs the 4.5:1 AA minimum) against their white background --
+  dropped the opacity on the inactive state only (active states are
+  dark-on-light or light-on-maroon and stay well above 4.5:1 even
+  reduced); (3) the "Worth a closer look" carousel's pagination dots
+  were literally 7x7px with 6px gaps -- kept them visually the same
+  size (drawn via `::after` now) but gave each `<button>` itself a
+  24x24px hit area.
+
+**Worth checking on other pages** (not yet audited): the generic
+`.tag-count { opacity: 0.7 }` rule (style.css, used by `.filter-bar
+.tag` -- currently only `es/policies.html`'s filter bar, since the
+English `policies.html` moved to the newer `.policy-tabs` component)
+and the `.policy-alert-dot` pattern were only confirmed fixed on
+policies.html/es/policies.html specifically. If Russ runs Lighthouse
+against meetings.html, about.html, or letters.html and finds either
+contrast or touch-target failures, check whether they share one of
+these same CSS rules before assuming it's a new issue.
+
+Committed as `4a80e21` and `cb24767`. Not pushed -- remind Russ to
+`git push`.
