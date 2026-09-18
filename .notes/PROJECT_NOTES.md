@@ -2223,3 +2223,105 @@ in-progress edits from another chat). `PAGES` in `build_pages.py` and the
 write its `.tmpl` + that page's two locale JSON files, add its slug to
 `PAGES`, run the script. Flag to Russ whether/when to roll this out to the
 rest of the site -- pilot was intentionally scoped to one page first.
+
+## Accessibility pass, round 2: manual-check items from Lighthouse's "Additional items to manually check" list (Sept 2026)
+
+Follow-up to the "Accessibility pass" note above. Russ asked to also work
+through Lighthouse's 10 manual-check items (keyboard focusability,
+tab/visual order, focus traps, focus on new content, landmarks, offscreen
+content hidden from AT, custom control labels/roles) across the whole
+site, not just what the automated audit flags. Same local-server
+reproduction approach as before (site's own files served over
+`python3 -m http.server`, since the live site isn't reachable from the
+sandbox), this time driven with Playwright: ran the full axe-core
+ruleset (broader than what Lighthouse's accessibility category surfaces)
+against every page, plus a scripted Tab-key walk of every page logging
+each focused element's role/label/bounding box, to check real keyboard
+behavior rather than just static markup.
+
+Two real, sitewide issues turned up and were fixed (committed together,
+verified with a clean rerun of the same Playwright audit -- 0 axe
+violations on all 11 pages after):
+
+- **Landmarks**: `.disclaimer-bar` sat between `</header>` and `<main>`
+  on every single page -- a block of real content outside every
+  landmark (axe's `region` rule: "All page content should be contained
+  by landmarks"). Moved it to be the last child inside `<header>` on
+  every page (English + es/); purely a DOM nesting change, no visual
+  effect (nothing in style.css depends on it being a header sibling).
+- **Tab order vs. visual order**: `letters.html`/`es/letters.html`'s
+  `.submit-column` used `order: -1` in the `max-width: 860px` media
+  query to visually show the submit form ABOVE the letters list on
+  mobile, while `.submit-column` stayed SECOND in the DOM -- so a
+  keyboard/screen-reader user at that width would tab through the
+  (visually-below) letters list and its search/filter controls before
+  ever reaching the (visually-above) submit form. Fixed by swapping the
+  actual DOM order (`submit-column` now comes first) and replacing the
+  `order` hack with explicit `grid-column: 1` / `grid-column: 2` on
+  `.letters-column` / `.submit-column` at the wider (two-column)
+  breakpoint, so DOM order matches the mobile (stacked) visual order --
+  the breakpoint most vulnerable to this kind of mismatch -- while
+  desktop keeps its existing side-by-side look via explicit column
+  placement instead of relying on source order. Verified both the
+  narrow (submit visually first) and wide (letters-column still on the
+  left, same width ratio as before) layouts with Playwright.
+
+Also touched, smaller/more surgical:
+
+- `policies.html`'s topic filter (`.policy-tabs`) used
+  `role="tablist"`/`role="tab"`/`aria-selected`/`role="tabpanel"`, but
+  it isn't really a tab panel (it's a filter that a free-text search box
+  can override, so "exactly one tab selected" doesn't hold once you're
+  searching). Axe didn't flag it as broken -- the ARIA was
+  syntactically valid -- but the role was the wrong one, which is
+  exactly what manual review is supposed to catch. Switched to
+  `role="group"` on the container and `aria-pressed` on each button
+  (mirrors the correct existing pattern on `es/policies.html`'s
+  `.filter-bar`, which never had a fake-tablist), dropped the now
+  inaccurate `role="tabpanel"`/`aria-labelledby` on the results panel,
+  and updated the filtering script to match (`aria-selected` ->
+  `aria-pressed`).
+- `policies.html`/`es/policies.html`'s "Showing X of Y topics" counter
+  got `aria-live="polite"` so screen-reader users searching/filtering
+  hear the result count change, matching the pattern already used by
+  `letters.html`'s letter count and list (`aria-live="polite"`).
+
+Reviewed but left alone (already correct, verified rather than assumed):
+the mobile hamburger nav (real `display:none` when closed -- unreachable
+by Tab, not just visually hidden; Enter/Space and Escape both work); the
+home-page social-post carousel and the policy-alert carousel (real
+`<button>`s with `aria-label`/`aria-current`, autoplay that pauses on
+both `mouseenter` and `focusin` so keyboard users can stop it too); the
+about.html contact form's spam honeypot field (`display:none` +
+`tabindex="-1"`, correctly out of both the AT tree and tab order); no
+site-wide `outline: none` anywhere suppressing focus rings. The
+side-by-side two-column layouts (home page's main column + social
+sidebar, policies' main column + "Worth a closer look" sidebar,
+about.html's info + contact-form columns) all put the wider/primary
+column first in the DOM and the sidebar second, which reads oddly to a
+naive "does Y always increase" check (the sidebar starts back up near
+the top of the page, visually) but is the standard, accessible pattern
+for parallel columns -- left-to-right, not top-to-bottom, and not a
+defect.
+
+Not pushed -- remind Russ to `git push`.
+
+## FLAG FOR OTHER CHATS: this file's working-tree copy is currently behind HEAD
+
+As of this note, `.notes/PROJECT_NOTES.md` on disk (the actual working
+file, not what's committed) is missing the "Accessibility pass" section
+above it in git history (and, depending on timing, possibly missing
+this section and the one about `about.html`'s template pilot too) --
+some other chat's edit landed on top of a copy of this file it had read
+*before* an intervening commit, so its write silently dropped that
+commit's addition from the working tree even though the addition is
+still safely in git history at that commit.
+
+**If you're editing this file and notice content you expected is
+missing**: diff your working copy against `git show HEAD:.notes/PROJECT_NOTES.md`
+before you save/commit -- if HEAD has sections your working copy
+doesn't, merge them back in rather than committing over them (same
+advice as the existing `letters.html` flag above). This note was added
+via the same "commit against HEAD directly, don't touch the possibly-
+stale working file" technique used for `letters.html`, specifically so
+it wouldn't itself get lost the same way.

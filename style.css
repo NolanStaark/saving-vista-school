@@ -337,13 +337,28 @@ h2 {
   margin-top: 8px;
 }
 
+/* submit-column comes FIRST in the HTML (so it's first in reading/tab
+   order -- it's also shown first, above the letters list, once the
+   layout stacks to one column on mobile below). These explicit column
+   placements put letters-column back on the left (wider) and
+   submit-column on the right (narrower) at this two-column width,
+   independent of DOM order -- keeps the established desktop layout
+   without an `order` swap that would leave keyboard/screen-reader
+   users hitting the letters list before the submit form they see
+   second, since order only changes visual position, not tab order. */
+.letters-column { grid-column: 1; }
+.submit-column { grid-column: 2; }
+
 .submit-column h2 {
   font-size: 1.3rem;
 }
 
 @media (max-width: 860px) {
   .letters-layout { grid-template-columns: 1fr; }
-  .submit-column { order: -1; }
+  .letters-column,
+  .submit-column {
+    grid-column: auto;
+  }
 }
 
 .filter-bar {
