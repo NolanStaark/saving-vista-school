@@ -1205,6 +1205,13 @@ footer.site-footer a {
   color: var(--navy-dark);
   font-weight: 700;
   text-decoration: underline;
+  /* Padding + matching negative margin enlarges the clickable/tappable
+     area to meet the 24x24px touch-target minimum (the pill's own text
+     is short and would otherwise render well under that) without
+     growing the pill's visual footprint or pushing neighboring layout. */
+  display: inline-block;
+  padding: 7px 4px;
+  margin: -7px -4px;
 }
 
 /* Home page: "A Closer Look at Vista's Leadership" evidence/exhibit cards */
