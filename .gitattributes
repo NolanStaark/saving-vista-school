@@ -1,0 +1,24 @@
+# Normalize line endings to LF in the repository regardless of any
+# individual clone's core.autocrlf setting. Added Sept 2026 after
+# PROJECT_NOTES.md, letters.html, es/letters.html, and
+# assets/data/meetings.json all showed up as "modified" on Russ's
+# Windows checkout with 1000+ line diffs that were purely CRLF vs LF
+# noise (confirmed byte-identical to HEAD once normalized) -- no repo
+# history was affected (nothing was ever actually committed with CRLF),
+# this just stops it from recurring on the working-tree side.
+* text=auto eol=lf
+
+# Binary/media assets: never touch line endings (text=auto already
+# detects most of these as binary, but this makes it explicit and
+# avoids any auto-detection edge case corrupting them).
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.mp3 binary
+*.mp4 binary
+*.docx binary
+*.woff binary
+*.woff2 binary
