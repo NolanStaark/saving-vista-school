@@ -1,0 +1,13 @@
+{
+  "nav": {
+    "home": "Home",
+    "letters": "Letters of Concern",
+    "policies": "Policies &amp; Rights",
+    "meetings": "Meetings",
+    "about": "About &amp; Contact",
+    "toggle_aria": "Toggle navigation menu",
+    "lang_switch_aria": "Switch to Español"
+  },
+  "disclaimer": "Saving Vista School is an independent nonprofit run by concerned parents. We are not affiliated with, endorsed by, or operated by Vista School, its administration, or the Utah State Charter School Board.",
+  "footer_rights": "All rights reserved."
+}

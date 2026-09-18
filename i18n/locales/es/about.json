@@ -1,0 +1,23 @@
+{
+  "title": "Sobre Nosotros y Contacto — Saving Vista School",
+  "meta_description": "Información sobre Saving Vista School y cómo comunicarse con nosotros.",
+  "h1": "Sobre Nosotros y Contacto",
+  "subhead": "¿Tiene una pregunta, o necesita comunicarse con la oficina de la escuela? Contáctenos a continuación.",
+  "section_about_heading": "Sobre Vista School",
+  "section_about_body": "Vista School es una escuela autónoma pública y gratuita en Ivins, Utah, que atiende a estudiantes de kínder a noveno grado (K&ndash;9), con énfasis en Artes, Tecnología, y las materias STEM (fuente: <a href=\"https://www.vistautah.com/\" target=\"_blank\" rel=\"noopener\">vistautah.com</a>). Esta información se ofrece solo como contexto &mdash; Saving Vista School no está afiliada con Vista School, ni habla en su nombre.",
+  "section_mission_heading": "Nuestra Misión",
+  "section_mission_body": "Saving Vista School es una organización sin fines de lucro formada por un grupo de padres de familia preocupados. Creemos que varias decisiones recientes de la administración de la escuela merecen un análisis más detenido, y estamos dialogando directamente con la Junta Directiva (Charter Board) de Vista y con la Junta Estatal de Escuelas Autónomas de Utah para exigir mayor transparencia y rendición de cuentas.",
+  "email_label": "Correo electrónico",
+  "form_subject": "Nuevo mensaje desde savingvistaschool.org (versión en español)",
+  "form_heading": "Envíenos un Mensaje",
+  "form_label_name": "Nombre",
+  "form_label_email": "Correo electrónico",
+  "form_label_message": "Mensaje",
+  "form_button": "Enviar",
+  "form_note_privacy": "Los mensajes enviados a través de este formulario llegan a nuestro correo de la organización (<a href=\"mailto:savingvistaschool@gmail.com\">savingvistaschool@gmail.com</a>). Haremos todo lo posible por responder pronto.",
+  "form_note_sent": "Gracias — su mensaje fue enviado.",
+  "alt_heading": "Participe",
+  "alt_body": "Sin importar cómo haya llegado aquí, hay una manera de ayudar &mdash; comparta lo que sabe, o simplemente comuníquese con una pregunta.",
+  "alt_btn_submit": "Envíe una Carta de Preocupación",
+  "alt_btn_contact": "Contáctenos"
+}

@@ -2179,3 +2179,47 @@ these same CSS rules before assuming it's a new issue.
 
 Committed as `4a80e21` and `cb24767`. Not pushed -- remind Russ to
 `git push`.
+
+## about.html: piloted a template + locale-file build system (Sept 2026)
+
+Russ's underlying concern with Spanish localization: every `es/` page is a
+full independent HTML copy, so any structural/layout change has to be
+hand-mirrored into the other language's file -- easy to forget, easy to
+drift. Piloted a fix on `about.html`/`es/about.html` before touching the
+other pages.
+
+**How it works:** `i18n/templates/about.html.tmpl` holds the page's HTML
+structure ONCE, with `{{ }}` tokens in place of anything that varies by
+language (nav labels, headings, body copy, meta tags, the `lang`
+attribute, asset-path prefixes, the language-switcher's target link and
+flag order). `i18n/locales/en/` and `i18n/locales/es/` hold the actual
+strings as JSON (`common.json` for nav/disclaimer/footer text shared by
+every page, `about.json` for this page's own copy). `scripts/build_pages.py`
+renders the template once per language and writes `about.html` (English,
+repo root) and `es/about.html` (Spanish, `es/`) from it.
+
+Going forward, for `about.html`: a **layout/structure change** goes in the
+`.tmpl` file (once); a **wording change** goes in the relevant locale JSON
+(once, in that language); then run `python3 scripts/build_pages.py` from
+the repo root and commit the regenerated `about.html` + `es/about.html`
+alongside the template/locale edit. Don't hand-edit `about.html` or
+`es/about.html` directly anymore -- they're generated output now and a
+direct edit will just get overwritten next time someone runs the build.
+
+Verified the generator reproduces the live pages exactly: diffed the
+build's output against the previously-live files with HTML comments
+stripped and whitespace collapsed (the way a browser treats text nodes)
+and got a byte-for-byte match on both files. The only literal-source-level
+differences are non-rendering (paragraph text collapsed to one line
+instead of hand-wrapped across several, and a stale internal HTML comment
+in the old `about.html` -- "Replace/refine with your own exact wording" --
+dropped since it no longer applied).
+
+**Not yet migrated:** `meetings.html`, `policies.html`, `index.html`, and
+`letters.html` (all still full hand-duplicated `es/` copies as before --
+untouched by this pass, and `letters.html` currently has separate
+in-progress edits from another chat). `PAGES` in `build_pages.py` and the
+`LOCALES` config are written generically so adding another page later is:
+write its `.tmpl` + that page's two locale JSON files, add its slug to
+`PAGES`, run the script. Flag to Russ whether/when to roll this out to the
+rest of the site -- pilot was intentionally scoped to one page first.

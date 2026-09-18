@@ -1,0 +1,13 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "letters": "Cartas de Preocupación",
+    "policies": "Políticas y Derechos",
+    "meetings": "Reuniones",
+    "about": "Sobre Nosotros y Contacto",
+    "toggle_aria": "Abrir o cerrar el menú de navegación",
+    "lang_switch_aria": "Cambiar a inglés"
+  },
+  "disclaimer": "Saving Vista School es una organización sin fines de lucro independiente, dirigida por padres de familia preocupados. No estamos afiliados con Vista School, ni somos avalados u operados por la escuela, su administración, o la Junta Estatal de Escuelas Autónomas de Utah (Utah State Charter School Board).",
+  "footer_rights": "Todos los derechos reservados."
+}
