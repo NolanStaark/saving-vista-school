@@ -54,6 +54,21 @@ h1, h2, h3,
 a { color: var(--navy); }
 a:hover { color: var(--maroon); }
 
+/* Visually hides content while keeping it in the accessibility tree --
+   for headings/labels that need to exist for correct document structure
+   or screen-reader context but shouldn't show up visually. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -399,7 +414,12 @@ h2 {
 }
 
 .policy-tabs .tab-btn .tag-count {
-  opacity: 0.65;
+  /* No opacity here (unlike most .tag-count uses) -- var(--muted) at
+     reduced opacity on this button's white background fails WCAG AA
+     contrast (~2.7:1 vs the 4.5:1 required for text this size).
+     Full-opacity muted already reads as de-emphasized next to the
+     bolder label text, and the smaller font-size below still sets it
+     apart. */
   font-size: 0.85em;
 }
 
@@ -1438,20 +1458,33 @@ footer.site-footer a {
 .policy-alert-dots {
   display: flex;
   align-items: center;
-  gap: 6px;
 }
 
+/* Each dot is a 24x24px tap target (WCAG 2.5.8 minimum) with the small
+   visible dot drawn by ::after in the middle, so the row still reads as
+   a compact row of dots -- only the (invisible) clickable area grew. */
 .policy-alert-dot {
-  width: 7px;
-  height: 7px;
+  width: 24px;
+  height: 24px;
   padding: 0;
   border: none;
-  border-radius: 50%;
-  background: var(--border);
+  background: transparent;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.policy-alert-dot.is-active {
+.policy-alert-dot::after {
+  content: "";
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.policy-alert-dot.is-active::after {
   background: var(--amber);
   width: 18px;
   border-radius: 4px;
@@ -1736,9 +1769,14 @@ footer.site-footer a {
 .card-details[open] summary { margin-bottom: 8px; }
 .card-details p { color: var(--text); margin: 0; }
 
-/* Filter bar as tabs: count badge + clearer active state */
+/* Filter bar as tabs: count badge + clearer active state.
+   No opacity on the base rule -- var(--muted) at reduced opacity on a
+   white chip background fails WCAG AA contrast (~3:1 vs the 4.5:1
+   required for text this size); the smaller font-size still
+   de-emphasizes it. The .active variant below keeps its opacity since
+   that's white text on a solid maroon chip, which stays well above
+   4.5:1 even reduced. */
 .tag-count {
-  opacity: 0.7;
   font-size: 0.78em;
 }
 
