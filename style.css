@@ -582,7 +582,12 @@ h2 {
   display: block;
 }
 
-.count-note-tooltip {
+/* .count-banner-cta span sets a pale near-white color (#eef2f6) for text
+   sitting directly on the navy banner, and that compound selector
+   (0,1,1) beats a bare .count-note-tooltip (0,1,0) -- without scoping to
+   .count-banner-cta here too, the tooltip's dark text lost to that pale
+   color and read as barely-visible light gray on its own white card. */
+.count-banner-cta .count-note-tooltip {
   display: none;
   position: absolute;
   bottom: calc(100% + 10px);
