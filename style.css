@@ -346,8 +346,8 @@ h2 {
    without an `order` swap that would leave keyboard/screen-reader
    users hitting the letters list before the submit form they see
    second, since order only changes visual position, not tab order. */
-.letters-column { grid-column: 1; }
-.submit-column { grid-column: 2; }
+.letters-column { grid-column: 1; grid-row: 1; }
+.submit-column { grid-column: 2; grid-row: 1; }
 
 .submit-column h2 {
   font-size: 1.3rem;
@@ -358,6 +358,7 @@ h2 {
   .letters-column,
   .submit-column {
     grid-column: auto;
+    grid-row: auto;
   }
 }
 
@@ -527,8 +528,9 @@ h2 {
   font-size: 0.95rem;
   text-decoration: none;
   padding: 10px 18px;
-  border-radius: 999px;
+  border-radius: 14px;
   align-self: flex-start;
+  text-align: center;
   transition: background 0.15s ease;
 }
 
