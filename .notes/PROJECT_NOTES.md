@@ -2325,3 +2325,38 @@ advice as the existing `letters.html` flag above). This note was added
 via the same "commit against HEAD directly, don't touch the possibly-
 stale working file" technique used for `letters.html`, specifically so
 it wouldn't itself get lost the same way.
+
+## URGENT fix: raw merge-conflict markers were live on es/letters.html (Sept 2026)
+
+Russ spotted literal `<<<<<<< HEAD` / `=======` / `>>>>>>> 8954136...` text
+rendering on the live Spanish "Cartas de Preocupación" page, alongside a
+duplicated letters column (one copy showing 20 letters submitted, a second
+further down the file showing 19). Root cause: commit `b5ce235` ("Resolve
+merge conflict in es/letters.html", by another concurrent chat) merged two
+branches but never actually resolved the conflict -- it committed the raw
+markers and both sides of the conflict as literal file content, then
+`e0ff1cc` (a `.gitattributes` commit) landed on top without touching it.
+That broken state was on `origin/main`, i.e. genuinely live to visitors,
+not just a local working-tree issue.
+
+Fixed in `281cf29`: removed the conflict markers and the entire duplicated
+`.letters-column` block that was trapped between them (the one with the
+stale count), keeping the other copy and correcting its count from 19 to
+20 to match `letters.html`'s current count. Verified afterward: no
+conflict-marker strings anywhere in the repo, exactly one
+`.letters-column`/`.submit-column` pair in the file (order now matches
+`letters.html`: submit column first, then letters column), no duplicate
+`id=` attributes, balanced `<div>`/`</div>` counts.
+
+**Flag for other chats**: this file was being actively edited by another
+chat concurrently while this fix was made (its working-tree state changed
+between two checks a couple minutes apart, still mid-conflict-resolution
+both times). If you're picking up `es/letters.html` next and see something
+that doesn't match what's described here, re-check the live working file
+before assuming this note is current -- and please actually verify a
+merge resolution (search for `<<<<<<<`/`=======`/`>>>>>>>` before
+committing) rather than trusting an editor's "conflict resolved" framing.
+
+**Not pushed yet -- this is the second reason (after the pilot commit
+above) `git push` is needed urgently**, since the broken version is
+currently what's live at savingvistaschool.org/es/letters.html.
