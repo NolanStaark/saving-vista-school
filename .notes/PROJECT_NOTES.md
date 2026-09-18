@@ -965,7 +965,7 @@ official record to confirm against):
   transcript
 - Jul 30, 2026 -> Townhall (4 files) -- confirmed via transcript (a speaker
   states "this is the first town hall of the 26-27 school year")
-- Aug 24, 2026 -> Board (2 files) -- confirmed vs. official record
+- Aug 24, 2026 -> Board (1 file) -- confirmed vs. official record
 - Aug 31, 2026 -> Townhall (1 file) -- confirmed via transcript (and the
   file's own name in Otter)
 
@@ -986,6 +986,24 @@ above:
   enhanced versions) and regenerating their baked-in title-card frames
   (the on-screen "Vista Townhall Meeting" text), since the title card is
   a static image composited into the video, not just a filename.
+
+**Update (Sept 18, 2026):** the ~13:40 (820s) clip that had been filed as
+"pt1 of 2" for August 24 (no transcript was ever sent for it -- it just
+happened to be adjacent in time to the real 1802 board-meeting recording)
+turned out not to be part of any Vista meeting at all. Russ confirmed
+there's only one meeting on 08/24/2026 and that clip was a different,
+unrelated video. Resolution:
+- The real board-meeting video (matches `Note__20260824_1802_otter.ai.mp3`
+  by duration, 4559-4560s) is now a single file with no part count, same
+  style as August 31 -- `2026-08-24-board-meeting.mp4` in both the
+  top-level folder and `meeting videos (enhanced)/`. Its baked-in title
+  card was re-rendered to drop the now-incorrect "Part 2 of 2" text.
+- The unrelated clip was renamed to
+  `2026-08-24-EXCLUDED-not-a-vista-meeting.mp4` and moved out of
+  `meeting videos (enhanced)/` (the folder Russ uploads from) so it can't
+  be uploaded by mistake. It was never rendered as a raw/original file --
+  only ever existed in the enhanced folder.
+- Total video count for upload is now 14 (was 15).
 
 Per Russ's preference, chunked recordings were kept as separate numbered
 parts (pt1, pt2, ...) rather than concatenated into one file per meeting.
