@@ -201,13 +201,18 @@
               which Google account currently owns the Sheet/Apps Script/Tally integration.
             -->
 
-            <p class="policy-note" style="margin-bottom:24px;">
+            <p class="policy-note" id="letters-count-note" tabindex="-1" style="margin-bottom:24px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--gold);flex-shrink:0;vertical-align:-3px;margin-right:6px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg><strong>A note on these letters:</strong> each one was written and submitted
               by the parent, staff member, or community member named below it (or kept
               anonymous at their request). They are personal accounts and opinions &mdash;
               Saving Vista School does not independently investigate or verify every
               factual claim within them, and publishing a letter here doesn't mean we
-              endorse everything it says. If you believe something published here about
+              endorse everything it says. Every letter is submitted to Vista's
+              administration, the School Board, and/or the Utah State Charter School
+              Board regardless of whether it's published here &mdash; publishing is a
+              separate, optional step, and only letters whose authors gave us express
+              permission appear below (many understandably hold back out of fear of
+              professional retaliation). If you believe something published here about
               you is inaccurate or unfair, please
               <a href="about.html#contact">contact us</a> and we'll review it.
             </p>
@@ -220,11 +225,15 @@
               </div>
               <div class="count-banner-cta">
                 <span id="count-banner-cta-text"><span class="count-banner-cta-number" id="total-count-banner-2" data-count="20">20</span> concerned parents and staff have spoken up.</span>
+                <span class="count-note-wrap">
+                  <a href="#letters-count-note" class="count-note-flag" id="count-note-flag" aria-describedby="count-note-tooltip">Why are there only <span id="visible-letters-count">6</span> letters shown?</a>
+                  <span class="count-note-tooltip" id="count-note-tooltip" role="tooltip">Every letter above was submitted to Vista's administration, the School Board, and/or the Utah State Charter School Board &mdash; publishing here is a separate, optional step, and only letters with the author's express permission appear below.</span>
+                </span>
                 <a href="#submit-a-letter" class="count-banner-link">Add your voice to support Vista &rarr;</a>
               </div>
             </div>
 
-            <h2 class="letters-heading">Read What Other Parents Have Said</h2>
+            <h2 class="letters-heading">These Parents Have Granted Permission to Display Their Letters</h2>
             <p class="letters-heading-note">
               Every letter below is shared here with the express permission of the
               person who wrote it.
@@ -427,6 +436,8 @@
       // array, so this still works for the few minutes between deploying
       // this file and redeploying the Apps Script.
       var items = Array.isArray(data) ? data : (data && Array.isArray(data.items) ? data.items : []);
+      var visibleCountEl = document.getElementById('visible-letters-count');
+      if (visibleCountEl) visibleCountEl.textContent = items.length;
       var totalSubmitted = Array.isArray(data) ? null : (data && typeof data.totalSubmitted === 'number' ? data.totalSubmitted : null);
       // If the live count differs from the page's baked-in seed (a new
       // letter came in since the last GitHub Action run), correct it --

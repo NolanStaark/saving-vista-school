@@ -539,6 +539,85 @@ h2 {
   text-decoration: none;
 }
 
+/* A direct pointer from the banner's own count down to the combined
+   "note on these letters" box (#letters-count-note), so the "why are
+   there only N shown" question is answered right where it comes up, not
+   just a box people can scroll past. Selector is deliberately scoped
+   (.count-banner-cta a.count-note-flag) and repeats the color as both
+   `color` and `text-decoration-color` so it can't lose out to the
+   page-wide `a { color: var(--navy); }` rule or an inherited underline
+   color on the navy banner background -- that under-specificity was why
+   this previously rendered almost invisibly dark-on-navy. */
+.count-banner-cta a.count-note-flag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+  text-underline-offset: 3px;
+  align-self: flex-start;
+}
+
+.count-banner-cta a.count-note-flag:hover,
+.count-banner-cta a.count-note-flag:focus-visible {
+  color: #fff;
+  text-decoration-color: #fff;
+}
+
+/* Hover/focus tooltip on the "why are there only N letters shown" link --
+   the link itself still jumps to #letters-count-note (for tap/keyboard
+   users and anyone with hover unavailable), the tooltip is just a faster
+   answer for a mouse user who hovers instead of clicking. */
+.count-note-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.count-note-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  z-index: 5;
+  width: 260px;
+  max-width: 70vw;
+  background: #fff;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.45;
+  text-decoration: none;
+  padding: 12px 14px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.count-note-tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 18px;
+  border: 6px solid transparent;
+  border-top-color: #fff;
+}
+
+.count-note-wrap:hover .count-note-tooltip,
+.count-banner-cta a.count-note-flag:focus-visible + .count-note-tooltip {
+  display: block;
+}
+
+@media (max-width: 480px) {
+  .count-note-tooltip { left: -10px; width: 220px; }
+}
+
+#letters-count-note:target {
+  outline: 3px solid var(--amber);
+  outline-offset: 2px;
+}
+
 .submit-box h3 {
   color: var(--maroon);
 }
