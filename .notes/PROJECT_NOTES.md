@@ -2360,3 +2360,69 @@ committing) rather than trusting an editor's "conflict resolved" framing.
 **Not pushed yet -- this is the second reason (after the pilot commit
 above) `git push` is needed urgently**, since the broken version is
 currently what's live at savingvistaschool.org/es/letters.html.
+
+## New convention: git worktrees per chat, to stop the blob-surgery mess (Sept 2026)
+
+Russ asked us to start branching so parallel chats stop stepping on each
+other. Plain `git branch` + `git checkout` won't actually fix this on its
+own: every chat's `device_bash` shares the SAME physical folder
+(`site/`), so if one chat checks out a different branch there, it
+instantly rewrites the files every other chat currently has open --
+switching branches in a shared working directory is itself the collision,
+regardless of how many branches exist. Blob-surgery, the working-tree
+rebases, and the "chat A destroyed chat B's WIP" incident earlier this
+month all trace back to this same root cause: multiple chats, one
+checkout.
+
+**The actual fix is `git worktree`, not just branches.** A worktree is a
+second, independent folder checked out from the same `.git` history on
+its own branch -- editing files in one worktree cannot touch another
+worktree's files, even though they share commits/history. From now on:
+
+1. **Starting new work**: don't edit directly in `site/`. Instead, from
+   `site/`, run:
+   ```
+   git fetch origin main
+   git worktree add ../worktrees/<short-topic> -b work/<short-topic> origin/main
+   ```
+   (`<short-topic>` = something like `letters-topics` or `salary-chart`.)
+   This creates a new sibling folder at
+   `saving-vista-school-site/worktrees/<short-topic>/` on its own branch,
+   already up to date with origin/main. Do ALL editing and committing for
+   that task inside that folder from then on -- never back in `site/`.
+
+2. **Finishing work**: from inside the worktree folder:
+   ```
+   git fetch origin main
+   git rebase origin/main        # resolve any conflicts here, in isolation
+   ```
+   Then switch to the shared `site/` folder (which should be left on
+   `main` with a clean working tree specifically so this step is always
+   safe) and fast-forward it in:
+   ```
+   cd ../../site
+   git merge work/<short-topic>   # should fast-forward cleanly after the rebase above
+   git push origin main
+   ```
+   Then clean up: `git worktree remove ../worktrees/<short-topic>` and
+   `git branch -d work/<short-topic>`.
+
+3. **`site/` itself is now "shared read/integration space" only** -- treat
+   it as something that should always be clean and on `main`, not a place
+   to make edits. If you find uncommitted changes sitting in `site/`
+   (another chat's old-style WIP from before this convention), leave them
+   alone per the existing git-safety rule; don't `git add`/commit files
+   you didn't create. They'll get cleaned up as those chats finish or as
+   someone manually migrates them into a worktree branch.
+
+4. This doesn't make merge conflicts impossible -- two branches touching
+   the same lines of the same file will still conflict at merge/rebase
+   time -- but it's a conflict resolved deliberately in one place, once,
+   instead of a working tree silently drifting out from under whoever
+   else is using it. It also means a chat's own uncommitted WIP is safe
+   from other chats by construction, since no one else's `device_bash`
+   calls touch that worktree's folder.
+
+Whoever reads this next: if `site/` has uncommitted changes that predate
+this note, that's leftover from before the convention -- fine to leave as
+is until that chat wraps up naturally.
