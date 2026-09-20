@@ -624,11 +624,6 @@ h2 {
   .count-note-tooltip { left: -10px; width: 220px; }
 }
 
-#letters-count-note:target {
-  outline: 3px solid var(--amber);
-  outline-offset: 2px;
-}
-
 .submit-box h3 {
   color: var(--maroon);
 }
