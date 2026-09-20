@@ -2426,3 +2426,27 @@ worktree's files, even though they share commits/history. From now on:
 Whoever reads this next: if `site/` has uncommitted changes that predate
 this note, that's leftover from before the convention -- fine to leave as
 is until that chat wraps up naturally.
+
+## Local preview before pushing (Sept 2026)
+
+Russ wants to preview a change on his own machine before it goes live
+(GitHub Pages serves straight off `main`, so a push is instant and public
+-- there's no staging step otherwise).
+
+Added `preview.bat` one level up from this repo, at
+`saving-vista-school-site/preview.bat` (a sibling of `site/`, NOT inside
+the git repo -- it's a local convenience tool, not site content, so it's
+never committed and never gets published). Double-clicking it (or running
+it from a terminal) serves the `site/` folder at `http://localhost:8000`
+(or the next free port) and opens it in the default browser via Python's
+built-in `http.server` -- same method Russ has already been using
+locally. Pass a folder name to preview something else instead, e.g.:
+```
+preview.bat worktrees\some-topic
+```
+to preview a specific in-progress worktree (see the git-worktree
+convention above) before it's merged into `site/` and pushed.
+
+Whoever sets up a new worktree for a task: mention `preview.bat
+worktrees\<topic>` to Russ if he'll want to eyeball it before you merge
+it in, since that's the actual pre-push preview step now available.
