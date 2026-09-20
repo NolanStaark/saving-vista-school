@@ -2450,3 +2450,17 @@ convention above) before it's merged into `site/` and pushed.
 Whoever sets up a new worktree for a task: mention `preview.bat
 worktrees\<topic>` to Russ if he'll want to eyeball it before you merge
 it in, since that's the actual pre-push preview step now available.
+
+## Standing rule: always give Russ the preview.bat command (Sept 2026)
+
+Whenever a chat creates or updates a worktree, it must tell Russ the exact
+command to preview it -- don't just mention that worktrees/preview.bat
+exist as a concept. Every response that touches a worktree should include
+the literal line, e.g.:
+```
+preview.bat worktrees\<topic>
+```
+using that task's real folder name. Same idea as the existing "always
+remind Russ to git push" rule -- the point is he should never have to
+recall the convention or guess a folder name himself, just copy/paste
+what the chat gives him.
