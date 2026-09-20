@@ -2464,3 +2464,19 @@ using that task's real folder name. Same idea as the existing "always
 remind Russ to git push" rule -- the point is he should never have to
 recall the convention or guess a folder name himself, just copy/paste
 what the chat gives him.
+
+## preview.bat path gotcha: Russ's terminal is usually inside site\ (Sept 2026)
+
+Russ's PowerShell prompt is normally already `cd`'d into
+`saving-vista-school-site\site`, but `preview.bat` lives one level up
+(deliberately -- see note above, it's outside the git repo on purpose).
+Running bare `preview.bat ...` from inside `site\` fails in PowerShell
+("not recognized") since PowerShell won't resolve a script from the
+current directory without an explicit path (unlike cmd.exe).
+
+**So the command a chat gives Russ needs the leading `..\`**, e.g.:
+```
+..\preview.bat worktrees\<topic>
+```
+assuming his prompt is inside `site\` (the normal case). Don't just say
+`preview.bat worktrees\<topic>` -- that will fail for him as-is.
