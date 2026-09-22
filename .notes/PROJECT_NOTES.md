@@ -1037,6 +1037,45 @@ back and confirm the playlist IDs already in meetings.html are correct
 (they should be, per the above) or update them if Russ used different
 playlists.
 
+## YouTube captions: forced-aligned .srt files (Sept 2026)
+
+Each meeting video now has a matching `.srt` next to it in
+`Claude outputs/meeting videos/meeting videos (enhanced)/` (same basename).
+YouTube's caption uploader rejects a plain Otter `.txt` ("Unable to parse
+selected file") -- it needs per-line timecodes.
+
+**First attempt (bad, do not repeat):** estimated timing by spreading each
+Otter speaker-turn's text across the turn's time window proportionally to word
+count. Otter only timestamps the START of each speaker turn, and some turns run
+5-22 minutes, so captions drifted badly inside long turns. Russ confirmed they
+didn't line up.
+
+**What actually works:** ASR-anchored alignment.
+- ASR: `sherpa-onnx` (pip) + NeMo `parakeet_tdt_ctc_110m` model, downloaded
+  from a **GitHub release asset** -- github.com is reachable through the egress
+  proxy, while huggingface.co and download.pytorch.org are BLOCKED (403). That
+  GitHub route is the way to get model weights in this environment. Runs
+  ~30x realtime on the cloud container's 2 CPU cores (all 14 files ≈ 13 min).
+- The ASR transcript is imperfect, but it doesn't need to be perfect: its word
+  timestamps are matched against the Otter text with `difflib.SequenceMatcher`,
+  and matching runs become timing anchors (53-80% of Otter's words get a direct
+  anchor). Otter's own turn timestamps fill any remaining long gaps.
+- Note the LibriSpeech-trained zipformer model was tried first and is far too
+  weak on this far-field room audio (~10% anchored). espeak+MFCC DTW forced
+  alignment (the "aeneas" method) was also tried: ~7.6s median error, not usable.
+
+**Accuracy:** validated two ways. (1) Predicted speaker-turn times vs Otter's
+own timestamps: median error 0.5-1.8s per file. (2) Independent end-to-end
+check -- re-transcribe the audio at each caption's own timestamp and count how
+many of that caption's words are actually heard there: 56.6%, vs 6.8% for the
+same captions checked against audio 15s later. The 8x separation is the proof
+the timing is real; the 56.6% ceiling is just ASR error on short noisy snippets.
+
+Working pipeline lives in the session scratchpad (not committed): transcript
+parse -> ASR -> anchor matching -> monotonic word-index->time map -> .srt.
+Captions are wrapped at ~84 chars on sentence boundaries, 1-7s each, and a
+new speaker turn is marked with the standard `>> ` caption convention.
+
 ## Social posts Apps Script deployed -- live (Sept 2026)
 
 Russ deployed the Apps Script from the note above. Verified it directly
