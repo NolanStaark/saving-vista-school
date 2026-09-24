@@ -154,7 +154,7 @@
               <div class="privacy-tips">
                 <strong>About your privacy:</strong>
                 <ul>
-                  <li>Your name and email are for our team's internal use only, to follow up if we have questions &mdash; the email is never published, and the name will only be published if you consent.</li>
+                  <li>Your name and email are for our team's internal use only, to follow up if we have questions &mdash; the email is never published on this site, and will only be published if you give express consent.</li>
                   <li>Leave the "Publishing preference" box unchecked if you'd like your letter posted without your name attached; check it if you're comfortable being named.</li>
                   <li>Don't write your name inside the document itself if you want to stay anonymous even internally to whoever reviews the file.</li>
                   <li>If submitting a photo of a letter, be aware phone photos can carry hidden location data &mdash; consider taking a screenshot of the photo instead, or removing location data before uploading.</li>
@@ -226,14 +226,14 @@
               <div class="count-banner-cta">
                 <span id="count-banner-cta-text"><span class="count-banner-cta-number" id="total-count-banner-2" data-count="20">20</span> concerned parents and staff have spoken up.</span>
                 <span class="count-note-wrap">
-                  <a href="#letters-count-note" class="count-note-flag" id="count-note-flag" aria-describedby="count-note-tooltip">Why are there only <span id="visible-letters-count">6</span> letters shown?</a>
-                  <span class="count-note-tooltip" id="count-note-tooltip" role="tooltip">Every letter submitted to Vista's administration, the School Board, and/or the Utah State Charter School Board counts toward that total &mdash; publishing on this page is a separate, optional step, and only letters with the author's express permission are shown here.</span>
+                  <a href="#letters-count-note" class="count-note-flag" id="count-note-flag" aria-describedby="count-note-tooltip">Why are there only <span class="live-letter-count">6</span> letters shown?</a>
+                  <span class="count-note-tooltip" id="count-note-tooltip" role="tooltip">Every letter is submitted to Vista's administration, the School Board, and/or the Utah State Charter School Board and counts toward that total &mdash; publishing on this page is a separate, optional step, and only letters with the author's express permission are published here.</span>
                 </span>
                 <a href="#submit-a-letter" class="count-banner-link">Add your voice to support Vista &rarr;</a>
               </div>
             </div>
 
-            <h2 class="letters-heading">These Parents Have Granted Permission to Display Their Letters</h2>
+            <h2 class="letters-heading">These <span class="live-letter-count">6</span> Parents Have Granted Permission to Display Their Letters</h2>
             <p class="letters-heading-note">
               Every letter below is shared here with the express permission of the
               person who wrote it.
@@ -436,8 +436,9 @@
       // array, so this still works for the few minutes between deploying
       // this file and redeploying the Apps Script.
       var items = Array.isArray(data) ? data : (data && Array.isArray(data.items) ? data.items : []);
-      var visibleCountEl = document.getElementById('visible-letters-count');
-      if (visibleCountEl) visibleCountEl.textContent = items.length;
+      document.querySelectorAll('.live-letter-count').forEach(function (el) {
+        el.textContent = items.length;
+      });
       var totalSubmitted = Array.isArray(data) ? null : (data && typeof data.totalSubmitted === 'number' ? data.totalSubmitted : null);
       // If the live count differs from the page's baked-in seed (a new
       // letter came in since the last GitHub Action run), correct it --
