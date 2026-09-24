@@ -2527,3 +2527,40 @@ current directory without an explicit path (unlike cmd.exe).
 ```
 assuming his prompt is inside `site\` (the normal case). Don't just say
 `preview.bat worktrees\<topic>` -- that will fail for him as-is.
+
+## meetings.html: "Recording public meetings" note added (Sept 2026)
+
+Added a `.policy-note` right after the Live Stream `.video-embed` block
+on `meetings.html` (inline `margin-top:18px`, since `.policy-note` has no
+top margin of its own). It cites, with links to le.utah.gov:
+- Utah Code 53G-5-405(5)(a) -- each charter school is subject to Title 52,
+  Chapter 4, Open and Public Meetings Act (OPMA).
+- Utah Code 52-4-203(5) -- "All or any part of an open meeting may be
+  independently recorded by any person in attendance if the recording does
+  not interfere with the conduct of the meeting."
+Both sections were opened on le.utah.gov on 2026-09-23 before committing:
+52-4-203 is the version effective 5/1/2024 (recording right still
+Subsection (5)); 53G-5-405 is effective 5/1/2024 (OPMA is Subsection
+(5)(a)). Re-check the subsection numbers if either statute is amended.
+
+Also changed the page-header line "Watch our School Board and Townhall
+meetings live" to "Watch Vista's School Board and Townhall meetings live"
+(per Russ -- the meetings are Vista's, not this site's).
+
+**Not done:** `es/meetings.html` did not get the matching note or header
+change -- Russ scoped this to the English page only. Mirror it there if
+he asks.
+
+**OPEN QUESTION -- are Vista's Townhalls "open meetings" under OPMA?**
+The note deliberately does NOT claim the recording right covers Townhalls.
+Under Utah Code 52-4-103(5) (effective 5/6/2026), a "meeting" is a
+gathering of a public body with a quorum present, convened by someone with
+authority to convene it, following the legal process for convening it,
+for the express purpose of acting as that body (receive public comment,
+deliberate, or take action). So a Townhall is only covered if a quorum of
+Vista's governing board is formally convened there as the board -- which
+is unconfirmed. Things that would help settle it: whether Townhalls are
+noticed on the Utah Public Notice Website as board meetings, whether they
+have agendas/minutes (Vista doesn't publish Townhall docs -- see Meetings
+automation above), and how many board members attend. Don't add Townhall
+language to the note until this is confirmed with Russ.
