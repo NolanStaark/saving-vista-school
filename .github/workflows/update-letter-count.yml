@@ -3,8 +3,9 @@ name: Update Letter Count
 on:
   schedule:
     # Twice a day. Letters trickle in rather than flooding in, so this is
-    # just to keep the on-load seed number reasonably fresh -- the live
-    # page always corrects it against the real feed on every visit anyway.
+    # just to keep the baked-in submitted/published counts reasonably
+    # fresh -- the live page always corrects them against the real feed on
+    # every visit anyway.
     - cron: '0 13,23 * * *'
   workflow_dispatch: {}
 
@@ -26,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: pip install requests
 
-      - name: Pull total submitted letter count
+      - name: Pull submitted and published letter counts
         run: python scripts/update_letter_count.py
 
       - name: Commit changes if the count moved
@@ -37,6 +38,8 @@ jobs:
             echo "No change to the letter count."
           else
             git add letters.html es/letters.html
-            git commit -m "Update letters-submitted count"
+            git commit -m "Update letter counts from the letters feed"
+            # Someone may have pushed while this ran; replay on top of it.
+            git pull --rebase
             git push
           fi

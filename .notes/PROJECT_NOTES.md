@@ -2572,3 +2572,28 @@ noticed on the Utah Public Notice Website as board meetings, whether they
 have agendas/minutes (Vista doesn't publish Townhall docs -- see Meetings
 automation above), and how many board members attend. Don't add Townhall
 language to the note until this is confirmed with Russ.
+
+## Letter-count Action: now keeps "published" counts current too, and tolerates feed hiccups (Sept 25, 2026)
+
+`scripts/update_letter_count.py` (run twice daily by
+`.github/workflows/update-letter-count.yml`) now bakes BOTH numbers into
+`letters.html` and `es/letters.html`:
+- "Total Letters Submitted" (`#total-count-banner`, `#total-count-banner-2`)
+  from the feed's `totalSubmitted` -- as before.
+- The published-letters count (feed `items.length`): every
+  `<span class="live-letter-count">` in `letters.html`, and
+  `<span id="visible-letters-count">` in `es/letters.html`. Previously these
+  were only corrected by the page's JS at load time, so the baked-in "6" went
+  stale and was what visitors saw whenever the feed failed.
+If you rename/restructure any of those spans, update the script's regexes
+(it exits 1 with a clear message if it can't find them).
+
+Why the change: run #26 (2026-09-25 01:06 UTC) failed with
+`404 Client Error: Not Found` on the one-time
+`script.googleusercontent.com/macros/echo?...` redirect after ~40s -- an
+intermittent Apps Script failure (the same feed worked on the prior run and
+in later manual checks, 4-8s per request, anonymous). The script now retries
+up to 3 times (fresh `/exec` request each time, 10s/30s waits, 60s timeout)
+and, if all fail, prints a `::warning::` annotation and exits 0 without
+touching files. The workflow also does `git pull --rebase` before `git push`
+so a push that lands mid-run doesn't fail the commit step.

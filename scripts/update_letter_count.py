@@ -1,30 +1,50 @@
 #!/usr/bin/env python3
 """
-Keeps the "Letters Submitted" count-banner numbers in letters.html (and its
-Spanish counterpart, es/letters.html -- same feed, same two span ids) roughly
-in sync with reality, so the on-load count-up animation (see either page's
-inline script) starts from a real, recent number instead of always
-starting from 0.
+Keeps the letter-count numbers baked into letters.html (and its Spanish
+counterpart, es/letters.html -- same feed) in sync with reality:
 
-This is a fallback seed, not the source of truth: the live page still
+  * "Total Letters Submitted" -- the two count-banner spans
+    (#total-count-banner, #total-count-banner-2), from the feed's
+    totalSubmitted field.
+  * "Published" letters shown on the page -- the number of rows the feed
+    returns (Status = Published). In letters.html that's every
+    <span class="live-letter-count">; in es/letters.html it's
+    <span id="visible-letters-count">.
+
+These are fallback seeds, not the source of truth: the live page still
 fetches the Apps Script feed on every visit and corrects the displayed
-number if it's moved since this last ran. That means it's fine for this to
-run infrequently (see .github/workflows/update-letter-count.yml) -- worst
-case, a visitor briefly sees last run's number before the live feed
-corrects it a moment later.
+numbers. Baking fresh numbers in just means that (a) the on-load count-up
+animation starts from a real number, and (b) a visitor who hits the page
+while Google's feed is down still sees current-ish counts instead of stale
+ones.
+
+Google's Apps Script web apps occasionally fail a request (seen in practice:
+a ~40s wait, then a 404 on the one-time script.googleusercontent.com redirect
+URL). So each run retries a few times, starting from the /exec URL each time
+to get a fresh redirect. If every attempt fails, the run logs a warning and
+exits successfully WITHOUT touching the files -- a missed refresh of a
+fallback number isn't worth a failed-workflow email. Markup mismatches (the
+script can't find the spans it expects) still fail loudly, because that's a
+real bug that needs fixing.
 
 Run on a schedule via .github/workflows/update-letter-count.yml.
 """
 import re
 import sys
+import time
 from pathlib import Path
 
 import requests
 
-LETTERS_HTML_PATH = Path(__file__).resolve().parent.parent / "letters.html"
-LETTERS_HTML_ES_PATH = Path(__file__).resolve().parent.parent / "es" / "letters.html"
+REPO_ROOT = Path(__file__).resolve().parent.parent
+LETTERS_HTML_PATH = REPO_ROOT / "letters.html"
+LETTERS_HTML_ES_PATH = REPO_ROOT / "es" / "letters.html"
 FEED_URL_RE = re.compile(r"var LETTERS_FEED_URL = '([^']+)';")
 USER_AGENT = "Mozilla/5.0 (compatible; SavingVistaSchoolBot/1.0; +https://savingvistaschool.org)"
+
+MAX_ATTEMPTS = 3
+RETRY_WAIT_SECONDS = [10, 30]  # wait before attempt 2, attempt 3
+REQUEST_TIMEOUT_SECONDS = 60
 
 
 def get_feed_url(html):
@@ -34,29 +54,64 @@ def get_feed_url(html):
     return match.group(1)
 
 
-def get_total_submitted(feed_url):
-    resp = requests.get(feed_url, headers={"User-Agent": USER_AGENT}, timeout=30)
+def fetch_counts_once(feed_url):
+    resp = requests.get(
+        feed_url, headers={"User-Agent": USER_AGENT}, timeout=REQUEST_TIMEOUT_SECONDS
+    )
     resp.raise_for_status()
     data = resp.json()
-    if not isinstance(data, dict) or not isinstance(data.get("totalSubmitted"), int):
+    if not isinstance(data, dict):
+        raise ValueError("feed response isn't a JSON object")
+    total = data.get("totalSubmitted")
+    items = data.get("items")
+    if not isinstance(total, int) or isinstance(total, bool):
+        raise ValueError("feed response has no numeric totalSubmitted field")
+    if not isinstance(items, list):
+        raise ValueError("feed response has no items list")
+    return total, len(items)
+
+
+def fetch_counts(feed_url):
+    """Returns (total_submitted, published_count), or None if every attempt failed."""
+    for attempt in range(1, MAX_ATTEMPTS + 1):
+        try:
+            return fetch_counts_once(feed_url)
+        except (requests.RequestException, ValueError) as err:
+            print("Attempt {}/{} to read the letters feed failed: {}".format(
+                attempt, MAX_ATTEMPTS, err))
+            if attempt < MAX_ATTEMPTS:
+                wait = RETRY_WAIT_SECONDS[attempt - 1]
+                print("Retrying in {}s...".format(wait))
+                time.sleep(wait)
+    return None
+
+
+def replace_span_numbers(html, pattern, new_value, what, label, exactly=None):
+    """Replace the digits captured between group 1 and group 2 of `pattern`."""
+    new_html, count = pattern.subn(r"\g<1>{}\g<2>".format(new_value), html)
+    if count == 0 or (exactly is not None and count != exactly):
         sys.exit(
-            "Feed response didn't include a numeric totalSubmitted field "
-            "-- has the Apps Script's response shape changed?"
+            "Expected {} {} in {}, found {} -- markup may have changed, "
+            "update this script's pattern.".format(
+                exactly if exactly is not None else "at least one", what, label, count
+            )
         )
-    return data["totalSubmitted"]
+    return new_html
 
 
-def update_span(html, elem_id, new_value, label="letters.html"):
-    # Matches the count-banner spans regardless of attribute order, as long
-    # as id comes before data-count in the tag (that's how letters.html
-    # writes them): <span ... id="X" data-count="18" ...>18</span>
-    pattern = re.compile(
+def total_banner_pattern(elem_id):
+    # <span ... id="X" data-count="18" ...>18</span> -- id before data-count,
+    # which is how both letters pages write them. Both numbers get replaced.
+    return re.compile(
         r'(<span\b[^>]*\bid="{}"[^>]*\bdata-count=")\d+("[^>]*>)\d+(</span>)'.format(
             re.escape(elem_id)
         )
     )
-    new_html, count = pattern.subn(
-        r"\g<1>{0}\g<2>{0}\g<3>".format(new_value), html
+
+
+def update_total_banner(html, elem_id, total, label):
+    new_html, count = total_banner_pattern(elem_id).subn(
+        r"\g<1>{0}\g<2>{0}\g<3>".format(total), html
     )
     if count != 1:
         sys.exit(
@@ -68,29 +123,47 @@ def update_span(html, elem_id, new_value, label="letters.html"):
     return new_html
 
 
-def main():
-    html = LETTERS_HTML_PATH.read_text(encoding="utf-8")
-    feed_url = get_feed_url(html)
-    total = get_total_submitted(feed_url)
+LIVE_COUNT_CLASS_RE = re.compile(
+    r'(<span\b[^>]*\bclass="live-letter-count"[^>]*>)\d+(</span>)'
+)
+VISIBLE_COUNT_ID_RE = re.compile(
+    r'(<span\b[^>]*\bid="visible-letters-count"[^>]*>)\d+(</span>)'
+)
 
-    updated = update_span(html, "total-count-banner", total)
-    updated = update_span(updated, "total-count-banner-2", total)
 
+def update_file(path, label, total, published, published_pattern, published_what,
+                published_exactly=None):
+    html = path.read_text(encoding="utf-8")
+    updated = update_total_banner(html, "total-count-banner", total, label)
+    updated = update_total_banner(updated, "total-count-banner-2", total, label)
+    updated = replace_span_numbers(
+        updated, published_pattern, published, published_what, label, published_exactly
+    )
     if updated != html:
-        LETTERS_HTML_PATH.write_text(updated, encoding="utf-8")
-        print("Updated letters.html seed count to {}.".format(total))
+        path.write_text(updated, encoding="utf-8")
+        print("Updated {}: {} submitted, {} published.".format(label, total, published))
     else:
-        print("letters.html count unchanged ({}); nothing to write.".format(total))
+        print("{} unchanged ({} submitted, {} published).".format(label, total, published))
 
+
+def main():
+    feed_url = get_feed_url(LETTERS_HTML_PATH.read_text(encoding="utf-8"))
+    counts = fetch_counts(feed_url)
+    if counts is None:
+        # GitHub Actions shows ::warning:: lines as a yellow annotation on the
+        # run, without failing it.
+        print("::warning::Couldn't read the letters feed after {} attempts; "
+              "left the baked-in counts as they were. The live page still "
+              "loads real numbers from the feed on every visit.".format(MAX_ATTEMPTS))
+        return
+    total, published = counts
+
+    update_file(LETTERS_HTML_PATH, "letters.html", total, published,
+                LIVE_COUNT_CLASS_RE, "span.live-letter-count")
     if LETTERS_HTML_ES_PATH.exists():
-        es_html = LETTERS_HTML_ES_PATH.read_text(encoding="utf-8")
-        es_updated = update_span(es_html, "total-count-banner", total, label="es/letters.html")
-        es_updated = update_span(es_updated, "total-count-banner-2", total, label="es/letters.html")
-        if es_updated != es_html:
-            LETTERS_HTML_ES_PATH.write_text(es_updated, encoding="utf-8")
-            print("Updated es/letters.html seed count to {}.".format(total))
-        else:
-            print("es/letters.html count unchanged ({}); nothing to write.".format(total))
+        update_file(LETTERS_HTML_ES_PATH, "es/letters.html", total, published,
+                    VISIBLE_COUNT_ID_RE, "#visible-letters-count span",
+                    published_exactly=1)
 
 
 if __name__ == "__main__":
