@@ -847,6 +847,14 @@ the home page(s).
 - On `/es/` pages the `.brand` link points to `index.html` (the Spanish
   home), not `../index.html` -- the logo keeps Spanish readers in `/es/`.
   Only the lang-switcher link should go to `../index.html`. (Sept 2026)
+  `i18n/templates/about.html.tmpl` now hardcodes `href="index.html"` for
+  `.brand` too (was `{{prefix}}index.html`, which would have reverted
+  `es/about.html` to the English home on the next build).
+  **Flag:** the about template/locale files have otherwise drifted from the
+  live `about.html`/`es/about.html` (e.g. the disclaimer bar sits in a
+  different spot). Running `scripts/build_pages.py` right now would undo
+  those later hand edits -- diff its output against the live files and
+  bring the template up to date before anyone rebuilds.
 - `index.html`/`home-full.html`: the hero/under-construction watermark
   icon is now 220px (was the standard 104px `.page-header-graphic`
   size used on every other page) -- more visual weight on the site's
