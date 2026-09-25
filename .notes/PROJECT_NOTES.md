@@ -839,6 +839,9 @@ the home page(s).
   text, white stroke/gold stars -- header background is navy everywhere
   so one version works site-wide. `.brand` switched to flex layout;
   new `.brand-icon` class.
+- On `/es/` pages the `.brand` link points to `index.html` (the Spanish
+  home), not `../index.html` -- the logo keeps Spanish readers in `/es/`.
+  Only the lang-switcher link should go to `../index.html`. (Sept 2026)
 - `index.html`/`home-full.html`: the hero/under-construction watermark
   icon is now 220px (was the standard 104px `.page-header-graphic`
   size used on every other page) -- more visual weight on the site's
