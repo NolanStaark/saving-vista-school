@@ -25,6 +25,11 @@ disclaimer bar says so and that must never be softened or removed.
 - Claude can `git commit` locally via `device_bash`, but **cannot `git push`**
   — the device's network egress proxy returns 403 on github.com. Russ must
   push himself after each session (remind him).
+- **Russ's rule: always `git pull` and merge incoming changes BEFORE telling
+  him to `git push`.** Use `git -c core.editor=true pull --no-edit` (never
+  let git open vim), resolve/finish any merge, confirm `git status -sb`
+  shows only "ahead" (not "behind"/diverged), and only then say push.
+  Pull does work from the device (fetch is allowed; only push is blocked).
 - If `git` commands fail with "Operation not permitted" on `.git/*.lock`
   files, or "File exists" / "cannot lock ref HEAD": call
   `device_request_delete_permission` on the connected folder root once per
