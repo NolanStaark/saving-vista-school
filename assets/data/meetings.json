@@ -1,16 +1,13 @@
 {
   "source": "https://calendar.google.com/calendar/ical/vistautah.com_848rd4r1ssm1rkme3mnr3ke9h4%40group.calendar.google.com/public/basic.ics",
   "board_page_source": "https://www.vistautah.com/board-meetings",
-  "updated_at": "2026-09-29T18:30:02Z",
+  "updated_at": "2026-09-30T18:18:36Z",
   "next_board": {
     "type": "board",
     "summary": "Vista Board Meeting",
-    "date": "2026-09-29",
-    "display_date": "September 29, 2026",
-    "time": "6:00 PM",
-    "agenda_url": "https://drive.google.com/file/d/1kGLOr5HOKZpxPRnt1wkRoz906ib7SxPM/view?usp=drive_link",
-    "minutes_url": null,
-    "recording_url": null
+    "date": "2026-10-27",
+    "display_date": "October 27, 2026",
+    "time": "6:00 PM"
   },
   "next_townhall": {
     "type": "townhall",
@@ -39,7 +36,7 @@
       "display_date": "September 29, 2026",
       "agenda_url": "https://drive.google.com/file/d/1kGLOr5HOKZpxPRnt1wkRoz906ib7SxPM/view?usp=drive_link",
       "minutes_url": null,
-      "recording_url": null
+      "recording_url": "https://drive.google.com/file/d/1LFTegAJ-aREeB65dTBMEpi8Y1QgZFQJj/view?usp=sharing"
     }
   ],
   "archive_years": [
