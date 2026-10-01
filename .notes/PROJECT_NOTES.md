@@ -168,6 +168,35 @@ workflow (`.github/workflows/update-meetings.yml`, daily cron) runs
    fetches and renders (unified chronological list, "Next" badge, doc
    links, archive-year links to Vista's own per-year pages).
 
+**Update (Oct 2026) -- two sources, and qualified meetings.** Vista's board
+page dated a row "October 09, 2026 Retreat"; `parse_board_page` required the
+whole Date cell to parse as a date, so strptime raised and the row was dropped
+silently -- the retreat never reached the site. Now:
+- The date is found *inside* the cell and any qualifier (Retreat / Work Session
+  / Special Meeting) is kept as a `label`, shown as a badge on the next-meeting
+  card and in the table (EN + ES, `LABEL_ES` translates it) so a retreat is
+  never passed off as a regular business meeting.
+- The board page is a second SOURCE for "what's next", not just a place to find
+  doc links -- that retreat is not on the calendar under a title we'd match.
+  `pick_next_board` takes the earliest upcoming across both; the calendar wins a
+  shared date because only it carries a start time. Page-sourced entries have no
+  `time`, and meetings.html already falls back to 6pm.
+- Either fetch may fail without killing the run; we only `sys.exit(1)` (leaving
+  the file untouched rather than clobbering it) when BOTH come back empty.
+- Calendar titles that aren't "Board Meeting" are matched conservatively: the
+  title must ALSO say "board", so a bare "Retreat" is never swept in.
+- Dates roll forward on their own (filter is `>= today`, so a meeting stays on
+  the card through its own day, then drops off next morning). Verified by
+  running the real code with the clock moved to Oct 1 / 9 / 10 / 27 / 28.
+
+`updated_at` means last CHECKED (meetings.html renders it as "Schedule last
+checked"), so it moves every run and the file is rewritten daily on purpose --
+that timestamp is the page's liveness signal. Rather than suppress those
+commits, the script reports `schedule_changed` to the workflow, which picks the
+commit message: "Update meeting schedule from Vista's calendar" for a real
+change vs "Meeting schedule checked -- no change". So a daily bot commit is
+normal and expected; read the message to see whether anything actually moved.
+
 Both Board and Townhall meetings are stated (per Russ) to be held in the
 **Vista School Gym** — note the calendar's own `LOCATION` field disagrees
 (says "Choir Room" for many entries), so the script does NOT use

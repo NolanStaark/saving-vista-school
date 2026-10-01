@@ -24,6 +24,7 @@ rather than assuming a fixed weekday/time pattern.
 Run on a schedule via .github/workflows/update-meetings.yml.
 """
 import json
+import os
 import re
 import sys
 from datetime import datetime, timedelta, timezone
@@ -265,16 +266,20 @@ def parse_board_page(html):
 
 
 def main():
-    meetings = fetch_upcoming_meetings()
+    # Two independent sources, and either one can carry a run on its own:
+    # the calendar has start times and townhalls, the board page sometimes has
+    # a meeting the calendar doesn't (the Oct 2026 retreat). Neither fetch is
+    # allowed to kill the run -- we only give up if BOTH end up empty, checked
+    # after both have been consulted.
+    meetings = []
+    try:
+        meetings = fetch_upcoming_meetings()
+    except Exception as exc:
+        print(f"Warning: couldn't fetch/parse Vista's calendar ({exc}); "
+              f"falling back to their board-meetings page.", file=sys.stderr)
+
     next_board = next_of_type(meetings, "board")
     next_townhall = next_of_type(meetings, "townhall")
-
-    if not next_board and not next_townhall:
-        # Don't overwrite a good file with an empty result if the calendar
-        # is briefly unreachable or its structure changed -- fail loudly so
-        # the workflow surfaces it instead of silently going stale.
-        print("No upcoming meetings resolved from Vista's calendar -- not writing output.", file=sys.stderr)
-        sys.exit(1)
 
     current_year_board_meetings = []
     docs_by_date = {}
@@ -283,17 +288,28 @@ def main():
         board_html = fetch_text(BOARD_PAGE_URL)
         current_year_board_meetings, docs_by_date, archive_years = parse_board_page(board_html)
     except Exception as exc:
-        # Doc links, the full-year table, and the archive list are a bonus,
-        # not the source of truth for dates -- don't fail the whole run
-        # over them.
         print(f"Warning: couldn't fetch/parse Vista's board-meetings page ({exc}); "
               f"continuing with calendar dates only.", file=sys.stderr)
 
     next_board = pick_next_board(next_board, current_year_board_meetings)
 
+    if not next_board and not next_townhall:
+        # Don't overwrite a good file with an empty result if both sources are
+        # briefly unreachable or their structure changed -- fail loudly so the
+        # workflow surfaces it instead of the site silently going stale.
+        print("No upcoming meetings resolved from Vista's calendar or board page "
+              "-- not writing output.", file=sys.stderr)
+        sys.exit(1)
+
     if next_board and next_board["date"] in docs_by_date:
         next_board.update(docs_by_date[next_board["date"]])
 
+    # `updated_at` is when we last CHECKED (meetings.html shows it as "Schedule
+    # last checked"), so it moves every run and the file is always rewritten --
+    # that timestamp is the page's liveness signal and would be a lie if we
+    # skipped the write. What we do instead is tell the workflow whether
+    # anything *else* changed, so the commit message can say so and the history
+    # stays readable at a glance.
     data = {
         "source": CALENDAR_ICS_URL,
         "board_page_source": BOARD_PAGE_URL,
@@ -304,11 +320,30 @@ def main():
         "archive_years": archive_years,
     }
 
+    previous = None
+    if OUTPUT_PATH.exists():
+        try:
+            previous = json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            previous = None
+
+    def schedule_only(d):
+        return {k: v for k, v in (d or {}).items() if k != "updated_at"}
+
+    schedule_changed = schedule_only(previous) != schedule_only(data)
+
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2)
         f.write("\n")
 
+    gh_output = os.environ.get("GITHUB_OUTPUT")
+    if gh_output:
+        with open(gh_output, "a", encoding="utf-8") as f:
+            f.write(f"schedule_changed={'true' if schedule_changed else 'false'}\n")
+
+    print("Schedule changed." if schedule_changed
+          else "Schedule unchanged since the last run (timestamp refreshed).")
     print(f"Wrote next_board={next_board and next_board['date']}"
           f"{next_board and next_board.get('label') and ' (' + next_board['label'] + ')' or ''} "
           f"next_townhall={next_townhall and next_townhall['date']}, "

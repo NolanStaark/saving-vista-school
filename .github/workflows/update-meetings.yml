@@ -26,16 +26,26 @@ jobs:
         run: pip install requests beautifulsoup4 icalendar recurring-ical-events
 
       - name: Pull Vista's meeting schedule
+        id: pull
         run: python scripts/update_meetings.py
 
+      # The file is rewritten every run because it carries a "last checked"
+      # timestamp the page displays, so the commit message is what makes the
+      # history readable: it says outright whether the schedule actually moved
+      # or whether this was just the daily check finding nothing new.
       - name: Commit changes if the schedule moved
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if git diff --quiet -- assets/data/meetings.json; then
-            echo "No changes to the meeting schedule."
+            echo "Nothing to commit."
           else
+            if [ "${{ steps.pull.outputs.schedule_changed }}" = "true" ]; then
+              MSG="Update meeting schedule from Vista's calendar"
+            else
+              MSG="Meeting schedule checked -- no change"
+            fi
             git add assets/data/meetings.json
-            git commit -m "Update meeting schedule from Vista's calendar"
+            git commit -m "$MSG"
             git push
           fi
