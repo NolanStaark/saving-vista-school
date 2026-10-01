@@ -52,6 +52,28 @@ FUTURE_WINDOW_DAYS = 270
 
 TOWNHALL_RE = re.compile(r"town\s*hall", re.IGNORECASE)
 BOARD_RE = re.compile(r"board meeting", re.IGNORECASE)
+# Board gatherings Vista names something other than "Board Meeting" -- a
+# retreat, work session or special meeting. These are still noticed board
+# meetings and belong on the page, but we keep the distinguishing word so the
+# site can label them rather than passing a retreat off as a regular business
+# meeting. Deliberately conservative: the title must also say "board", so we
+# never sweep in unrelated school events.
+BOARD_ALT_RE = re.compile(r"\bboard\b.*?(retreat|work\s*session|special\s*meeting)"
+                          r"|(retreat|work\s*session|special\s*meeting).*?\bboard\b",
+                          re.IGNORECASE)
+# A date cell on Vista's board page may carry a trailing qualifier, e.g.
+# "October 09, 2026 Retreat" -- find the date inside the cell instead of
+# requiring the cell to be nothing but a date.
+DATE_IN_TEXT_RE = re.compile(r"([A-Za-z]{3,9}\.?\s+\d{1,2},\s*\d{4})")
+QUALIFIER_RE = re.compile(r"\b(retreat|work\s*session|special\s*meeting)\b", re.IGNORECASE)
+
+
+def meeting_label(text):
+    """The distinguishing word for a non-regular board meeting, or None."""
+    m = QUALIFIER_RE.search(text or "")
+    if not m:
+        return None
+    return " ".join(w.capitalize() for w in m.group(1).split())
 
 
 def fetch_text(url):
@@ -61,13 +83,17 @@ def fetch_text(url):
 
 
 def classify(summary):
+    """Returns (kind, label). `label` marks a board gathering that is not a
+    regular business meeting (e.g. "Retreat"), otherwise None."""
     # Check townhall first: some of Vista's own event titles (e.g. "Vista
     # School Board Town Hall") contain both words, and those are townhalls.
     if TOWNHALL_RE.search(summary):
-        return "townhall"
+        return "townhall", None
     if BOARD_RE.search(summary):
-        return "board"
-    return None
+        return "board", meeting_label(summary)
+    if BOARD_ALT_RE.search(summary):
+        return "board", meeting_label(summary)
+    return None, None
 
 
 def fetch_upcoming_meetings():
@@ -85,7 +111,7 @@ def fetch_upcoming_meetings():
     meetings = []
     for event in occurrences:
         summary = str(event.get("SUMMARY", ""))
-        kind = classify(summary)
+        kind, label = classify(summary)
         if not kind:
             continue
 
@@ -100,6 +126,7 @@ def fetch_upcoming_meetings():
         meetings.append({
             "type": kind,
             "summary": summary,
+            "label": label,
             "date": local_dt.date().isoformat(),
             "display_date": local_dt.strftime("%B %-d, %Y"),
             "time": local_dt.strftime("%-I:%M %p"),
@@ -131,6 +158,36 @@ def next_of_type(meetings, kind):
     return None
 
 
+def pick_next_board(calendar_next, board_rows):
+    """The earliest upcoming board gathering across BOTH sources.
+
+    Vista's board-meetings page sometimes carries a dated meeting their public
+    calendar doesn't (the October 2026 board retreat, for one), so the page is
+    treated as a second source for "what's next" rather than only as a place to
+    find document links. When both sources list the same date the calendar entry
+    wins -- only it carries a start time -- but it picks up the page's label."""
+    today = datetime.now(DENVER).date().isoformat()
+    upcoming = [r for r in board_rows if r.get("date") and r["date"] >= today]
+    if not upcoming:
+        return calendar_next
+    earliest = min(upcoming, key=lambda r: r["date"])
+    if calendar_next and calendar_next["date"] <= earliest["date"]:
+        if (earliest["date"] == calendar_next["date"]
+                and earliest.get("label") and not calendar_next.get("label")):
+            calendar_next["label"] = earliest["label"]
+        return calendar_next
+    # The page has something sooner. It gives no start time, and meetings.html
+    # already falls back to the usual 6pm when a time is absent, so leave it out
+    # rather than inventing one.
+    return {
+        "type": "board",
+        "summary": "Vista Board " + (earliest.get("label") or "Meeting"),
+        "date": earliest["date"],
+        "display_date": earliest["display_date"],
+        "label": earliest.get("label"),
+    }
+
+
 def parse_board_page(html):
     """Pull the full current-year Board Meetings table (one row per meeting
     Vista has actually dated -- their page also includes blank placeholder
@@ -154,15 +211,24 @@ def parse_board_page(html):
             if not date_text:
                 continue
 
+            # Vista sometimes qualifies the date in the same cell, e.g.
+            # "October 09, 2026 Retreat". Pull the date out of the cell rather
+            # than requiring the whole cell to parse as one, or rows like that
+            # get silently dropped.
+            match = DATE_IN_TEXT_RE.search(date_text)
+            if not match:
+                continue
             iso_date = None
             for fmt in ("%B %d, %Y", "%b %d, %Y"):
                 try:
-                    iso_date = datetime.strptime(date_text, fmt).date().isoformat()
+                    iso_date = datetime.strptime(
+                        match.group(1).replace(".", ""), fmt).date().isoformat()
                     break
                 except ValueError:
                     continue
             if not iso_date:
                 continue
+            label = meeting_label(date_text)
 
             def link_or_none(cell):
                 a = cell.find("a")
@@ -173,6 +239,7 @@ def parse_board_page(html):
             rows_ordered.append({
                 "date": iso_date,
                 "display_date": datetime.fromisoformat(iso_date).strftime("%B %-d, %Y"),
+                "label": label,
                 "agenda_url": link_or_none(cells[1]),
                 "minutes_url": link_or_none(cells[2]),
                 "recording_url": link_or_none(cells[3]),
@@ -222,6 +289,8 @@ def main():
         print(f"Warning: couldn't fetch/parse Vista's board-meetings page ({exc}); "
               f"continuing with calendar dates only.", file=sys.stderr)
 
+    next_board = pick_next_board(next_board, current_year_board_meetings)
+
     if next_board and next_board["date"] in docs_by_date:
         next_board.update(docs_by_date[next_board["date"]])
 
@@ -240,7 +309,8 @@ def main():
         json.dump(data, f, indent=2)
         f.write("\n")
 
-    print(f"Wrote next_board={next_board and next_board['date']} "
+    print(f"Wrote next_board={next_board and next_board['date']}"
+          f"{next_board and next_board.get('label') and ' (' + next_board['label'] + ')' or ''} "
           f"next_townhall={next_townhall and next_townhall['date']}, "
           f"{len(current_year_board_meetings)} current-year board meeting rows, "
           f"and {len(archive_years)} archive years to {OUTPUT_PATH}")

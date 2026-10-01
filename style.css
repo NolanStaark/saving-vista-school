@@ -1173,6 +1173,23 @@ footer.site-footer a {
   color: #8a5a00;
 }
 
+/* Qualifies a board gathering that isn't a regular business meeting -- a
+   retreat, work session or special meeting. Deliberately quieter than the
+   board/townhall type badge it sits next to. */
+.meeting-label-badge {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  vertical-align: middle;
+}
+
 .meeting-docs {
   display: flex;
   flex-wrap: wrap;

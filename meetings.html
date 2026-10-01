@@ -227,6 +227,21 @@
     return '<a class="doc-link" href="' + url + '" target="_blank" rel="noopener">' + label + '</a>';
   }
 
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // Marks a board gathering that isn't a regular business meeting (a retreat,
+  // work session or special meeting), so the card can show it as what's next
+  // without passing it off as a normal board meeting.
+  function labelBadge(meeting) {
+    return meeting && meeting.label
+      ? '<span class="meeting-label-badge">' + esc(meeting.label) + '</span>'
+      : '';
+  }
+
   function renderCard(meeting, typeLabel, typeClass) {
     if (!meeting) {
       return (
@@ -247,6 +262,7 @@
     return (
       '<div class="next-meeting-card ' + typeClass + '">' +
         '<span class="meeting-type-badge ' + typeClass + '">' + typeLabel + '</span>' +
+        labelBadge(meeting) +
         '<div class="next-meeting-date">' + (meeting.display_date || meeting.date) + (meeting.time ? ' at ' + meeting.time : '') + '</div>' +
         '<div class="next-meeting-location">Vista School Gym</div>' +
         docsHtml +
@@ -293,7 +309,7 @@
     tbody.innerHTML = rows.map(function (m) {
       return (
         '<tr>' +
-          '<td>' + (m.display_date || m.date) + '</td>' +
+          '<td>' + (m.display_date || m.date) + labelBadge(m) + '</td>' +
           '<td>' + docLink(m.agenda_url, 'Agenda') + '</td>' +
           '<td>' + docLink(m.minutes_url, 'Minutes') + '</td>' +
           '<td>' + docLink(m.recording_url, 'Recording') + '</td>' +

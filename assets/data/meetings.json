@@ -1,17 +1,21 @@
 {
   "source": "https://calendar.google.com/calendar/ical/vistautah.com_848rd4r1ssm1rkme3mnr3ke9h4%40group.calendar.google.com/public/basic.ics",
   "board_page_source": "https://www.vistautah.com/board-meetings",
-  "updated_at": "2026-09-30T18:18:36Z",
+  "updated_at": "2026-10-01T04:23:41Z",
   "next_board": {
     "type": "board",
-    "summary": "Vista Board Meeting",
-    "date": "2026-10-27",
-    "display_date": "October 27, 2026",
-    "time": "6:00 PM"
+    "summary": "Vista Board Retreat",
+    "date": "2026-10-09",
+    "display_date": "October 9, 2026",
+    "label": "Retreat",
+    "agenda_url": null,
+    "minutes_url": null,
+    "recording_url": null
   },
   "next_townhall": {
     "type": "townhall",
     "summary": "Town Hall Meeting",
+    "label": null,
     "date": "2026-10-20",
     "display_date": "October 20, 2026",
     "time": "6:00 PM"
@@ -20,6 +24,7 @@
     {
       "date": "2026-07-29",
       "display_date": "July 29, 2026",
+      "label": null,
       "agenda_url": "https://drive.google.com/file/d/1yPnWrehf1UiOJCpm8ymrgr-wfztI3F-O/view?usp=sharing",
       "minutes_url": "https://drive.google.com/file/d/1DuxIKPLfxgcvb2YHWAB-J3wwCIkh74Kb/view?usp=drive_link",
       "recording_url": "https://drive.google.com/file/d/1yCIvy4imW1te4smkNC9QLcUCbGUfDBFv/view?usp=sharing"
@@ -27,6 +32,7 @@
     {
       "date": "2026-08-24",
       "display_date": "August 24, 2026",
+      "label": null,
       "agenda_url": "https://drive.google.com/drive/folders/1got85Kq9C4wA_5Ge563yJ8e5Y-yq5lq9",
       "minutes_url": "https://drive.google.com/file/d/1tGA3e2oXIXgCSiO7aZFcfGVz8-bNOE2J/view?usp=drive_link",
       "recording_url": "https://drive.google.com/file/d/1JMGFuRUfOG1ezEpwwQ1jqclgbsRf4Ti6/view?usp=sharing"
@@ -34,9 +40,18 @@
     {
       "date": "2026-09-29",
       "display_date": "September 29, 2026",
+      "label": null,
       "agenda_url": "https://drive.google.com/file/d/1kGLOr5HOKZpxPRnt1wkRoz906ib7SxPM/view?usp=drive_link",
       "minutes_url": null,
       "recording_url": "https://drive.google.com/file/d/1LFTegAJ-aREeB65dTBMEpi8Y1QgZFQJj/view?usp=sharing"
+    },
+    {
+      "date": "2026-10-09",
+      "display_date": "October 9, 2026",
+      "label": "Retreat",
+      "agenda_url": null,
+      "minutes_url": null,
+      "recording_url": null
     }
   ],
   "archive_years": [

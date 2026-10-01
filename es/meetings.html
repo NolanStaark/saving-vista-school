@@ -199,6 +199,27 @@
     return '<a class="doc-link" href="' + url + '" target="_blank" rel="noopener">' + label + '</a>';
   }
 
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  // Marca una reunión de la Junta que no es una sesión ordinaria (un retiro,
+  // sesión de trabajo o reunión especial). La etiqueta llega en inglés desde
+  // la página de Vista; se traduce aquí, con respaldo al texto original.
+  var LABEL_ES = {
+    'Retreat': 'Retiro',
+    'Work Session': 'Sesión de Trabajo',
+    'Special Meeting': 'Reunión Especial'
+  };
+
+  function labelBadge(meeting) {
+    if (!meeting || !meeting.label) return '';
+    return '<span class="meeting-label-badge">' +
+      esc(LABEL_ES[meeting.label] || meeting.label) + '</span>';
+  }
+
   function renderCard(meeting, typeLabel, typeClass) {
     if (!meeting) {
       return (
@@ -218,6 +239,7 @@
     return (
       '<div class="next-meeting-card ' + typeClass + '">' +
         '<span class="meeting-type-badge ' + typeClass + '">' + typeLabel + '</span>' +
+        labelBadge(meeting) +
         '<div class="next-meeting-date">' + (meeting.display_date || meeting.date) + (meeting.time ? ' a las ' + meeting.time : '') + '</div>' +
         '<div class="next-meeting-location">Gimnasio de Vista School</div>' +
         docsHtml +
@@ -264,7 +286,7 @@
     tbody.innerHTML = rows.map(function (m) {
       return (
         '<tr>' +
-          '<td>' + (m.display_date || m.date) + '</td>' +
+          '<td>' + (m.display_date || m.date) + labelBadge(m) + '</td>' +
           '<td>' + docLink(m.agenda_url, 'Agenda') + '</td>' +
           '<td>' + docLink(m.minutes_url, 'Actas') + '</td>' +
           '<td>' + docLink(m.recording_url, 'Grabación') + '</td>' +
