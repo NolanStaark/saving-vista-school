@@ -2597,3 +2597,63 @@ up to 3 times (fresh `/exec` request each time, 10s/30s waits, 60s timeout)
 and, if all fail, prints a `::warning::` annotation and exits 0 without
 touching files. The workflow also does `git pull --rebase` before `git push`
 so a push that lands mid-run doesn't fail the commit step.
+
+
+## policies.html: fixed two broken Vista PDF links, added dress-code enforcement note (Oct 2026)
+
+Russ flagged the Code of Conduct PDF link as broken ("File is in owner's
+trash" in Drive's preview). Checked all four Drive-hosted policy links
+used on this page via `mcp__Google_Drive__get_file_metadata`:
+
+- Code of Conduct and Professional Boundaries Policy: OLD id
+  `1D9rW_x_bPZ5TfMvn7Ofz-uMwP1o2nq9F` is gone (trashed by its owner, not
+  recoverable by us). Vista re-uploaded it; current link via
+  vistautah.com/policies-forms is id `1YtX22g-vdHNpHG3-1LN9sGU3pDPa4QCm`.
+  Read the new file in full and checked our quotes against it -- the
+  scope ("volunteers who have unsupervised access to students"), the
+  "Staff Member" definition (no unsupervised-access qualifier), and the
+  off-campus rules we cite are all unchanged. Only the board-approval
+  date moved: August 2026 -> September 2026 (updated on the card).
+- Bullying, Cyber-Bullying, Hazing, Retaliation, and Abusive Conduct
+  Policy: OLD id `1ZJ68NGAzq_OVME3OeJ-JVtMIsCL24XwA` is also gone.
+  Current link (same vistautah.com index) is id
+  `1-n0aCyswy0Sxu5tfAD3Q5i8yXhyJ_HO9`. Reading the new version in full
+  turned up a real content change worth knowing about if this gets
+  revisited: Section VIII ("Appeals") now gives *anyone* accused of
+  prohibited conduct a procedural appeal, not just employees -- so our
+  old claim that an accused parent has "no equivalent notice-and-appeal
+  process" was no longer accurate (possibly was never fully accurate;
+  the old trashed file can't be re-checked to confirm). That appeal is
+  narrow though -- limited to a failure-to-follow-procedure or new
+  evidence, explicitly NOT a way to contest the finding itself ("mere
+  disagreement with the outcome...is not, by itself, a basis") --
+  versus the separate, fuller grievance process an EMPLOYEE gets under
+  Section XI if dissatisfied with how their own report was handled.
+  Rewrote the card's factual paragraph and "why this matters" box to
+  describe that distinction accurately instead of overstating it.
+  - Classroom Visitation and Observation Policy (`1AjkT9cfL-8GC7D0RqhdoknL1Td4rxdg3`)
+    and Volunteer Policy (`1Fr3sc2YkgfVq2AfMljaOVqhTGFM4evQi`, still
+    marked "DRAFT" in its own title text) are both still live at their
+    original ids -- no change needed. The two direct vistautah.com
+    uploads we link (Civility.pdf, Student-Laptop-Policy.pdf) both still
+    200 OK at their existing URLs too.
+  - Lesson for next time a Drive link 404s: check
+    vistautah.com/policies-forms first (full policy index, alphabetized)
+    -- Vista keeps that page's links current even when it reuploads a
+    policy under a new Drive file id.
+- Separately, Russ asked for a note that dress-code enforcement has, per
+  reports from parents he's talked to, centered on girls specifically
+  (pants/leggings flagged for lacking back pockets, similar pants on
+  boys not questioned) -- not yet in a published letter on letters.html,
+  so there's no citable source beyond Russ's own word. Added as a second
+  paragraph in the dress-code card's "why this matters" box, framed per
+  the standing "most defensible" instruction: attributed to parent
+  reports rather than asserted as verified ("Parents have also told
+  us... if that's accurate..."), ending on a question for Vista rather
+  than a conclusion about intent or motive.
+- Committed as `ff523a6` (link fixes + Code of Conduct/Abusive Conduct
+  accuracy corrections) and `829070e` (dress-code enforcement note).
+  Branch was pulled up to date with `origin/main` before this work
+  (local had fallen behind -- another concurrent session's work had
+  already been pushed and merged in), so these two commits are the only
+  ones still unpushed from this session. Russ needs to `git push`.
