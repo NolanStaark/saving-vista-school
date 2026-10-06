@@ -1,13 +1,14 @@
 {
   "source": "https://calendar.google.com/calendar/ical/vistautah.com_848rd4r1ssm1rkme3mnr3ke9h4%40group.calendar.google.com/public/basic.ics",
   "board_page_source": "https://www.vistautah.com/board-meetings",
-  "updated_at": "2026-10-04T17:20:26Z",
+  "updated_at": "2026-10-06T18:49:55Z",
   "next_board": {
     "type": "board",
-    "summary": "Vista Board Retreat",
+    "summary": "Board Retreat",
+    "label": "Retreat",
     "date": "2026-10-09",
     "display_date": "October 9, 2026",
-    "label": "Retreat",
+    "time": "3:30 PM",
     "agenda_url": null,
     "minutes_url": null,
     "recording_url": null
