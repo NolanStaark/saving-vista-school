@@ -2686,3 +2686,52 @@ used on this page via `mcp__Google_Drive__get_file_metadata`:
   (local had fallen behind -- another concurrent session's work had
   already been pushed and merged in), so these two commits are the only
   ones still unpushed from this session. Russ needs to `git push`.
+
+## Home + About: clarifications of outside misreadings (Oct 2026) -- FLAG FOR OTHER CHATS
+
+In October 2026 an outside letter to the state misread the site: as seeking
+release of personnel records, as only disagreement with board decisions, as
+asking the state to override the board, and with a COVID explanation for the
+director's Monroe resignation. Russ approved in-place clarifications (not an
+FAQ). He asked that the site NOT name the letter's author or mention the
+letter yet -- keep it that way unless he says otherwise.
+
+What changed (branch `work/site-clarifications`, worktree
+`worktrees/site-clarifications`):
+- `index.html` / `es/index.html` "Why This Site Exists": rewritten. Site
+  gathers Vista information in one place; decisions are the board's; the
+  central concern is staff treatment (current/former teachers' letters
+  describe intimidation and fear of retaliation; parents have asked the
+  board to investigate since July 2026; no formal action as of Oct 2026);
+  concerns raised with the state, which reviews educator conduct
+  confidentially; we don't seek anyone's personnel records; "Everything on
+  this site is either public information or shared with its author's
+  permission." Source for the teacher-letter and board lines: Hillary
+  Osness's Oct 2026 response letter to the state. This deliberately
+  reverses part of the Sept 2026 "play nice with the Board" pass (the site
+  mentions the board again) -- Russ approved it explicitly.
+- `i18n/locales/{en,es}/about.json` `section_mission_body`: same points,
+  short form; `about.html` + `es/about.html` rebuilt.
+- Turnover note: charts are yearly totals, not personnel records; the
+  exits chart counts teachers, so longer tenure doesn't inflate it.
+- Pay note: every bar in salary-comparison-chart.png is Transparent Utah
+  WAGES, not benefits. Verified Oct 11, 2026: Blasko FY2026 $189,771.60
+  wages (+$33,581.49 benefits = $223,353.09); Bradshaw FY2026 $150,663.96;
+  GWA director Blake Clark FY2026 $152,613.48 (+$48,051.68 benefits);
+  Jocelyn Larkin (Vista asst. principal) FY2025 $93,937.73; Christine
+  Giles (GWA asst. director) FY2025 $103,810.80. Counting benefits, the
+  director gap narrows from about $37k to about $23k.
+- Monroe paragraphs (two on index.html, one on es/index.html): sequence
+  corrected -- placed on leave Dec 2021, THEN the Seabold Group report
+  (May 9, 2022, addressed to district counsel, preponderance standard)
+  found many complaints supported by the evidence, resigned July 2022.
+  Added: findings concern treatment of staff, not reopening; the report
+  (p. 7) says Monroe's board approved his Nov 16, 2020 letter ordering
+  first-grade teachers back in person. Added an inline link to the
+  DocumentCloud copy (16 pages; it calls itself a summary report).
+- `i18n/templates/about.html.tmpl`: moved the disclaimer bar inside
+  `<header>` to match what commit a695960 did to the generated files.
+  Before this, running `build_pages.py` silently reverted that landmark
+  change; now the build reproduces the committed pages byte-for-byte.
+
+Not changed: enrollment section, academics, the one-school pay comparison.
