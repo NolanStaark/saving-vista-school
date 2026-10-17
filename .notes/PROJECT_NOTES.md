@@ -2735,3 +2735,31 @@ What changed (branch `work/site-clarifications`, worktree
   change; now the build reproduces the committed pages byte-for-byte.
 
 Not changed: enrollment section, academics, the one-school pay comparison.
+
+## Letters feed: how "Total Letters Submitted" is counted (Oct 17, 2026)
+
+The letters Apps Script (bound to the "Submit a Letter of Concern" sheet;
+its code is NOT in this repo) sets `totalSubmitted` by counting every row
+whose "Letter (PDF, photo, or scan)" cell is non-empty, regardless of
+Status. So a row with no Drive link is not counted. On Oct 17 the sheet had
+28 letter rows but the site showed 26: Michael Hale's row (no file on
+purpose, DO NOT PUBLISH) and Emily Smith's newly added row (file not yet
+uploaded to Drive) both had empty link cells.
+
+Fix given to Russ (needs paste + redeploy in Apps Script, same /exec URL):
+count a row if it has a file link OR a Display Title, i.e. replace
+
+    if (String(row[col.fileLink] || '').trim()) {
+      totalSubmitted++;
+    }
+
+with
+
+    var hasFile = String(row[col.fileLink] || '').trim() !== '';
+    var hasTitle = col.title !== -1 && String(row[col.title] || '').trim() !== '';
+    if (hasFile || hasTitle) {
+      totalSubmitted++;
+    }
+
+Placeholder "Unreviewed" rows have neither, so they still aren't counted.
+Until the redeploy is confirmed, assume the old file-link-only rule.
