@@ -2763,3 +2763,9 @@ with
 
 Placeholder "Unreviewed" rows have neither, so they still aren't counted.
 Until the redeploy is confirmed, assume the old file-link-only rule.
+Same day: Russ asked for links on both rows instead, so both now have
+private text-only Google Doc copies (in roslow82's Drive folder "Saving
+Vista - Letters not yet in Letters folder"), which brings the count to 28
+under the current rule. Hale's stays out of the Letters folder (DO NOT
+PUBLISH). Emily Smith's copy lacks her embedded turnover graph; upload the
+original .docx to the Letters folder before ever publishing it.
