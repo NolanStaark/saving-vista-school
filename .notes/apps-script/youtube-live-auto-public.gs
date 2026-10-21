@@ -3,19 +3,24 @@
  *
  * Problem: streams started from the YouTube phone app have "Allow embedding"
  * off (so the savingvistaschool.org player shows "This video is unavailable"),
- * and channels under 1,000 subscribers get their replay set to Private when
- * the stream ends.
+ * channels under 1,000 subscribers get their replay set to Private when the
+ * stream ends, and the phone app gives every stream the same default title.
  *
- * Fix: only on meeting days, from 15 min before the scheduled start until
- * 4 hours after it, check every 10 minutes. Any broadcast that ACTUALLY went
- * live in the last 2 days gets set to Public + embeddable. Broadcasts that
- * never started (dropped-connection "Upcoming" shells) are ignored.
- * It also renames the stream to match the channel's existing titles, e.g.
- * "Vista Townhall Meeting — October 20, 2026" or
- * "Vista Board Meeting — October 27, 2026". Any other title (phone-app
- * default or typed by hand) is replaced. It then adds the stream to the
- * matching playlist ("Board Meetings" or "Town Hall Meetings", looked up by
- * name) if it isn't already in it.
+ * What it does: only on meeting days, from 15 min before the scheduled start
+ * until 4 hours after it, every 10 minutes, for any broadcast that ACTUALLY
+ * went live in the last 2 days (empty "Upcoming" shells are ignored):
+ *   - Title: "Vista Townhall Meeting — October 20, 2026" /
+ *            "Vista Board Meeting — October 27, 2026" (replaces any title)
+ *   - Visibility Public, Allow embedding on
+ *   - Category Nonprofits & Activism, Standard YouTube License,
+ *     not made for kids, no AI-altered content, no paid promotion,
+ *     like counts shown, recording date = the day it streamed
+ *   - Custom thumbnail (Board or Town Hall image from the site)
+ *   - Added to the "Board Meetings" / "Town Hall Meetings" playlist
+ *
+ * Settings YouTube's API can't change (comments, who can comment, moderation,
+ * sort order, Shorts remixing, React live, automatic chapters/places/concepts)
+ * come from the channel's Upload defaults in YouTube Studio instead.
  *
  * Meeting dates/times come from the site's own schedule file (the same data
  * meetings.html uses), which a GitHub Action refreshes daily from Vista's
@@ -27,22 +32,29 @@
  *      (keep the identifier "YouTube").
  *   3. Pick "setup" in the function dropdown and click Run. Authorize.
  *      If asked to choose an account/channel, choose Saving Vista School.
- *   4. Optional test: pick "fixRecentLiveStreams" and Run once, then check
- *      the Execution log (it will also fix any stream from the last 2 days).
+ *   4. Pick "fixPastMeetings" and Run once: applies the settings + thumbnail
+ *      to the Sept 29 and Oct 20 recordings. Check the Execution log.
  * To stop everything later: run "removeAllTriggers".
  */
 
 var SCHEDULE_URL = 'https://savingvistaschool.org/assets/data/meetings.json';
+var THUMBNAIL_URLS = {
+  board: 'https://savingvistaschool.org/assets/youtube/thumb-board.png',
+  townhall: 'https://savingvistaschool.org/assets/youtube/thumb-townhall.png'
+};
+var PLAYLIST_NAMES = { board: 'Board Meetings', townhall: 'Town Hall Meetings' };
+var CATEGORY_ID = '29';     // Nonprofits & Activism
 var TZ = 'America/Denver';
 var BEFORE_MIN = 15;        // start watching 15 min before scheduled start
 var AFTER_HOURS = 4;        // keep watching until 4 h after scheduled start
 var CHECK_EVERY_MIN = 10;   // how often to check during the window
 var LOOKBACK_HOURS = 48;    // which broadcasts count as "recent"
-var PLAYLIST_NAMES = { board: 'Board Meetings', townhall: 'Town Hall Meetings' };
+
+// ---------------------------------------------------------------- schedule
 
 /** Runs every morning: if a meeting is today, schedule the watch window. */
 function dailyScheduleCheck() {
-  var data = JSON.parse(UrlFetchApp.fetch(SCHEDULE_URL, { muteHttpExceptions: false }).getContentText());
+  var data = JSON.parse(UrlFetchApp.fetch(SCHEDULE_URL).getContentText());
   var today = Utilities.formatDate(new Date(), TZ, 'yyyy-MM-dd');
   var todays = [data.next_board, data.next_townhall]
     .filter(function (m) { return m && m.date === today; })
@@ -58,14 +70,11 @@ function dailyScheduleCheck() {
 
   if (!todays.length) { Logger.log('No meeting today (' + today + ').'); return; }
 
-  // Remember today's meetings so the fixer knows what to name each stream.
+  // Remember today's meetings so the fixer knows what each stream is.
   PropertiesService.getScriptProperties().setProperty('meetings', JSON.stringify(todays));
-  var starts = todays.map(function (m) { return new Date(m.start); });
 
-  var first = starts[0];
-  var last = starts[starts.length - 1];
-  var windowStart = new Date(first.getTime() - BEFORE_MIN * 60000);
-  var windowEnd = new Date(last.getTime() + AFTER_HOURS * 3600000);
+  var windowStart = new Date(todays[0].start - BEFORE_MIN * 60000);
+  var windowEnd = new Date(todays[todays.length - 1].start + AFTER_HOURS * 3600000);
   PropertiesService.getScriptProperties().setProperty('windowEnd', String(windowEnd.getTime()));
 
   deleteTriggersFor_('startWatching');
@@ -95,71 +104,93 @@ function watchTick() {
   }
 }
 
-/** The actual fix: recent broadcasts that went live -> Public + embeddable. */
+// ---------------------------------------------------------------- the fix
+
+/** Recent broadcasts that went live during a scheduled meeting -> fix them. */
 function fixRecentLiveStreams() {
   var cutoff = Date.now() - LOOKBACK_HOURS * 3600 * 1000;
-
-  var resp = YouTube.LiveBroadcasts.list('id,snippet,status', {
-    broadcastStatus: 'all',
-    broadcastType: 'all',
-    maxResults: 25
+  var resp = YouTube.LiveBroadcasts.list('id,snippet', {
+    broadcastStatus: 'all', broadcastType: 'all', maxResults: 25
   });
-  var ids = ((resp && resp.items) || []).filter(function (b) {
-    var started = b.snippet && b.snippet.actualStartTime;
-    return started && new Date(started).getTime() >= cutoff;
-  }).map(function (b) { return b.id; });
-
-  if (!ids.length) { Logger.log('No broadcasts went live in the last ' + LOOKBACK_HOURS + 'h.'); return; }
-
-  var startedAt = {};
-  ((resp && resp.items) || []).forEach(function (b) {
-    if (b.snippet && b.snippet.actualStartTime) startedAt[b.id] = new Date(b.snippet.actualStartTime).getTime();
+  var started = ((resp && resp.items) || []).filter(function (b) {
+    var t = b.snippet && b.snippet.actualStartTime;
+    return t && new Date(t).getTime() >= cutoff;
   });
+  if (!started.length) { Logger.log('No broadcasts went live in the last ' + LOOKBACK_HOURS + 'h.'); return; }
 
-  var vids = YouTube.Videos.list('status,snippet', { id: ids.join(',') });
-  (vids.items || []).forEach(function (v) {
-    var s = v.status;
-    var sn = v.snippet;
-    var meeting = meetingFor_(startedAt[v.id]);
-    var newTitle = meeting ? titleFor_(meeting) : null;
-    var rename = newTitle && sn.title !== newTitle;
-    if (meeting) addToPlaylist_(v.id, meeting.type);
-
-    if (s.privacyStatus === 'public' && s.embeddable === true && !rename) {
-      Logger.log('OK already: ' + v.id + ' "' + sn.title + '"');
-      return;
-    }
-    // videos.update replaces the whole "status" part, so send back every
-    // writable field, changing only privacy + embedding.
-    var newStatus = {
-      privacyStatus: 'public',
-      embeddable: true,
-      license: s.license,
-      publicStatsViewable: s.publicStatsViewable,
-      selfDeclaredMadeForKids: s.madeForKids === true
-    };
-    if (s.containsSyntheticMedia !== undefined) newStatus.containsSyntheticMedia = s.containsSyntheticMedia;
-    // Same for "snippet": resend title, description, tags, category, language.
-    var newSnippet = {
-      title: rename ? newTitle : sn.title,
-      description: sn.description || '',
-      categoryId: sn.categoryId
-    };
-    if (sn.tags) newSnippet.tags = sn.tags;
-    if (sn.defaultLanguage) newSnippet.defaultLanguage = sn.defaultLanguage;
-    try {
-      YouTube.Videos.update({ id: v.id, snippet: newSnippet, status: newStatus }, 'snippet,status');
-      Logger.log('FIXED: ' + v.id + ' "' + sn.title + '"' + (rename ? ' -> "' + newTitle + '"' : '') +
-                 ' (was ' + s.privacyStatus + ', embeddable=' + s.embeddable + ')');
-    } catch (err) {
-      Logger.log('FAILED on ' + v.id + ': ' + err);
-    }
+  started.forEach(function (b) {
+    var startMs = new Date(b.snippet.actualStartTime).getTime();
+    var meeting = meetingFor_(startMs);
+    if (!meeting) { Logger.log('Skipped ' + b.id + ': not on a scheduled meeting day.'); return; }
+    applyAll_(b.id, meeting, startMs);
   });
 }
 
+/**
+ * One-time catch-up for recordings made before this script existed.
+ * Add more lines here if needed: [videoId, 'board'|'townhall', 'Month D, YYYY', 'YYYY-MM-DD'].
+ */
+function fixPastMeetings() {
+  [
+    ['DsthRuW6L0o', 'board',    'September 29, 2026', '2026-09-29'],
+    ['kXhaGvnHEA4', 'townhall', 'October 20, 2026',   '2026-10-20']
+  ].forEach(function (r) {
+    var startMs = Utilities.parseDate(r[3] + ' 6:00 PM', TZ, 'yyyy-MM-dd h:mm a').getTime();
+    applyAll_(r[0], { type: r[1], label: null, display_date: r[2], start: startMs }, startMs);
+  });
+}
+
+/** Everything for one video: details, thumbnail, playlist. */
+function applyAll_(videoId, meeting, startMs) {
+  var v = (YouTube.Videos.list('snippet,status', { id: videoId }).items || [])[0];
+  if (!v) { Logger.log('Video ' + videoId + ' not found.'); return; }
+  var sn = v.snippet, s = v.status;
+  var title = titleFor_(meeting);
+
+  // videos.update replaces each part it is given, so resend every writable
+  // field we want to keep (description, tags, language) alongside the changes.
+  var snippet = { title: title, description: sn.description || '', categoryId: CATEGORY_ID };
+  if (sn.tags) snippet.tags = sn.tags;
+  if (sn.defaultLanguage) snippet.defaultLanguage = sn.defaultLanguage;
+
+  var status = {
+    privacyStatus: 'public',
+    embeddable: true,
+    license: 'youtube',
+    publicStatsViewable: true,
+    selfDeclaredMadeForKids: false,
+    containsSyntheticMedia: false
+  };
+
+  var recordingDetails = {
+    recordingDate: Utilities.formatDate(new Date(startMs), 'UTC', "yyyy-MM-dd'T'HH:mm:ss'Z'")
+  };
+
+  try {
+    YouTube.Videos.update({ id: videoId, snippet: snippet, status: status, recordingDetails: recordingDetails },
+                          'snippet,status,recordingDetails');
+    Logger.log('UPDATED ' + videoId + ': "' + sn.title + '" -> "' + title + '" (was ' + s.privacyStatus +
+               ', embeddable=' + s.embeddable + ')');
+  } catch (err) {
+    Logger.log('FAILED details on ' + videoId + ': ' + err);
+  }
+
+  // Paid promotion = No. Separate call so a problem here can't block the rest.
+  try {
+    YouTube.Videos.update({ id: videoId, paidProductPlacementDetails: { hasPaidProductPlacement: false } },
+                          'paidProductPlacementDetails');
+  } catch (err) {
+    Logger.log('Note: could not set paid promotion on ' + videoId + ' (usually already "No"): ' + err);
+  }
+
+  setThumbnailOnce_(videoId, meeting.type);
+  addToPlaylist_(videoId, meeting.type);
+}
+
+// ---------------------------------------------------------------- helpers
+
 /** The scheduled meeting a stream that started at startMs belongs to. */
 function meetingFor_(startMs) {
-  if (!startMs) return null;
   var meetings = JSON.parse(PropertiesService.getScriptProperties().getProperty('meetings') || '[]');
   var day = Utilities.formatDate(new Date(startMs), TZ, 'yyyy-MM-dd');
   var sameDay = meetings.filter(function (m) {
@@ -175,7 +206,24 @@ function meetingFor_(startMs) {
 function titleFor_(m) {
   var name = m.type === 'townhall' ? 'Vista Townhall Meeting' : 'Vista Board Meeting';
   if (m.label) name += ' (' + m.label + ')';
-  return name + ' \u2014 ' + m.display_date;
+  return name + ' — ' + m.display_date;
+}
+
+/** Upload the Board/Town Hall thumbnail, once per video. */
+function setThumbnailOnce_(videoId, type) {
+  var props = PropertiesService.getScriptProperties();
+  var key = 'thumb_' + videoId;
+  if (props.getProperty(key)) return;
+  var url = THUMBNAIL_URLS[type];
+  if (!url) return;
+  try {
+    var blob = UrlFetchApp.fetch(url).getBlob().setContentType('image/png');
+    YouTube.Thumbnails.set(videoId, blob);
+    props.setProperty(key, '1');
+    Logger.log('Thumbnail set on ' + videoId + ' (' + type + ').');
+  } catch (err) {
+    Logger.log('FAILED thumbnail on ' + videoId + ': ' + err);
+  }
 }
 
 /** Add the video to the Board or Town Hall playlist (found by name) once. */
@@ -203,6 +251,8 @@ function addToPlaylist_(videoId, type) {
     Logger.log('FAILED adding ' + videoId + ' to "' + wanted + '": ' + err);
   }
 }
+
+// ---------------------------------------------------------------- setup
 
 /** One-time setup: daily schedule check at ~5 AM Mountain, plus a check now. */
 function setup() {
