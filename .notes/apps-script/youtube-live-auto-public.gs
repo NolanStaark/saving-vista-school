@@ -13,7 +13,9 @@
  * It also renames the stream to match the channel's existing titles, e.g.
  * "Vista Townhall Meeting — October 20, 2026" or
  * "Vista Board Meeting — October 27, 2026". Any other title (phone-app
- * default or typed by hand) is replaced.
+ * default or typed by hand) is replaced. It then adds the stream to the
+ * matching playlist ("Board Meetings" or "Town Hall Meetings", looked up by
+ * name) if it isn't already in it.
  *
  * Meeting dates/times come from the site's own schedule file (the same data
  * meetings.html uses), which a GitHub Action refreshes daily from Vista's
@@ -36,6 +38,7 @@ var BEFORE_MIN = 15;        // start watching 15 min before scheduled start
 var AFTER_HOURS = 4;        // keep watching until 4 h after scheduled start
 var CHECK_EVERY_MIN = 10;   // how often to check during the window
 var LOOKBACK_HOURS = 48;    // which broadcasts count as "recent"
+var PLAYLIST_NAMES = { board: 'Board Meetings', townhall: 'Town Hall Meetings' };
 
 /** Runs every morning: if a meeting is today, schedule the watch window. */
 function dailyScheduleCheck() {
@@ -117,8 +120,10 @@ function fixRecentLiveStreams() {
   (vids.items || []).forEach(function (v) {
     var s = v.status;
     var sn = v.snippet;
-    var newTitle = titleFor_(startedAt[v.id]);
+    var meeting = meetingFor_(startedAt[v.id]);
+    var newTitle = meeting ? titleFor_(meeting) : null;
     var rename = newTitle && sn.title !== newTitle;
+    if (meeting) addToPlaylist_(v.id, meeting.type);
 
     if (s.privacyStatus === 'public' && s.embeddable === true && !rename) {
       Logger.log('OK already: ' + v.id + ' "' + sn.title + '"');
@@ -152,8 +157,8 @@ function fixRecentLiveStreams() {
   });
 }
 
-/** Title for a stream that started at startMs, based on today's meeting(s). */
-function titleFor_(startMs) {
+/** The scheduled meeting a stream that started at startMs belongs to. */
+function meetingFor_(startMs) {
   if (!startMs) return null;
   var meetings = JSON.parse(PropertiesService.getScriptProperties().getProperty('meetings') || '[]');
   var day = Utilities.formatDate(new Date(startMs), TZ, 'yyyy-MM-dd');
@@ -163,10 +168,40 @@ function titleFor_(startMs) {
   if (!sameDay.length) return null;
   // If two meetings share a day, pick the one whose start is closest.
   sameDay.sort(function (a, b) { return Math.abs(a.start - startMs) - Math.abs(b.start - startMs); });
-  var m = sameDay[0];
+  return sameDay[0];
+}
+
+/** e.g. "Vista Townhall Meeting — October 20, 2026" */
+function titleFor_(m) {
   var name = m.type === 'townhall' ? 'Vista Townhall Meeting' : 'Vista Board Meeting';
   if (m.label) name += ' (' + m.label + ')';
   return name + ' \u2014 ' + m.display_date;
+}
+
+/** Add the video to the Board or Town Hall playlist (found by name) once. */
+function addToPlaylist_(videoId, type) {
+  var wanted = PLAYLIST_NAMES[type];
+  if (!wanted) return;
+  var playlistId = null, pageToken;
+  do {
+    var pl = YouTube.Playlists.list('snippet', { mine: true, maxResults: 50, pageToken: pageToken });
+    (pl.items || []).forEach(function (p) {
+      if (!playlistId && p.snippet.title.trim().toLowerCase() === wanted.toLowerCase()) playlistId = p.id;
+    });
+    pageToken = pl.nextPageToken;
+  } while (!playlistId && pageToken);
+  if (!playlistId) { Logger.log('Playlist "' + wanted + '" not found; skipped.'); return; }
+
+  var existing = YouTube.PlaylistItems.list('id', { playlistId: playlistId, videoId: videoId });
+  if (existing.items && existing.items.length) return;
+  try {
+    YouTube.PlaylistItems.insert({
+      snippet: { playlistId: playlistId, resourceId: { kind: 'youtube#video', videoId: videoId } }
+    }, 'snippet');
+    Logger.log('Added ' + videoId + ' to playlist "' + wanted + '".');
+  } catch (err) {
+    Logger.log('FAILED adding ' + videoId + ' to "' + wanted + '": ' + err);
+  }
 }
 
 /** One-time setup: daily schedule check at ~5 AM Mountain, plus a check now. */
