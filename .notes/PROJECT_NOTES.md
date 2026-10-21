@@ -319,6 +319,7 @@ with a Display Title -> the Apps Script feed picks it up automatically.
 
 ## Open / unconfirmed items
 
+- Oct 20 2026 Town Hall: Russ streamed from the YouTube phone app and watched it live on another device, but the site embed showed "This video is unavailable." A signed-out check that night found 4 empty duplicate public "Saving Vista School is live!" broadcasts (6:00-6:03 PM, all still "upcoming", playableInEmbed=false) and the real broadcast not publicly listed yet. Likely causes: embedding off on phone-app broadcasts and/or the real one not Public. Fix to try: schedule one Public broadcast with "Allow embedding" checked (Studio) before the meeting, go live into it, delete stray duplicates. Added a "Watch on YouTube" / "Ver en YouTube" fallback button (channel /live URL) under the embed on meetings.html and es/meetings.html.
 - Whether updating Brave's Shields content-filter lists actually fixed the
   YouTube live-stream embed (a documented Brave bug) — Russ hasn't
   confirmed either way.
