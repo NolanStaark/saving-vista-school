@@ -10,6 +10,11 @@
  * 4 hours after it, check every 10 minutes. Any broadcast that ACTUALLY went
  * live in the last 2 days gets set to Public + embeddable. Broadcasts that
  * never started (dropped-connection "Upcoming" shells) are ignored.
+ * It also renames the stream to match the channel's existing titles, e.g.
+ * "Vista Townhall Meeting — October 20, 2026" or
+ * "Vista Board Meeting — October 27, 2026". Only default phone-app titles
+ * (starting with "Saving Vista School") are renamed; a title you typed
+ * yourself is left alone.
  *
  * Meeting dates/times come from the site's own schedule file (the same data
  * meetings.html uses), which a GitHub Action refreshes daily from Vista's
@@ -37,14 +42,23 @@ var LOOKBACK_HOURS = 48;    // which broadcasts count as "recent"
 function dailyScheduleCheck() {
   var data = JSON.parse(UrlFetchApp.fetch(SCHEDULE_URL, { muteHttpExceptions: false }).getContentText());
   var today = Utilities.formatDate(new Date(), TZ, 'yyyy-MM-dd');
-  var starts = [data.next_board, data.next_townhall]
+  var todays = [data.next_board, data.next_townhall]
     .filter(function (m) { return m && m.date === today; })
     .map(function (m) {
-      return Utilities.parseDate(m.date + ' ' + (m.time || '6:00 PM'), TZ, 'yyyy-MM-dd h:mm a');
+      return {
+        type: m.type,
+        label: m.label || null,
+        display_date: m.display_date || m.date,
+        start: Utilities.parseDate(m.date + ' ' + (m.time || '6:00 PM'), TZ, 'yyyy-MM-dd h:mm a').getTime()
+      };
     })
-    .sort(function (a, b) { return a - b; });
+    .sort(function (a, b) { return a.start - b.start; });
 
-  if (!starts.length) { Logger.log('No meeting today (' + today + ').'); return; }
+  if (!todays.length) { Logger.log('No meeting today (' + today + ').'); return; }
+
+  // Remember today's meetings so the fixer knows what to name each stream.
+  PropertiesService.getScriptProperties().setProperty('meetings', JSON.stringify(todays));
+  var starts = todays.map(function (m) { return new Date(m.start); });
 
   var first = starts[0];
   var last = starts[starts.length - 1];
@@ -95,11 +109,20 @@ function fixRecentLiveStreams() {
 
   if (!ids.length) { Logger.log('No broadcasts went live in the last ' + LOOKBACK_HOURS + 'h.'); return; }
 
+  var startedAt = {};
+  ((resp && resp.items) || []).forEach(function (b) {
+    if (b.snippet && b.snippet.actualStartTime) startedAt[b.id] = new Date(b.snippet.actualStartTime).getTime();
+  });
+
   var vids = YouTube.Videos.list('status,snippet', { id: ids.join(',') });
   (vids.items || []).forEach(function (v) {
     var s = v.status;
-    if (s.privacyStatus === 'public' && s.embeddable === true) {
-      Logger.log('OK already: ' + v.id + ' "' + v.snippet.title + '"');
+    var sn = v.snippet;
+    var newTitle = titleFor_(startedAt[v.id]);
+    var rename = newTitle && sn.title !== newTitle && /^Saving Vista School/i.test(sn.title);
+
+    if (s.privacyStatus === 'public' && s.embeddable === true && !rename) {
+      Logger.log('OK already: ' + v.id + ' "' + sn.title + '"');
       return;
     }
     // videos.update replaces the whole "status" part, so send back every
@@ -112,13 +135,39 @@ function fixRecentLiveStreams() {
       selfDeclaredMadeForKids: s.madeForKids === true
     };
     if (s.containsSyntheticMedia !== undefined) newStatus.containsSyntheticMedia = s.containsSyntheticMedia;
+    // Same for "snippet": resend title, description, tags, category, language.
+    var newSnippet = {
+      title: rename ? newTitle : sn.title,
+      description: sn.description || '',
+      categoryId: sn.categoryId
+    };
+    if (sn.tags) newSnippet.tags = sn.tags;
+    if (sn.defaultLanguage) newSnippet.defaultLanguage = sn.defaultLanguage;
     try {
-      YouTube.Videos.update({ id: v.id, status: newStatus }, 'status');
-      Logger.log('FIXED: ' + v.id + ' "' + v.snippet.title + '" was ' + s.privacyStatus + ', embeddable=' + s.embeddable);
+      YouTube.Videos.update({ id: v.id, snippet: newSnippet, status: newStatus }, 'snippet,status');
+      Logger.log('FIXED: ' + v.id + ' "' + sn.title + '"' + (rename ? ' -> "' + newTitle + '"' : '') +
+                 ' (was ' + s.privacyStatus + ', embeddable=' + s.embeddable + ')');
     } catch (err) {
       Logger.log('FAILED on ' + v.id + ': ' + err);
     }
   });
+}
+
+/** Title for a stream that started at startMs, based on today's meeting(s). */
+function titleFor_(startMs) {
+  if (!startMs) return null;
+  var meetings = JSON.parse(PropertiesService.getScriptProperties().getProperty('meetings') || '[]');
+  var day = Utilities.formatDate(new Date(startMs), TZ, 'yyyy-MM-dd');
+  var sameDay = meetings.filter(function (m) {
+    return Utilities.formatDate(new Date(m.start), TZ, 'yyyy-MM-dd') === day;
+  });
+  if (!sameDay.length) return null;
+  // If two meetings share a day, pick the one whose start is closest.
+  sameDay.sort(function (a, b) { return Math.abs(a.start - startMs) - Math.abs(b.start - startMs); });
+  var m = sameDay[0];
+  var name = m.type === 'townhall' ? 'Vista Townhall Meeting' : 'Vista Board Meeting';
+  if (m.label) name += ' (' + m.label + ')';
+  return name + ' \u2014 ' + m.display_date;
 }
 
 /** One-time setup: daily schedule check at ~5 AM Mountain, plus a check now. */
