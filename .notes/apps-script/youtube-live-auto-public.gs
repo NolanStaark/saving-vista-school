@@ -12,9 +12,8 @@
  * never started (dropped-connection "Upcoming" shells) are ignored.
  * It also renames the stream to match the channel's existing titles, e.g.
  * "Vista Townhall Meeting — October 20, 2026" or
- * "Vista Board Meeting — October 27, 2026". Only default phone-app titles
- * (starting with "Saving Vista School") are renamed; a title you typed
- * yourself is left alone.
+ * "Vista Board Meeting — October 27, 2026". Any other title (phone-app
+ * default or typed by hand) is replaced.
  *
  * Meeting dates/times come from the site's own schedule file (the same data
  * meetings.html uses), which a GitHub Action refreshes daily from Vista's
@@ -119,7 +118,7 @@ function fixRecentLiveStreams() {
     var s = v.status;
     var sn = v.snippet;
     var newTitle = titleFor_(startedAt[v.id]);
-    var rename = newTitle && sn.title !== newTitle && /^Saving Vista School/i.test(sn.title);
+    var rename = newTitle && sn.title !== newTitle;
 
     if (s.privacyStatus === 'public' && s.embeddable === true && !rename) {
       Logger.log('OK already: ' + v.id + ' "' + sn.title + '"');
