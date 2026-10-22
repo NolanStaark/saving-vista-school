@@ -1,0 +1,17 @@
+{
+  "_note": "Our own YouTube recordings of Vista Townhall meetings, keyed by meeting date (YYYY-MM-DD). scripts/update_meetings.py merges these into meetings.json. Add a line here when a new recording is posted.",
+  "by_date": {
+    "2026-07-30": [
+      {"label": "Part 1", "url": "https://www.youtube.com/watch?v=0_C6aro5mJQ"},
+      {"label": "Part 2", "url": "https://www.youtube.com/watch?v=qhudUNkEyvI"},
+      {"label": "Part 3", "url": "https://www.youtube.com/watch?v=_q7VWgb50zM"},
+      {"label": "Part 4", "url": "https://www.youtube.com/watch?v=SkeYO4GwfUk"}
+    ],
+    "2026-08-31": [
+      {"label": "Recording", "url": "https://www.youtube.com/watch?v=4a3eqUc2V1M"}
+    ],
+    "2026-10-20": [
+      {"label": "Recording", "url": "https://www.youtube.com/watch?v=kXhaGvnHEA4"}
+    ]
+  }
+}

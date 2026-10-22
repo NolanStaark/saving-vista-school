@@ -113,7 +113,7 @@
       Todas las reuniones de la Junta Directiva de Vista School del año escolar actual, con enlaces a la Agenda, las
       Actas, y la Grabación conforme Vista los publica &mdash; obtenidos directamente de
       <a href="https://www.vistautah.com/board-meetings" target="_blank" rel="noopener">la página de Reuniones de la Junta de Vista</a>.
-      Vista no publica una tabla equivalente para las reuniones comunitarias.
+      Las reuniones comunitarias aparecen por separado más abajo.
     </p>
 
     <div class="table-scroll">
@@ -130,6 +130,32 @@
       </table>
     </div>
     <p id="current-year-board-empty" class="empty-state" hidden>Aún no se han publicado fechas de reuniones de la Junta Directiva para este año escolar.</p>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <h2>Reuniones Comunitarias de Este Año</h2>
+    <p style="color:var(--muted);font-size:0.9rem;margin:0 0 16px;">
+      Todas las reuniones comunitarias de Vista del año escolar actual, obtenidas de
+      <a href="https://calendar.google.com/calendar/embed?src=vistautah.com_848rd4r1ssm1rkme3mnr3ke9h4%40group.calendar.google.com&ctz=America/Denver" target="_blank" rel="noopener">el calendario público de Vista</a>.
+      Vista no publica grabaciones de las reuniones comunitarias, así que los enlaces de Grabación llevan a las
+      grabaciones que hicieron los padres y publicamos en nuestro canal de YouTube.
+    </p>
+
+    <div class="table-scroll">
+      <table class="meetings-table">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Grabación</th>
+          </tr>
+        </thead>
+        <tbody id="current-year-townhall-meetings"></tbody>
+      </table>
+    </div>
+    <p id="current-year-townhall-empty" class="empty-state" hidden>Aún no se han publicado fechas de reuniones comunitarias para este año escolar.</p>
   </div>
 </section>
 
@@ -300,6 +326,37 @@
     }).join('');
   }
 
+  function renderCurrentYearTownhalls(data) {
+    var tbody = document.getElementById('current-year-townhall-meetings');
+    var emptyEl = document.getElementById('current-year-townhall-empty');
+    if (!tbody) return;
+
+    var rows = (data && Array.isArray(data.current_year_townhall_meetings)) ? data.current_year_townhall_meetings : [];
+    if (!rows.length) {
+      tbody.innerHTML = '';
+      if (emptyEl) emptyEl.hidden = false;
+      return;
+    }
+
+    if (emptyEl) emptyEl.hidden = true;
+    tbody.innerHTML = rows.map(function (m) {
+      var recs = Array.isArray(m.recordings) ? m.recordings : [];
+      var recHtml = recs.length
+        ? recs.map(function (r) {
+            return '<a class="doc-link" href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(String(r.label).replace(/^Recording$/, 'Grabación').replace(/^Part /, 'Parte ')) + '</a>';
+          }).join('')
+        : '<span class="doc-link disabled">' + (m.upcoming ? 'Se transmitirá en vivo' : 'No disponible aún') + '</span>';
+      return (
+        '<tr>' +
+          '<td>' + esc(m.display_date || m.date) +
+            (m.upcoming ? '<span class="meeting-label-badge">Próxima</span>' : '') + '</td>' +
+          '<td>' + esc(m.time || '') + '</td>' +
+          '<td><div style="display:flex;flex-wrap:wrap;gap:6px;">' + recHtml + '</div></td>' +
+        '</tr>'
+      );
+    }).join('');
+  }
+
   function parseMeetingDateTime(m) {
     if (!m || !m.date) return null;
     var timeMatch = /(\d+):(\d+)\s*(AM|PM)/i.exec(m.time || '');
@@ -358,6 +415,7 @@
     .then(function (data) {
       renderNextMeetings(data);
       renderCurrentYearBoardMeetings(data);
+      renderCurrentYearTownhalls(data);
       updateLiveStreamPlaceholder(data);
     })
     .catch(function (err) {
@@ -366,6 +424,8 @@
       if (empty) empty.hidden = false;
       var boardEmpty = document.getElementById('current-year-board-empty');
       if (boardEmpty) boardEmpty.hidden = false;
+      var townhallEmpty = document.getElementById('current-year-townhall-empty');
+      if (townhallEmpty) townhallEmpty.hidden = false;
     });
 })();
 </script>

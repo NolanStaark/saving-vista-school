@@ -112,7 +112,7 @@
       Every Vista School Board Meeting for the current school year, with Agenda, Minutes, and
       Recording links as Vista posts them &mdash; pulled directly from
       <a href="https://www.vistautah.com/board-meetings" target="_blank" rel="noopener">Vista's own Board Meetings page</a>.
-      Vista doesn't publish an equivalent table for Townhall meetings.
+      Townhall meetings are listed separately below.
     </p>
 
     <div class="table-scroll">
@@ -129,6 +129,32 @@
       </table>
     </div>
     <p id="current-year-board-empty" class="empty-state" hidden>No Board Meeting dates posted yet for this school year.</p>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <h2>This Year's Townhall Meetings</h2>
+    <p style="color:var(--muted);font-size:0.9rem;margin:0 0 16px;">
+      Every Vista Townhall Meeting for the current school year, pulled from
+      <a href="https://calendar.google.com/calendar/embed?src=vistautah.com_848rd4r1ssm1rkme3mnr3ke9h4%40group.calendar.google.com&ctz=America/Denver" target="_blank" rel="noopener">Vista's own public calendar</a>.
+      Vista doesn't post recordings of Townhalls, so the Recording links go to the recordings parents made
+      and posted on our YouTube channel.
+    </p>
+
+    <div class="table-scroll">
+      <table class="meetings-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Recording</th>
+          </tr>
+        </thead>
+        <tbody id="current-year-townhall-meetings"></tbody>
+      </table>
+    </div>
+    <p id="current-year-townhall-empty" class="empty-state" hidden>No Townhall Meeting dates posted yet for this school year.</p>
   </div>
 </section>
 
@@ -325,6 +351,37 @@
     }).join('');
   }
 
+  function renderCurrentYearTownhalls(data) {
+    var tbody = document.getElementById('current-year-townhall-meetings');
+    var emptyEl = document.getElementById('current-year-townhall-empty');
+    if (!tbody) return;
+
+    var rows = (data && Array.isArray(data.current_year_townhall_meetings)) ? data.current_year_townhall_meetings : [];
+    if (!rows.length) {
+      tbody.innerHTML = '';
+      if (emptyEl) emptyEl.hidden = false;
+      return;
+    }
+
+    if (emptyEl) emptyEl.hidden = true;
+    tbody.innerHTML = rows.map(function (m) {
+      var recs = Array.isArray(m.recordings) ? m.recordings : [];
+      var recHtml = recs.length
+        ? recs.map(function (r) {
+            return '<a class="doc-link" href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(r.label) + '</a>';
+          }).join('')
+        : '<span class="doc-link disabled">' + (m.upcoming ? 'Will be streamed live' : 'Not posted yet') + '</span>';
+      return (
+        '<tr>' +
+          '<td>' + esc(m.display_date || m.date) +
+            (m.upcoming ? '<span class="meeting-label-badge">Upcoming</span>' : '') + '</td>' +
+          '<td>' + esc(m.time || '') + '</td>' +
+          '<td><div style="display:flex;flex-wrap:wrap;gap:6px;">' + recHtml + '</div></td>' +
+        '</tr>'
+      );
+    }).join('');
+  }
+
   function parseMeetingDateTime(m) {
     if (!m || !m.date) return null;
     var timeMatch = /(\d+):(\d+)\s*(AM|PM)/i.exec(m.time || '');
@@ -386,6 +443,7 @@
     .then(function (data) {
       renderNextMeetings(data);
       renderCurrentYearBoardMeetings(data);
+      renderCurrentYearTownhalls(data);
       updateLiveStreamPlaceholder(data);
     })
     .catch(function (err) {
@@ -394,6 +452,8 @@
       if (empty) empty.hidden = false;
       var boardEmpty = document.getElementById('current-year-board-empty');
       if (boardEmpty) boardEmpty.hidden = false;
+      var townhallEmpty = document.getElementById('current-year-townhall-empty');
+      if (townhallEmpty) townhallEmpty.hidden = false;
       // Leave the live-placeholder visible (its default state) rather than
       // risk showing YouTube's raw "unavailable" error underneath it.
     });

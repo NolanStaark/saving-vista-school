@@ -11,9 +11,13 @@ Also scrapes the full current-year Board Meetings table (Date/Agenda/
 Minutes/Recording, one row per meeting Vista has actually dated) from that
 same board-meetings page into `current_year_board_meetings`, so
 meetings.html can show a full-year table mirroring Vista's own page.
-Board only -- Vista doesn't publish a Townhall equivalent. Rows on Vista's
-page with no date yet (placeholder rows for meetings not yet scheduled)
-are skipped since they carry no information.
+Rows on Vista's page with no date yet (placeholder rows for meetings not
+yet scheduled) are skipped since they carry no information.
+
+Vista doesn't publish a Townhall table, so `current_year_townhall_meetings`
+is built from their calendar instead: every Townhall in the current school
+year (Jul 1 - Jun 30), past and upcoming, with recording links from our own
+YouTube channel merged in from assets/data/recordings.json (keyed by date).
 
 Vista's calendar has real Google Calendar recurrence rules with per-meeting
 overrides (a single occurrence can be moved without changing the recurring
@@ -43,6 +47,7 @@ CALENDAR_ICS_URL = (
 )
 BOARD_PAGE_URL = "https://www.vistautah.com/board-meetings"
 OUTPUT_PATH = Path(__file__).resolve().parent.parent / "assets" / "data" / "meetings.json"
+RECORDINGS_PATH = Path(__file__).resolve().parent.parent / "assets" / "data" / "recordings.json"
 USER_AGENT = "Mozilla/5.0 (compatible; SavingVistaSchoolBot/1.0; +https://savingvistaschool.org)"
 DENVER = ZoneInfo("America/Denver")
 
@@ -97,17 +102,59 @@ def classify(summary):
     return None, None
 
 
-def fetch_upcoming_meetings():
+def fetch_calendar():
+    return icalendar.Calendar.from_ical(fetch_text(CALENDAR_ICS_URL))
+
+
+def fetch_upcoming_meetings(calendar):
     """Returns all upcoming Board/Townhall occurrences within the window,
     chronologically, resolved directly from Vista's calendar (recurrence +
     per-occurrence overrides included)."""
-    ics_text = fetch_text(CALENDAR_ICS_URL)
-    calendar = icalendar.Calendar.from_ical(ics_text)
-
     now = datetime.now(timezone.utc)
     end = now + timedelta(days=FUTURE_WINDOW_DAYS)
+    return meetings_between(calendar, now, end)
 
-    occurrences = recurring_ical_events.of(calendar).between(now, end)
+
+def school_year_bounds(now=None):
+    """(start, end) of the current school year, Jul 1 - Jul 1, Denver time."""
+    now = (now or datetime.now(timezone.utc)).astimezone(DENVER)
+    start_year = now.year if now.month >= 7 else now.year - 1
+    return (datetime(start_year, 7, 1, tzinfo=DENVER),
+            datetime(start_year + 1, 7, 1, tzinfo=DENVER))
+
+
+def load_recordings():
+    """Our own YouTube recordings, keyed by meeting date (YYYY-MM-DD)."""
+    try:
+        data = json.loads(RECORDINGS_PATH.read_text(encoding="utf-8"))
+        return data.get("by_date", {}) if isinstance(data, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def current_year_townhalls(calendar, now=None):
+    """Every Townhall this school year, chronological, with an `upcoming`
+    flag and any recording parts we have for that date."""
+    now = now or datetime.now(timezone.utc)
+    start, end = school_year_bounds(now)
+    recordings = load_recordings()
+    today = now.astimezone(DENVER).date().isoformat()
+    rows = []
+    for m in meetings_between(calendar, start, end):
+        if m["type"] != "townhall":
+            continue
+        rows.append({
+            "date": m["date"],
+            "display_date": m["display_date"],
+            "time": m["time"],
+            "upcoming": m["date"] >= today,
+            "recordings": recordings.get(m["date"], []),
+        })
+    return rows
+
+
+def meetings_between(calendar, start, end):
+    occurrences = recurring_ical_events.of(calendar).between(start, end)
 
     meetings = []
     for event in occurrences:
@@ -272,8 +319,11 @@ def main():
     # allowed to kill the run -- we only give up if BOTH end up empty, checked
     # after both have been consulted.
     meetings = []
+    current_year_townhall_meetings = []
     try:
-        meetings = fetch_upcoming_meetings()
+        calendar = fetch_calendar()
+        meetings = fetch_upcoming_meetings(calendar)
+        current_year_townhall_meetings = current_year_townhalls(calendar)
     except Exception as exc:
         print(f"Warning: couldn't fetch/parse Vista's calendar ({exc}); "
               f"falling back to their board-meetings page.", file=sys.stderr)
@@ -317,6 +367,7 @@ def main():
         "next_board": next_board,
         "next_townhall": next_townhall,
         "current_year_board_meetings": current_year_board_meetings,
+        "current_year_townhall_meetings": current_year_townhall_meetings,
         "archive_years": archive_years,
     }
 
@@ -326,6 +377,11 @@ def main():
             previous = json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             previous = None
+
+    # If the calendar was unreachable this run, keep the last known Townhall
+    # table rather than blanking it on the site.
+    if not current_year_townhall_meetings and previous:
+        data["current_year_townhall_meetings"] = previous.get("current_year_townhall_meetings", [])
 
     def schedule_only(d):
         return {k: v for k, v in (d or {}).items() if k != "updated_at"}
@@ -348,6 +404,7 @@ def main():
           f"{next_board and next_board.get('label') and ' (' + next_board['label'] + ')' or ''} "
           f"next_townhall={next_townhall and next_townhall['date']}, "
           f"{len(current_year_board_meetings)} current-year board meeting rows, "
+          f"{len(data['current_year_townhall_meetings'])} current-year townhall rows, "
           f"and {len(archive_years)} archive years to {OUTPUT_PATH}")
 
 

@@ -167,6 +167,14 @@ workflow (`.github/workflows/update-meetings.yml`, daily cron) runs
 4. Writes `assets/data/meetings.json`, which `meetings.html`'s inline JS
    fetches and renders (unified chronological list, "Next" badge, doc
    links, archive-year links to Vista's own per-year pages).
+5. (Oct 2026) Also writes `current_year_townhall_meetings`: every Townhall in
+   the current school year (Jul 1 - Jun 30) from the same calendar, with
+   `upcoming` flag and `recordings` merged from `assets/data/recordings.json`
+   (our own YouTube links keyed by date, maintained by hand: add an entry
+   when a new Townhall recording is posted). Rendered as "This Year's
+   Townhall Meetings" on meetings.html + es/meetings.html. The channel's
+   public RSS feed returned 404 when tried, so recordings can't be
+   auto-discovered without a YouTube API key.
 
 **Update (Oct 2026) -- two sources, and qualified meetings.** Vista's board
 page dated a row "October 09, 2026 Retreat"; `parse_board_page` required the
