@@ -205,10 +205,10 @@ commit message: "Update meeting schedule from Vista's calendar" for a real
 change vs "Meeting schedule checked -- no change". So a daily bot commit is
 normal and expected; read the message to see whether anything actually moved.
 
-Both Board and Townhall meetings are stated (per Russ) to be held in the
-**Vista School Gym** — note the calendar's own `LOCATION` field disagrees
-(says "Choir Room" for many entries), so the script does NOT use
-calendar LOCATION; the venue text is hardcoded from what Russ told us.
+Both Board and Townhall meetings are now held in the **Vista School Choir
+Room** (Russ, Oct 27 2026: "its regular now, not the gym"; previously the
+Gym). The venue text is hardcoded in meetings.html / es/meetings.html (intro
+note + next-meeting cards), NOT read from the calendar's `LOCATION` field.
 Flag to Russ if this venue ever needs re-confirming.
 
 **GitHub Actions gotcha not yet confirmed fixed**: for the workflow's
