@@ -1,17 +1,14 @@
 {
   "source": "https://calendar.google.com/calendar/ical/vistautah.com_848rd4r1ssm1rkme3mnr3ke9h4%40group.calendar.google.com/public/basic.ics",
   "board_page_source": "https://www.vistautah.com/board-meetings",
-  "updated_at": "2026-10-27T18:35:47Z",
+  "updated_at": "2026-10-28T18:41:50Z",
   "next_board": {
     "type": "board",
     "summary": "Vista Board Meeting",
     "label": null,
-    "date": "2026-10-27",
-    "display_date": "October 27, 2026",
-    "time": "6:00 PM",
-    "agenda_url": "https://drive.google.com/file/d/11Db0nXKs592ShwcTdD4NCiS8qQ7qnsQW/view?usp=sharing",
-    "minutes_url": null,
-    "recording_url": null
+    "date": "2026-12-08",
+    "display_date": "December 8, 2026",
+    "time": "6:00 PM"
   },
   "next_townhall": null,
   "current_year_board_meetings": [
@@ -53,7 +50,7 @@
       "label": null,
       "agenda_url": "https://drive.google.com/file/d/11Db0nXKs592ShwcTdD4NCiS8qQ7qnsQW/view?usp=sharing",
       "minutes_url": null,
-      "recording_url": null
+      "recording_url": "https://drive.google.com/file/d/1Q8GnEA76TT_HzgvZR2dXmoqBSQ0zok_6/view?usp=sharing"
     }
   ],
   "current_year_townhall_meetings": [
