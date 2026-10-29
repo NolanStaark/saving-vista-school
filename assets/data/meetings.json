@@ -1,14 +1,17 @@
 {
   "source": "https://calendar.google.com/calendar/ical/vistautah.com_848rd4r1ssm1rkme3mnr3ke9h4%40group.calendar.google.com/public/basic.ics",
   "board_page_source": "https://www.vistautah.com/board-meetings",
-  "updated_at": "2026-10-28T18:41:50Z",
+  "updated_at": "2026-10-29T18:50:12Z",
   "next_board": {
     "type": "board",
     "summary": "Vista Board Meeting",
     "label": null,
     "date": "2026-12-08",
     "display_date": "December 8, 2026",
-    "time": "6:00 PM"
+    "time": "6:00 PM",
+    "agenda_url": null,
+    "minutes_url": null,
+    "recording_url": null
   },
   "next_townhall": null,
   "current_year_board_meetings": [
@@ -33,7 +36,7 @@
       "display_date": "September 29, 2026",
       "label": null,
       "agenda_url": "https://drive.google.com/file/d/1kGLOr5HOKZpxPRnt1wkRoz906ib7SxPM/view?usp=drive_link",
-      "minutes_url": "https://drive.google.com/file/d/1xbicCRAHn2TuPrww50QQ7d5lwFcjOhW-/view?usp=drive_link",
+      "minutes_url": "https://drive.google.com/file/d/1qrvfVirm6d6nL1Cyu32UFtAD3G64K1X_/view?usp=sharing",
       "recording_url": "https://drive.google.com/file/d/1LFTegAJ-aREeB65dTBMEpi8Y1QgZFQJj/view?usp=sharing"
     },
     {
@@ -41,7 +44,7 @@
       "display_date": "October 9, 2026",
       "label": "Retreat",
       "agenda_url": "https://drive.google.com/file/d/1IEHTSALogbEib0hKnYq1RtL10Zu8_e_V/view?usp=drive_link",
-      "minutes_url": "https://drive.google.com/file/d/1BQKeHkpKmDCZ_HLRSukwkUqro7G2DskL/view?usp=drive_link",
+      "minutes_url": "https://drive.google.com/file/d/1PDtcodXfm9WNTHRrQek_32RWkcxF5ICH/view?usp=drive_link",
       "recording_url": null
     },
     {
@@ -49,8 +52,16 @@
       "display_date": "October 27, 2026",
       "label": null,
       "agenda_url": "https://drive.google.com/file/d/11Db0nXKs592ShwcTdD4NCiS8qQ7qnsQW/view?usp=sharing",
-      "minutes_url": null,
+      "minutes_url": "https://drive.google.com/file/d/1VzmVYWwMA2YSEgcF_qOaMfjDh2Rl9Sic/view?usp=sharing",
       "recording_url": "https://drive.google.com/file/d/1Q8GnEA76TT_HzgvZR2dXmoqBSQ0zok_6/view?usp=sharing"
+    },
+    {
+      "date": "2026-12-08",
+      "display_date": "December 8, 2026",
+      "label": null,
+      "agenda_url": null,
+      "minutes_url": null,
+      "recording_url": null
     }
   ],
   "current_year_townhall_meetings": [
