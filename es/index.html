@@ -66,6 +66,72 @@
     visibility: visible;
     opacity: 1;
   }
+
+  /* Parent survey callout (Oct 2026). Temporary: remove this block and the
+     #parent-survey section once Vista closes its 2026-27 family survey. */
+  .survey-callout { padding: 40px 0 8px; }
+  .survey-card {
+    max-width: 860px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: 28px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-top: 6px solid var(--maroon);
+    border-radius: var(--radius);
+    padding: 28px 30px;
+    box-shadow: 0 8px 22px rgba(0, 62, 86, 0.08);
+  }
+  .survey-stat {
+    text-align: center;
+    background: var(--cream);
+    border-radius: var(--radius);
+    padding: 20px 14px;
+    align-self: start;
+  }
+  .survey-stat-number {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--maroon);
+  }
+  .survey-stat-label {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--navy-dark);
+  }
+  .survey-stat-source {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .survey-badge {
+    display: inline-block;
+    background: var(--amber-bg);
+    color: var(--amber);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .survey-body h2 { margin: 10px 0 8px; }
+  .survey-body p { margin: 0 0 12px; }
+  .survey-why { margin: 0 0 20px; padding-left: 20px; }
+  .survey-why li { margin-bottom: 8px; }
+  .survey-why strong { color: var(--navy-dark); }
+  .survey-fineprint { margin: 14px 0 0 !important; font-size: 0.8rem; color: var(--muted); }
+  @media (max-width: 680px) {
+    .survey-card { grid-template-columns: 1fr; padding: 22px 18px; gap: 18px; }
+    .survey-body .btn-primary { width: 100%; justify-content: center; }
+  }
 </style>
 </head>
 <body>
@@ -137,6 +203,49 @@
     <div class="home-next-meeting" id="home-next-meeting" hidden></div>
   </div>
 </section>
+
+<!-- PARENT SURVEY CALLOUT (Oct 2026). Spanish counterpart of the block in ../index.html;
+     keep the two in sync and remove both once Vista closes the survey. -->
+<section class="survey-callout" id="parent-survey" aria-labelledby="parent-survey-heading">
+  <div class="container">
+    <div class="survey-card">
+      <div class="survey-stat">
+        <span class="survey-stat-number">119</span>
+        <span class="survey-stat-label">familias respondieron la encuesta para padres del año pasado</span>
+        <span class="survey-stat-source">Vista tiene unos 1,080 estudiantes.
+          Fuente: <a href="https://drive.google.com/file/d/1T2F6axuo1ax2MsHV1Y0FJnoNA3ctMIu7/view" target="_blank" rel="noopener">actas de la junta del 15 de junio de 2026</a></span>
+      </div>
+      <div class="survey-body">
+        <span class="survey-badge">Abierta ahora</span>
+        <h2 id="parent-survey-heading">Por Favor Responda la Encuesta para Padres de Vista</h2>
+        <p>
+          Vista School les pide a todas las familias que llenen su encuesta para padres. Toma
+          unos minutos, y es una de las pocas maneras directas en que los padres pueden decirle
+          a la administración y a la junta cómo van realmente las cosas.
+        </p>
+        <ul class="survey-why">
+          <li><strong>Un grupo pequeño puede terminar hablando por todos.</strong> Los resultados
+            del año pasado vinieron de 119 familias y se presentaron a la junta como un reflejo de
+            lo que sienten los padres de Vista. Más respuestas hacen que ese reflejo sea exacto.</li>
+          <li><strong>Es anónima.</strong> Vista dice que la encuesta es anónima, así que puede
+            ser sincero sobre lo que funciona y lo que no.</li>
+          <li><strong>Cada opinión cuenta.</strong> Ya sea que esté contento con cómo van las
+            cosas o que tenga inquietudes, la junta solo puede considerar lo que escucha.</li>
+          <li><strong>Forma parte de la revisión de acreditación de Vista.</strong> La encuesta
+            de este año se realiza en Cognia, la organización con la que Vista trabaja en su
+            acreditación.</li>
+        </ul>
+        <a class="btn-primary" href="https://insights.cognia.org/s/kqbeosbg" target="_blank" rel="noopener">Responder la Encuesta &rarr;</a>
+        <p class="survey-fineprint">
+          Esta es la encuesta propia de Vista School. Saving Vista School no la administra y
+          nunca ve las respuestas de nadie. Es el mismo enlace que Vista compartió en su boletín
+          del 23 de octubre de 2026 y en el volante que se repartió en la escuela.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <section>
   <div class="container container--wide">
