@@ -1,15 +1,14 @@
 {
   "source": "https://calendar.google.com/calendar/ical/vistautah.com_848rd4r1ssm1rkme3mnr3ke9h4%40group.calendar.google.com/public/basic.ics",
   "board_page_source": "https://www.vistautah.com/board-meetings",
-  "updated_at": "2026-11-20T20:57:39Z",
+  "updated_at": "2026-11-21T19:58:48Z",
   "next_board": {
     "type": "board",
     "summary": "Vista Board Meeting",
+    "date": "2026-11-23",
+    "display_date": "November 23, 2026",
     "label": null,
-    "date": "2026-12-08",
-    "display_date": "December 8, 2026",
-    "time": "6:00 PM",
-    "agenda_url": null,
+    "agenda_url": "https://drive.google.com/file/d/1mEnypb4HuffZQ43iUo0ZPsvUFk9nrT-v/view?usp=drive_link",
     "minutes_url": null,
     "recording_url": null
   },
@@ -54,6 +53,14 @@
       "agenda_url": "https://drive.google.com/file/d/11Db0nXKs592ShwcTdD4NCiS8qQ7qnsQW/view?usp=sharing",
       "minutes_url": "https://drive.google.com/file/d/1VzmVYWwMA2YSEgcF_qOaMfjDh2Rl9Sic/view?usp=sharing",
       "recording_url": "https://drive.google.com/file/d/1Q8GnEA76TT_HzgvZR2dXmoqBSQ0zok_6/view?usp=sharing"
+    },
+    {
+      "date": "2026-11-23",
+      "display_date": "November 23, 2026",
+      "label": null,
+      "agenda_url": "https://drive.google.com/file/d/1mEnypb4HuffZQ43iUo0ZPsvUFk9nrT-v/view?usp=drive_link",
+      "minutes_url": null,
+      "recording_url": null
     },
     {
       "date": "2026-12-08",
